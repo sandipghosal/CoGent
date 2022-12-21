@@ -1,6 +1,7 @@
 import sys
 import xml.dom.minidom
 
+from ramodel import Automaton
 from xmlparser import ParsedXML
 
 
@@ -13,8 +14,9 @@ def main(argv):
         print('missing xml input file')
         sys.exit(2)
 
-    ParsedXML(argv)
+    automaton = ParsedXML(argv)
 
+    # print(automaton.transitions)
 
 if __name__ == "__main__":
     main(sys.argv[1])
