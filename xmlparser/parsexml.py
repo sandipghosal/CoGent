@@ -27,8 +27,12 @@ class ParsedXML:
         # obtain the locations for the automaton
         self.locations = self.getLocations(self, root)
 
-        # obtain a tree of transitions
-        self.transitions = self.getTransitions(self, root)
+        # extract a list of transitions from xml file
+        extractedTrans = self.getTransitions(self, root)
+        # print(extractedTrans)
+
+        # prune the list of transition by removing output locations
+        self.transitions = self.condenseAutomaton(self, extractedTrans)
 
         return Automaton(self.methods,
                          self.constants,
@@ -82,9 +86,9 @@ class ParsedXML:
 
         for outputs in root.iter(OUTPUTS):
             for symbol in outputs.iter(SYMBOL):
-                paramids = dict()
+                paramids = []
                 for param in symbol.iter(PARAM):
-                    paramids[param.attrib[NAME]] = param.attrib[NAME]
+                    paramids.append(param.attrib[NAME])
 
                 products[symbol.attrib[NAME]] = paramids
 
@@ -120,7 +124,10 @@ class ParsedXML:
                     method = Method(name=symbol,
                                     paramids=self.methods[symbol])
                 elif symbol in self.outputs.keys():
-                    output = symbol
+                    method = output = symbol
+                    for assigns in transition.iter(ASSIGNMENTS):
+                        for assign in assigns.iter(ASSIGN):
+                            output = assign.text if assign.attrib[TO] in self.outputs[symbol] else symbol
 
                 # obtain guard condition for this transition
                 condition = transition.find(GUARD).text if transition.find(GUARD) is not None else 'True'
@@ -128,7 +135,6 @@ class ParsedXML:
                 # obtain the assignments performed while this transition
                 assignments = dict()
                 for assigns in transition.iter(ASSIGNMENTS):
-
                     for assign in assigns.iter(ASSIGN):
                         assignments[assign.attrib[TO]] = assign.text
 
@@ -146,42 +152,27 @@ class ParsedXML:
 
         return progress
 
-                        # lhs = assign.attrib[TO]
-                        # rhs = assign.text
+    def condenseAutomaton(self, transitions) -> list:
+        progress = []
+        deletelocations = set()
+        for transition in transitions:
+            # print('before pruning: ', transition)
+            currentTransition = transition
+            currentDest = transition.toLocation
+            nextTransition = currentDest.transitions[0] if len(currentDest.transitions) == 1 else None
+            if nextTransition is not None \
+                    and nextTransition.method in self.outputs.keys():
+                # insert the output location into the list to be deleted
+                deletelocations.add(currentDest)
+                currentTransition.output = nextTransition.output
+                currentTransition.toLocation = nextTransition.toLocation
+            # print('after pruning: ', currentTransition)
 
+            progress.append(currentTransition)
 
-                        # print(lhs + ':' + rhs)
+        # delete transitions originating from output locations
+        [progress.remove(transition) for location in deletelocations \
+         for transition in progress if transition.fromLocation == location]
 
-                        # both LHS and RHS of the assignment are registers
-                        # if all(key in self.registers.keys()
-                        #        for key in (lhs, rhs)):
-                        #     # print('LHS and RHS both registers')
-                        #     assignments[self.registers[lhs]] = self.registers[rhs]
+        return progress
 
-                        # only LHS is a register and RHS is a constant
-                        # elif all(key in [self.registers.keys(), self.constants.keys()]
-                        #          for key in (lhs, rhs)):
-                        #     # print('LHS is a register and RHS is a constant')
-                        #     assignments[self.registers[lhs]] = self.constants[rhs]
-                        #
-                        # # LHS is an input/output parameter and RHS is a constant
-                        # elif rhs in self.constants.keys():
-                        #     # all(key in (self.methods[methodname].keys() or self.outputs[output].keys() or
-                        #     #              self.constants.keys())
-                        #     #      for key in (lhs, rhs)):
-                        #     # print('LHS is a parameter and RHS is a constant')
-                        #     assignments[Parameter(name=lhs)] = self.constants[rhs]
-                        #
-                        # # only LHS is a register and RHS is a parameter
-                        # elif lhs in self.registers.keys():
-                        #     # print('LHS is a register and RHS is a parameter')
-                        #     assignments[self.registers[lhs]] =
-                        # # LHS is a parameter and RHS is a register
-                        # else:
-                        #     print('LHS is a parameter and RHS is a register')
-
-
-    # create a tree of tranistions for an automaton
-    # def transitions(self):
-    #     transition = self.getTransitions()
-    #     return transition

@@ -32,7 +32,7 @@ class Method:
         self.outputs = outputs
 
     def __repr__(self) -> str:
-        return f'{self.name}:{self.paramIDs}:{self.outputs}'
+        return f'{self.name}:{self.paramIDs}'
 
 class Parameter:
     def __init__(self, name, value=None) -> None:
@@ -51,7 +51,7 @@ class Transition:
 
     def __repr__(self) -> str:
         new_line = '\n'
-        return f'{new_line}{self.fromLocation}:{self.guard}:{self.assignments}:{self.output}:{self.toLocation}'
+        return f'{new_line}{self.fromLocation}:{self.method}:{self.guard}:{self.assignments}:{self.output}:{self.toLocation}'
 
 
 
