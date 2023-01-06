@@ -123,7 +123,7 @@
             <assignments/>
         </transition>
         <transition from="l12" to="l16" symbol="I_contains">
-            <guard>r2!=p1 &amp;&amp; r1!=p1</guard>
+            <guard>((r2!=p1) &amp;&amp; (r1!=p1))</guard>
             <assignments/>
         </transition>
         <transition from="l12" to="l18" symbol="I_contains">
@@ -141,7 +141,7 @@
             <assignments/>
         </transition>
         <transition from="l14" to="l17" symbol="I_contains">
-            <guard>r2!=p1 &amp;&amp; r3!=p1 &amp;&amp; r1!=p1</guard>
+            <guard>((r2!=p1) &amp;&amp; (r3!=p1) &amp;&amp; (r1!=p1))</guard>
             <assignments/>
         </transition>
         <transition from="l14" to="l20" symbol="I_contains">

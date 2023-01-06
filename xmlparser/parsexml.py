@@ -1,38 +1,51 @@
-from xmlparser.xmltags import *
-from ramodel.automaton import *
 
+from ramodel.automaton import *
+from xmlparser.xmltags import *
+import constraintsolver.solver as S
 import xml.etree.ElementTree as ET
 
 
 class ParsedXML:
+    """This is a class containing methods for extracting a register automaton
+    from a given XML file"""
+
+
+    ###############################################
+    #   constants = {id : [id_object, value]}
+    #   registers = {id : id_object}
+    #   method_object = Method(name, paramids)
+    #   paramids = {"id" : id_obj}
+    ################################################
 
     def __new__(self, xml_file) -> Automaton:
         tree = ET.parse(xml_file)
         root = tree.getroot()
         # obtain a dictionary of method objects
-        self.methods = self.getMethods(self, root)
+        self.methods = self.__get_methods(self, root)
 
         # obtain a dictionary of constants
-        self.constants = self.getConstants(self, root)
+        # constants = {id : [id_object, value]}
+        self.constants = self.__get_constants(self, root)
 
         # obtain a dictionary of registers
-        self.registers = self.getRegisters(self, root)
+        # registers = {id : id_object}
+        self.registers = self.__get_registers(self, root)
 
         # obtain a list of outputs
-        self.outputs = self.getOutputs(self, root)
+        self.outputs = self.__get_outputs(self, root)
 
         # obtain the start location of the automaton
-        self.startlocation = self.getStartLocation(self, root)
+        self.startlocation = self.__get_start_location(self, root)
 
         # obtain the locations for the automaton
-        self.locations = self.getLocations(self, root)
+        self.locations = self.__get_locations(self, root)
 
         # extract a list of transitions from xml file
-        extractedTrans = self.getTransitions(self, root)
+        extracted_trans = self.__get_transitions(self, root)
         # print(extractedTrans)
 
         # prune the list of transition by removing output locations
-        self.transitions = self.condenseAutomaton(self, extractedTrans)
+        self.transitions = self.__condense_automaton(self, extracted_trans)
 
         return Automaton(self.methods,
                          self.constants,
@@ -41,7 +54,8 @@ class ParsedXML:
                          self.transitions,
                          self.startlocation)
 
-    def getMethods(self, root) -> dict:
+    def __get_methods(self, root) -> dict:
+        """Method for extracting list of methods from the XML file"""
         # dict of methods
         # methods = {methodname : dict of params {param: value}}
         methods = dict()
@@ -49,59 +63,63 @@ class ParsedXML:
         for inputs in root.iter(INPUTS):
             for symbol in inputs.iter(SYMBOL):
                 methodname = symbol.attrib[NAME]
-                # print('method name: ' + method)
+                # paramids = {"id" : id_obj}
                 paramids = dict()
                 for param in symbol.iter(PARAM):
-                    paramids[param.attrib[NAME]] = param.attrib[NAME]
+                    paramids[param.attrib[NAME]] = S.get_object(param.attrib[NAME])
                     # print('id name: '+ param.attrib[NAME])
 
                 methods[methodname] = paramids
         return methods
 
-    def getConstants(self, root) -> dict:
-        # dictionary of constants {key : value}
+    def __get_constants(self, root) -> dict:
+        """Method for extracting list of constants defined in the RA"""
+        # dictionary of constants = {id : [id_object, value]}
         constants = dict()
 
         for consts in root.iter(CONSTANTS):
             for singleconst in consts.iter(CONSTANT):
-                constants[singleconst.attrib[NAME]] = int(singleconst.text)
-
+                constants[singleconst.attrib[NAME]] = [S.get_object(singleconst.attrib[NAME]), int(singleconst.text)]
         # print(constants)
         return constants
 
-    def getRegisters(self, root) -> dict:
-        # dictionary of registers {key  : value}
+    def __get_registers(self, root) -> dict:
+        """Method for extracting global registers used in the RA"""
+        # dictionary of registers = {id : id_object}
         registers = dict()
 
         for globals in root.iter(GLOBALS):
             for variable in globals.iter(VARIABLE):
                 # storing instance of each register object into the dictionary
-                # registers[variable.attrib[NAME]] = Register(variable.attrib[NAME], None)
-                registers[variable.attrib[NAME]] = int(variable.text)
+                registers[variable.attrib[NAME]] = S.get_object(variable.attrib[NAME])
         return registers
 
-    def getOutputs(self, root) -> dict:
+    def __get_outputs(self, root) -> dict:
+        """Method for extracting all possible outputs for transitions in RA"""
         # list of outputs produce by the automaton
         products = dict()
 
         for outputs in root.iter(OUTPUTS):
             for symbol in outputs.iter(SYMBOL):
-                paramids = []
+                # paramids = {"id" : id_obj}
+                paramids = dict()
                 for param in symbol.iter(PARAM):
-                    paramids.append(param.attrib[NAME])
+                    paramids[param.attrib[NAME]] = S.get_object(param.attrib[NAME])
 
                 products[symbol.attrib[NAME]] = paramids
 
         return products
 
-    def getStartLocation(self, root) -> [Location, None]:
+    def __get_start_location(self, root) -> [Location, None]:
+        """Method for extracting the starting location of the automaton"""
         for locations in root.iter(LOCATIONS):
             for location in root.iter(LOCATION):
                 if INITIAL in location.attrib.keys() and location.attrib[INITIAL] == TRUE:
                     return Location(location.attrib[NAME])
         return None
 
-    def getLocations(self, root) -> dict:
+    def __get_locations(self, root) -> dict:
+        """Method for extracting all the locations in the RA"""
         locations = dict()
         for states in root.iter(LOCATIONS):
             for state in states.iter(LOCATION):
@@ -110,7 +128,8 @@ class ParsedXML:
         # print(result)
         return locations
 
-    def getTransitions(self, root) -> list:
+    def __get_transitions(self, root) -> list:
+        """Method for extracting list of all the transitions in the RA"""
         progress = []
         for transitions in root.iter(TRANSITIONS):
             for transition in transitions.iter(TRANSITION):
@@ -121,8 +140,8 @@ class ParsedXML:
                 symbol = transition.attrib[SYMBOL]
                 output = None
                 if symbol in self.methods.keys():
-                    method = Method(name=symbol,
-                                    paramids=self.methods[symbol])
+                    method = Method(name_=symbol,
+                                    paramids_=self.methods[symbol])
                 elif symbol in self.outputs.keys():
                     method = output = symbol
                     for assigns in transition.iter(ASSIGNMENTS):
@@ -132,47 +151,51 @@ class ParsedXML:
                 # obtain guard condition for this transition
                 condition = transition.find(GUARD).text if transition.find(GUARD) is not None else 'True'
 
-                # obtain the assignments performed while this transition
-                assignments = dict()
+                # obtain a list of assignments performed while this transition
+                assignments = list()
                 for assigns in transition.iter(ASSIGNMENTS):
                     for assign in assigns.iter(ASSIGN):
-                        assignments[assign.attrib[TO]] = assign.text
+                        assignments.append(assign.attrib[TO] + '==' + assign.text)
+                        # assignments[assign.attrib[TO]] = assign.text
 
-                transObject = Transition(fromlocation=fromlocation,
-                                         tolocation=tolocation,
-                                         method=method,
-                                         condition=condition,
-                                         assignments=assignments,
-                                         output=output)
+                trans_object = Transition(fromlocation_=fromlocation,
+                                          tolocation_=tolocation,
+                                          method_=method,
+                                          condition_=condition,
+                                          assignments_=assignments,
+                                          output_=output)
 
                 # add the transition into the list of transitions
-                progress.append(transObject)
+                progress.append(trans_object)
                 # add the transition into the list of transitions originating at fromlocation
-                fromlocation.transitions.append(transObject)
+                fromlocation.transitions.append(trans_object)
 
         return progress
 
-    def condenseAutomaton(self, transitions) -> list:
+    def __condense_automaton(self, transitions) -> list:
+        """ Method for reformatting the RA by condensing the list of transitions.
+        Condensing is done by removing output locations from the RA """
         progress = []
         deletelocations = set()
         for transition in transitions:
             # print('before pruning: ', transition)
-            currentTransition = transition
-            currentDest = transition.toLocation
-            nextTransition = currentDest.transitions[0] if len(currentDest.transitions) == 1 else None
-            if nextTransition is not None \
-                    and nextTransition.method in self.outputs.keys():
+            current_transition = transition
+            current_dest = transition.toLocation
+            next_transition = current_dest.transitions[0] if len(current_dest.transitions) == 1 else None
+            if next_transition is not None \
+                    and next_transition.method in self.outputs.keys():
                 # insert the output location into the list to be deleted
-                deletelocations.add(currentDest)
-                currentTransition.output = nextTransition.output
-                currentTransition.toLocation = nextTransition.toLocation
-            # print('after pruning: ', currentTransition)
+                deletelocations.add(current_dest)
+                current_transition.output = next_transition.output
+                current_transition.toLocation = next_transition.toLocation
+            # print('after pruning: ', current_transition)
 
-            progress.append(currentTransition)
+            progress.append(current_transition)
 
         # delete transitions originating from output locations
         [progress.remove(transition) for location in deletelocations \
          for transition in progress if transition.fromLocation == location]
 
         return progress
+
 
