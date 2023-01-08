@@ -54,11 +54,15 @@ def weakest_precondition(argv, args) -> list:
 
     return substitute(argv, args)
 
+
 def do_simplify(argv):
+    if argv in (BoolVal(True), BoolVal(False)):
+        return argv
     return simplify(argv)
 
 
-
-
-
-
+def do_check(*args):
+    s = Solver()
+    for argv in args:
+        s.add(argv)
+    return s.check()

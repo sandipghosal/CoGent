@@ -15,7 +15,7 @@ def main(argv):
     automaton = ParsedXML(argv)
     generate(automaton, 'I_push')
 
-    # print(automaton.transitions)
+
     # print(automaton.getLocations())
     # for location in automaton.getLocations():
     #     print(automaton.getTransitions(source=location, method='I_push'))

@@ -33,7 +33,19 @@ from z3 import *
 
 r1, I_push_p1, I_contains_p1 = Reals('r1 I_push_p1 I_contains_p1')
 
-result = substitute(r1 == I_contains_p1, [(r1, I_push_p1)])
-simplify()
-print(result)
+# result = substitute(r1 == I_contains_p1, [(r1, I_push_p1)])
+# simplify()
+
+s = Solver()
+
+
+# s.add(True, I_push_p1 == I_contains_p1)
+# print(s.check())
+
+# s.add(Implies(r1 == I_contains_p1, Or(I_push_p1==I_contains_p1, r1==I_contains_p1)))
+# print(s.check())
+
+
+
+
 

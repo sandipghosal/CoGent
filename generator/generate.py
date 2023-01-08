@@ -1,3 +1,5 @@
+import itertools
+
 from constraint_builder.build_expression import build_expr
 from constraintsolver.solver import *
 
@@ -6,6 +8,7 @@ def generate(automaton, modifier):
     """ Function perform the steps for generating contract for a given method """
 
     observers = automaton.get_observers()
+    # get_preconditions(automaton, observers, automaton.startLocation)
     for observer in observers:
         for output in ['TRUE', 'FALSE']:
             # list of visited locations
@@ -24,7 +27,16 @@ def generate(automaton, modifier):
 
                 # derive weakest precondition at this location w.r.t. the observer and its output
                 weakest_pre = get_weakest_precondition(automaton, transitions, observer, output)
-                print(weakest_pre)
+
+                # list of all possible preconditions at the pre-location
+                preconditions = get_preconditions(automaton, observers, location)
+
+                # check for the satisfiability if each precondition
+                # does satisfy the weakest precondition
+                for condition in preconditions:
+                    condition = do_simplify(condition)
+                    result = get_implies(condition, weakest_pre)
+                    print(result, do_check(result), end='\n\n')
 
                 # insert the destination locations from this location into the queue
                 for transition in transitions:
@@ -33,10 +45,47 @@ def generate(automaton, modifier):
                         visited.append(transition.toLocation)
 
 
+def get_preconditions(automaton, observers, location):
+    # initialize the list of possible pre-conditions
+    preconditions = list()
+
+    # obtain list of transitions at location
+    transitions = automaton.get_transitions(source_=location, destination_=location)
+
+    # obtains monomials of all observers: a list of lists
+    monomials = [list(zip(observers, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(observers))]
+    # print(monomials)
+    for item in monomials:
+        # each element item is a list of tuples of observers
+        # with respective Boolean output TRUE/FALSE
+        result = None
+        for i in range(len(item)):
+
+            # iterate through all transitions due to observers at given location
+            for j in range(len(transitions)):
+                # if the transition method is same as the item[i][0]
+                # and produce same output as item[i][1]
+                if transitions[j].method.name == item[i][0] \
+                        and transitions[j].output == item[i][1]:
+
+                    # for first transition set the result
+                    if i == 0:
+                        result = get_constraint(automaton, transitions[j], transitions[j].guard)
+                    else:
+                        # for the subsequent transitions do the conjunction with previous result
+                        result = get_and(
+                            result,
+                            get_constraint(automaton, transitions[j], transitions[j].guard)
+                        )
+        if result is not None: preconditions.append(result)
+
+    return preconditions
+
+
 def get_weakest_precondition(automaton, transitions, observer, observer_output):
     """ Returns a BoolRef object at a given location for
     a method and an output of observer method """
-    # obtain disjunction of all the constraints for the given method
+    # obtain disjunction of all the constraints for the list of transitions
     disjunctions = constraints_disjunction(automaton, transitions)
 
     # derive the conjunction of implications: if guard of the modifier is true
@@ -46,6 +95,7 @@ def get_weakest_precondition(automaton, transitions, observer, observer_output):
     # obtain the weakest pre-condition by doing conjunction of disjunction and implications
     # and further simplification
     return do_simplify(get_and(disjunctions, implications))
+
 
 def constraints_disjunction(automaton, transitions):
     """ Returns BoolRef object: disjunctions of constraints
@@ -100,12 +150,12 @@ def implication_to_postcondition(automaton, transitions, observer, output):
         # obtain the conjunction of implications
         if index == 0:
             implications = get_implies(get_constraint(automaton, transitions[index], transitions[index].guard),
-                                      weakest_p)
+                                       weakest_p)
         else:
             implications = get_and(implications,
-                                  get_implies(get_constraint(automaton, transitions[index], transitions[index].guard),
-                                              weakest_p)
-                                  )
+                                   get_implies(get_constraint(automaton, transitions[index], transitions[index].guard),
+                                               weakest_p)
+                                   )
         return implications
 
 
