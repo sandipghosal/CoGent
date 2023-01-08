@@ -1,5 +1,5 @@
 class Automaton:
-    """This is a class containing the data structure for holding a register automaton (RA)"""
+    """ Class containing the data structure for holding a register automaton (RA) """
 
     def __init__(self, methods_, constants_, registers_, outputs_, transitions_, startlocation_) -> None:
         self.methods = methods_
@@ -30,7 +30,7 @@ class Automaton:
 
     def get_transitions(self, source_, destination_=None, method_=None, output_=None) -> list:
         """ Returns list of transitions between a source and destination (optional)
-        location for a given method (optional) and its output (optional) """
+        location(s) for a given method (optional) and its output (optional) """
         transitions = list()
         for transition in self.transitions:
             # check if transition starting at given location
@@ -49,6 +49,8 @@ class Automaton:
                                 or transition.output == output_:
                             transitions.append(transition)
         return transitions
+
+
 
 
 class Location:
@@ -86,7 +88,8 @@ class Parameter:
 
 
 class Transition:
-    def __init__(self, fromlocation_, tolocation_, method_=None, condition_=None, assignments_=None, output_=None):
+    def __init__(self, fromlocation_, tolocation_, method_=None,
+                 condition_=None, assignments_=None, output_=None):
         self.fromLocation = fromlocation_
         self.toLocation = tolocation_
         self.method = method_
@@ -98,6 +101,3 @@ class Transition:
         new_line = '\n'
         return f'{new_line}{self.fromLocation}:{self.method}:{self.guard}:{self.assignments}:{self.output}:{self.toLocation}'
 
-# class Guard:
-#     def __init__(self, ) -> None:
-#         pass

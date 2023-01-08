@@ -19,15 +19,25 @@ def weakest_precondition(*args) -> list:
     return t(goal)[0]
 
 
-class Constraint(Z3PPObject):
+class Constraint(BoolRef):
     """ Class instantiate a constraint and returns an object of Goal """
-    def __new__(self, expression_=None):
-        self.expression = Goal()
-        if expression_ is not None: self.expression.add(expression_)
-        return self.expression
+
+    def __init__(self, expression_):
+        self.expression = expression_
+
+    def __or__(self, other):
+        return Or(self.expression, other)
+
+    def __and__(self, other):
+        return And(self.expression, other)
+
+    def __neg__(self):
+        return Not(self.expression)
+
+    def __ne__(self, other):
+        return Not(self.expression, other)
 
     def __repr__(self):
         return f'{self.expression}'
 
-    # def __add__(self, other):
-    #     return self.expression.add(other)
+

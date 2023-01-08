@@ -1,6 +1,6 @@
 import re
 
-from expression_builder.tokens import *
+from constraint_builder.tokens import *
 
 
 ######################

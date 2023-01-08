@@ -1,8 +1,6 @@
-import sys
-
-from expression_builder.lexer import Lexer
-from expression_builder.parser import Parser
-from expression_builder.builder import Builder
+from constraint_builder.lexer import Lexer
+from constraint_builder.parser import Parser
+from constraint_builder.builder import Builder
 
 
 def build_expr(automaton, transition):
@@ -11,5 +9,5 @@ def build_expr(automaton, transition):
     tokens = lexer.create_tokens()
     tree = Parser(tokens, transition.guard).parse()
     builder = Builder(automaton, transition)
-    expression = builder.build(tree)
-    print(expression)
+    return builder.build(tree)
+

@@ -1,4 +1,3 @@
-
 from ramodel.automaton import *
 from xmlparser.xmltags import *
 import constraintsolver.solver as S
@@ -8,7 +7,6 @@ import xml.etree.ElementTree as ET
 class ParsedXML:
     """This is a class containing methods for extracting a register automaton
     from a given XML file"""
-
 
     ###############################################
     #   constants = {id : [id_object, value]}
@@ -173,10 +171,14 @@ class ParsedXML:
         return progress
 
     def __condense_automaton(self, transitions) -> list:
-        """ Method for reformatting the RA by condensing the list of transitions.
-        Condensing is done by removing output locations from the RA """
+        """ Method for reformatting the RA by condensing the list of transitions """
+        transitions = self.__remove_output_locations(self, transitions)
+        return self.__condense_constraints(self, transitions)
+
+    def __remove_output_locations(self, transitions):
+        """ Removes output locations from the RA """
         progress = []
-        deletelocations = set()
+        deletedlocations = set()
         for transition in transitions:
             # print('before pruning: ', transition)
             current_transition = transition
@@ -185,7 +187,7 @@ class ParsedXML:
             if next_transition is not None \
                     and next_transition.method in self.outputs.keys():
                 # insert the output location into the list to be deleted
-                deletelocations.add(current_dest)
+                deletedlocations.add(current_dest)
                 current_transition.output = next_transition.output
                 current_transition.toLocation = next_transition.toLocation
             # print('after pruning: ', current_transition)
@@ -193,9 +195,31 @@ class ParsedXML:
             progress.append(current_transition)
 
         # delete transitions originating from output locations
-        [progress.remove(transition) for location in deletelocations \
+        [progress.remove(transition) for location in deletedlocations \
          for transition in progress if transition.fromLocation == location]
 
         return progress
 
+    def __condense_constraints(self, transitions) -> list:
+        """ Condense automaton by accumulating constraints
+        for an observer that provides same output True or False """
+        progress = list()
 
+        for transition in transitions:
+            # print('For transition: ', transition)
+            for transition_ in transitions:
+                # if two transitions are different
+                # and their from and to locations are same
+                # and both caused by the same method
+                # and produce same output
+                if transition != transition_ \
+                        and transition.fromLocation == transition_.fromLocation \
+                        and transition.toLocation == transition_.toLocation \
+                        and transition.method.name == transition_.method.name \
+                        and transition.output == transition_.output:
+                    # print('Duplicate transition: ', transition_)
+                    transition.guard = '(' + transition.guard + ') || (' + transition_.guard + ')'
+                    # print('New guard: ' + transition.guard)
+                    transitions.remove(transition_)
+
+        return transitions

@@ -1,4 +1,4 @@
-from expression_builder.tokens import *
+from constraint_builder.tokens import *
 
 
 ###############################
@@ -123,7 +123,7 @@ class Parser:
 
         node = self.term()
 
-        while self.index < len(self.tokens) and self.tokens[self.index].type in (PLUS, MINUS, AND, OR, NEQ, XOR):
+        while self.index < len(self.tokens) and self.tokens[self.index].type in (PLUS, MINUS, AND, OR, NEQ, XOR, COMPARE):
             token = self.tokens[self.index]
             if token.type == PLUS:
                 self.match()
@@ -136,6 +136,8 @@ class Parser:
             elif token.type == NEQ:
                 self.match()
             elif token.type == XOR:
+                self.match()
+            elif token.type == COMPARE:
                 self.match()
 
             node = BinaryOp(node, token, self.term())

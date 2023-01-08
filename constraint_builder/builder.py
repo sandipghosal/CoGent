@@ -1,4 +1,4 @@
-from expression_builder.tokens import *
+from constraint_builder.tokens import *
 from constraintsolver.solver import *
 
 
