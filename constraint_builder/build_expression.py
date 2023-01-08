@@ -3,11 +3,12 @@ from constraint_builder.parser import Parser
 from constraint_builder.builder import Builder
 
 
-def build_expr(automaton, transition):
+def build_expr(automaton, transition, expression):
     """ Process an expression and returns a solver object """
-    lexer = Lexer(transition.guard)
+    lexer = Lexer(expression)
     tokens = lexer.create_tokens()
-    tree = Parser(tokens, transition.guard).parse()
+    tree = Parser(tokens, expression).parse()
+    # automaton required to get the registers, constants and parameters
     builder = Builder(automaton, transition)
     return builder.build(tree)
 

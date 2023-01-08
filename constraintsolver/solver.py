@@ -1,43 +1,64 @@
 from z3 import *
 
 
-def get_object(id):
+def get_int_object(id):
     """ Convert a string id to object of type Int """
     __id = Int(id)
     return __id
 
 
-def weakest_precondition(*args) -> list:
+# def get_a_context():
+#     """ Returns an instance of Context for building constraint """
+#     return Context()
+
+
+def get_or(first, second):
+    """ Returns disjunction of first and second constraints """
+    return Or(first, second)
+
+
+def get_and(first, second):
+    """ Returns conjunction of first and second constraints """
+    return And(first, second)
+
+
+def get_neg(first):
+    """ Returns negation of the parameter """
+    return Not(first)
+
+
+def get_neq(first, second):
+    """ Returns not equal expression of two parameters """
+    return Not(first == second)
+
+
+def get_implies(first, second):
+    """ Returns implication where first implies second """
+    return Implies(first, second)
+
+
+def weakest_precondition(argv, args) -> list:
     """ This function derives the weakest precondition
         for a given goal as input parameter """
-    goal = Goal()
-    for arg in args:
-        goal.add(arg)
-    t1 = Tactic('simplify')
-    t2 = Tactic('solve-eqs')
-    t = Then(t1, t2)
-    return t(goal)[0]
+    # if len(args) > 0:
+    #     goal = Goal()
+    #     goal.add(argv)
+    #     goal.add(args[0])
+    #     t1 = Tactic('simplify')
+    #     # t2 = Tactic('qe')
+    #     # t = Then(t1, t2)
+    #     print(t1(goal))
+    #     return weakest_precondition(*t(goal), args[1:])
+    # else:
+    #     return argv
+
+    return substitute(argv, args)
+
+def do_simplify(argv):
+    return simplify(argv)
 
 
-class Constraint(BoolRef):
-    """ Class instantiate a constraint and returns an object of Goal """
 
-    def __init__(self, expression_):
-        self.expression = expression_
 
-    def __or__(self, other):
-        return Or(self.expression, other)
-
-    def __and__(self, other):
-        return And(self.expression, other)
-
-    def __neg__(self):
-        return Not(self.expression)
-
-    def __ne__(self, other):
-        return Not(self.expression, other)
-
-    def __repr__(self):
-        return f'{self.expression}'
 
 

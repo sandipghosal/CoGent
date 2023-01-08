@@ -64,7 +64,7 @@ class ParsedXML:
                 # paramids = {"id" : id_obj}
                 paramids = dict()
                 for param in symbol.iter(PARAM):
-                    paramids[param.attrib[NAME]] = S.get_object(param.attrib[NAME])
+                    paramids[param.attrib[NAME]] = S.get_int_object(param.attrib[NAME])
                     # print('id name: '+ param.attrib[NAME])
 
                 methods[methodname] = paramids
@@ -77,7 +77,7 @@ class ParsedXML:
 
         for consts in root.iter(CONSTANTS):
             for singleconst in consts.iter(CONSTANT):
-                constants[singleconst.attrib[NAME]] = [S.get_object(singleconst.attrib[NAME]), int(singleconst.text)]
+                constants[singleconst.attrib[NAME]] = [S.get_int_object(singleconst.attrib[NAME]), int(singleconst.text)]
         # print(constants)
         return constants
 
@@ -89,7 +89,7 @@ class ParsedXML:
         for globals in root.iter(GLOBALS):
             for variable in globals.iter(VARIABLE):
                 # storing instance of each register object into the dictionary
-                registers[variable.attrib[NAME]] = S.get_object(variable.attrib[NAME])
+                registers[variable.attrib[NAME]] = S.get_int_object(variable.attrib[NAME])
         return registers
 
     def __get_outputs(self, root) -> dict:
@@ -102,7 +102,7 @@ class ParsedXML:
                 # paramids = {"id" : id_obj}
                 paramids = dict()
                 for param in symbol.iter(PARAM):
-                    paramids[param.attrib[NAME]] = S.get_object(param.attrib[NAME])
+                    paramids[param.attrib[NAME]] = S.get_int_object(param.attrib[NAME])
 
                 products[symbol.attrib[NAME]] = paramids
 
@@ -114,14 +114,17 @@ class ParsedXML:
             for location in root.iter(LOCATION):
                 if INITIAL in location.attrib.keys() and location.attrib[INITIAL] == TRUE:
                     return Location(location.attrib[NAME])
-        return None
+        return ValueError()
 
     def __get_locations(self, root) -> dict:
         """Method for extracting all the locations in the RA"""
         locations = dict()
         for states in root.iter(LOCATIONS):
             for state in states.iter(LOCATION):
-                locations[state.attrib[NAME]] = Location(state.attrib[NAME])
+                if INITIAL in state.attrib.keys() and state.attrib[INITIAL] == TRUE:
+                    locations[state.attrib[NAME]] = self.startlocation
+                else:
+                    locations[state.attrib[NAME]] = Location(state.attrib[NAME])
         # result = '\n'.join(f'{key}:{value}' for key, value in locations.items())
         # print(result)
         return locations
@@ -149,12 +152,12 @@ class ParsedXML:
                 # obtain guard condition for this transition
                 condition = transition.find(GUARD).text if transition.find(GUARD) is not None else 'True'
 
-                # obtain a list of assignments performed while this transition
-                assignments = list()
+                # obtain a dict of assignments performed while this transition
+                assignments = dict()
                 for assigns in transition.iter(ASSIGNMENTS):
                     for assign in assigns.iter(ASSIGN):
-                        assignments.append(assign.attrib[TO] + '==' + assign.text)
-                        # assignments[assign.attrib[TO]] = assign.text
+                        # assignments.append(assign.attrib[TO] + '==' + assign.text)
+                        assignments[assign.attrib[TO]] = assign.text
 
                 trans_object = Transition(fromlocation_=fromlocation,
                                           tolocation_=tolocation,

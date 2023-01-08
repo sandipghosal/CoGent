@@ -9,12 +9,23 @@ class Automaton:
         self.transitions = transitions_
         self.startLocation = startlocation_
 
-    def get_location(self) -> list:
-        """ Method returns a list of all the locations in RA """
+    def get_all_locations(self) -> list:
+        """ Method returns a list of Location objects for all the locations in RA """
         locations = set()
         for transition in self.transitions:
             locations.add(transition.fromLocation)
             locations.add(transition.toLocation)
+        return list(locations)
+
+    def get_target_locations(self, sourceloc_, method_= None) -> list:
+        """ Returns a list of target locations from
+        a given source location and a method (optional) """
+        locations = set()
+        for transition in self.transitions:
+            if transition.fromLocation == sourceloc_:
+                if method_ is None \
+                        or transition.method.name == method_:
+                    locations.add(transition.toLocation)
         return list(locations)
 
     def get_observers(self) -> list:
@@ -51,14 +62,20 @@ class Automaton:
         return transitions
 
 
-
-
 class Location:
     # Instantiate location with name and list of registers
     def __init__(self, name_) -> None:
         self.name = name_
         # list of transitions originating at this location
         self.transitions = list()
+
+    def __eq__(self, other):
+        if not isinstance(other, Location):
+            return None
+        return self.name == other.name and id(self) == id(other)
+
+    def __hash__(self):
+        return id(self)
 
     def __repr__(self) -> str:
         return f'{self.name}'
@@ -100,4 +117,3 @@ class Transition:
     def __repr__(self) -> str:
         new_line = '\n'
         return f'{new_line}{self.fromLocation}:{self.method}:{self.guard}:{self.assignments}:{self.output}:{self.toLocation}'
-

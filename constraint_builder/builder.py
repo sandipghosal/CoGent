@@ -24,11 +24,11 @@ class Builder(NodeVisitor):
 
     def visit_BinaryOp(self, node):
         if node.operator.type == OR:
-            return Or(self.visit(node.left), self.visit(node.right))
+            return get_or(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == AND:
-            return And(self.visit(node.left), self.visit(node.right))
+            return get_and(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == NEQ:
-            return Not(self.visit(node.left) == self.visit(node.right))
+            return get_neq(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == COMPARE:
             return self.visit(node.left) == self.visit(node.right)
         else:
@@ -36,7 +36,7 @@ class Builder(NodeVisitor):
 
     def visit_UnaryOp(self, node):
         if node.operator.type == NOT:
-            print(Not(self.visit(node.expr)))
+            return get_neg(self.visit(node.expr))
         else:
             raise ValueError()
 
@@ -52,8 +52,8 @@ class Builder(NodeVisitor):
         elif node.value in self.automaton.registers:
             return self.automaton.registers[node.value]
         elif node.value in self.transition.method.paramIDs:
-            pid = self.transition.method.name + '.' + node.value
-            return get_object(pid)
+            pid = self.transition.method.name + '_' + node.value
+            return get_int_object(pid)
         else:
             raise ValueError()
 
