@@ -1,5 +1,5 @@
 from z3 import *
-from xmlparser import ParsedXML
+from import_xml import ParsedXML
 from generator.generate import generate
 
 

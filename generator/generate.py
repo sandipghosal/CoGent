@@ -15,8 +15,8 @@ def generate(automaton, modifier):
             visited = list()
             # queue of locations pending to visit
             queue = list()
-            queue.append(automaton.startLocation)
-            visited.append(automaton.startLocation)
+            queue.append(automaton.startlocation)
+            visited.append(automaton.startlocation)
             # while queue is not empty
             while queue:
                 # pop a location from the queue
@@ -41,9 +41,9 @@ def generate(automaton, modifier):
 
                 # insert the destination locations from this location into the queue
                 for transition in transitions:
-                    if transition.toLocation not in visited:
-                        queue.append(transition.toLocation)
-                        visited.append(transition.toLocation)
+                    if transition.tolocation not in visited:
+                        queue.append(transition.tolocation)
+                        visited.append(transition.tolocation)
 
 
 def get_preconditions(automaton, observers, location):
@@ -129,8 +129,8 @@ def implication_to_postcondition(automaton, transitions, observer, output):
     for index in range(len(transitions)):
         # derive the wp for modifier assignment where
         # observer constraint is the post-condition
-        obs_transition = automaton.get_transitions(source_=transitions[index].toLocation,
-                                                   destination_=transitions[index].toLocation,
+        obs_transition = automaton.get_transitions(source_=transitions[index].tolocation,
+                                                   destination_=transitions[index].tolocation,
                                                    method_=observer,
                                                    output_=output)
 

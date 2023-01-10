@@ -26,7 +26,7 @@ class UnaryOp(AST):
 class Boolean(AST):
     def __init__(self, token):
         self.token = token
-        self.value = True if token.value == 'True' else False
+        self.value = True if token.value in ('True', 'TRUE', 'true') else False
 
 
 class Variable(AST):

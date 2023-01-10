@@ -7,9 +7,8 @@ def get_int_object(id):
     return __id
 
 
-# def get_a_context():
-#     """ Returns an instance of Context for building constraint """
-#     return Context()
+def get_bool_object(arg):
+    return BoolVal(True) if arg == True else BoolVal(False)
 
 
 def get_or(first, second):

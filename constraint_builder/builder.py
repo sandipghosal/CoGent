@@ -18,9 +18,10 @@ class NodeVisitor:
 
 class Builder(NodeVisitor):
 
-    def __init__(self, automaton_, transition_):
-        self.automaton = automaton_
-        self.transition = transition_
+    def __init__(self, method_, registers_, constants_):
+        self.method = method_
+        self.transition = registers_
+        self.constants = constants_
 
     def visit_BinaryOp(self, node):
         if node.operator.type == OR:
@@ -42,17 +43,17 @@ class Builder(NodeVisitor):
 
     def visit_Boolean(self, node):
         if node.token.type == BOOL:
-            return node.value
+            return get_bool_object(node.value)
         else:
             raise ValueError()
 
     def visit_Variable(self, node):
-        if node.value in self.automaton.constants:
-            return self.automaton.constants[node.value][0]
-        elif node.value in self.automaton.registers:
-            return self.automaton.registers[node.value]
-        elif node.value in self.transition.method.paramIDs:
-            pid = self.transition.method.name + '_' + node.value
+        if node.value in self.constants:
+            return self.constants[node.value][0]
+        elif node.value in self.registers:
+            return self.registers[node.value]
+        elif node.value in self.method.params:
+            pid = self.method.name + '_' + node.value
             return get_int_object(pid)
         else:
             raise ValueError()

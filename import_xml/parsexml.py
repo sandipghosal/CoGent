@@ -1,5 +1,5 @@
 from ramodel.automaton import *
-from xmlparser.xmltags import *
+from import_xml.xmltags import *
 import constraintsolver.solver as S
 import xml.etree.ElementTree as ET
 
@@ -185,21 +185,21 @@ class ParsedXML:
         for transition in transitions:
             # print('before pruning: ', transition)
             current_transition = transition
-            current_dest = transition.toLocation
+            current_dest = transition.tolocation
             next_transition = current_dest.transitions[0] if len(current_dest.transitions) == 1 else None
             if next_transition is not None \
                     and next_transition.method in self.outputs.keys():
                 # insert the output location into the list to be deleted
                 deletedlocations.add(current_dest)
                 current_transition.output = next_transition.output
-                current_transition.toLocation = next_transition.toLocation
+                current_transition.tolocation = next_transition.toLocation
             # print('after pruning: ', current_transition)
 
             progress.append(current_transition)
 
         # delete transitions originating from output locations
         [progress.remove(transition) for location in deletedlocations \
-         for transition in progress if transition.fromLocation == location]
+         for transition in progress if transition.fromlocation == location]
 
         return progress
 
@@ -216,8 +216,8 @@ class ParsedXML:
                 # and both caused by the same method
                 # and produce same output
                 if transition != transition_ \
-                        and transition.fromLocation == transition_.fromLocation \
-                        and transition.toLocation == transition_.toLocation \
+                        and transition.fromlocation == transition_.fromlocation \
+                        and transition.tolocation == transition_.tolocation \
                         and transition.method.name == transition_.method.name \
                         and transition.output == transition_.output:
                     # print('Duplicate transition: ', transition_)

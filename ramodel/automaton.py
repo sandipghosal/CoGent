@@ -1,31 +1,30 @@
 class Automaton:
     """ Class containing the data structure for holding a register automaton (RA) """
 
-    def __init__(self, methods_, constants_, registers_, outputs_, transitions_, startlocation_) -> None:
+    def __init__(self, methods_, constants_, registers_, transitions_, startlocation_) -> None:
         self.methods = methods_
         self.constants = constants_
         self.registers = registers_
-        self.outputs = outputs_
         self.transitions = transitions_
-        self.startLocation = startlocation_
+        self.startlocation = startlocation_
 
-    def get_all_locations(self) -> list:
+    def get_locations(self) -> list:
         """ Method returns a list of Location objects for all the locations in RA """
         locations = set()
         for transition in self.transitions:
-            locations.add(transition.fromLocation)
-            locations.add(transition.toLocation)
+            locations.add(transition.fromlocation)
+            locations.add(transition.tolocation)
         return list(locations)
 
-    def get_target_locations(self, sourceloc_, method_= None) -> list:
+    def get_destinations(self, sourceloc_, method_=None) -> list:
         """ Returns a list of target locations from
         a given source location and a method (optional) """
         locations = set()
         for transition in self.transitions:
-            if transition.fromLocation == sourceloc_:
+            if transition.fromlocation == sourceloc_:
                 if method_ is None \
                         or transition.method.name == method_:
-                    locations.add(transition.toLocation)
+                    locations.add(transition.tolocation)
         return list(locations)
 
     def get_observers(self) -> list:
@@ -34,7 +33,7 @@ class Automaton:
         for key in list(self.methods.keys()):
             methods.append(key)
         for transition in self.transitions:
-            if transition.fromLocation != transition.toLocation \
+            if transition.fromlocation != transition.tolocation \
                     and transition.method.name in methods:
                 methods.remove(transition.method.name)
         return methods
@@ -45,11 +44,11 @@ class Automaton:
         transitions = list()
         for transition in self.transitions:
             # check if transition starting at given location
-            if transition.fromLocation == source_:
+            if transition.fromlocation == source_:
                 # if destination is not given
                 # or destination same as input param
                 if destination_ is None \
-                        or destination_ == transition.toLocation:
+                        or destination_ == transition.tolocation:
                     # check if the transition caused by the method
                     # is same as given in the input parameter
                     if method_ is None \
@@ -66,8 +65,6 @@ class Location:
     # Instantiate location with name and list of registers
     def __init__(self, name_) -> None:
         self.name = name_
-        # list of transitions originating at this location
-        self.transitions = list()
 
     def __eq__(self, other):
         if not isinstance(other, Location):
@@ -81,39 +78,26 @@ class Location:
         return f'{self.name}'
 
 
-class Register:
-    def __init__(self, name_, value_) -> None:
-        self.id = name_
-        self.value = value_
-
-
 class Method:
     # Instantiate a method with its name and list of input parameters
-    def __init__(self, name_, paramids_=None, outputs_=None) -> None:
+    def __init__(self, name_, params_=None, output_=None) -> None:
         self.name = name_
-        self.paramIDs = paramids_
-        self.outputs = outputs_
+        self.params = params_
+        self.outputs = output_
 
     def __repr__(self) -> str:
-        return f'{self.name}:{self.paramIDs}'
-
-
-class Parameter:
-    def __init__(self, name_, value_=None) -> None:
-        self.id = name_
-        self.value = value_
+        return f'{self.name}:{self.params}:{self.outputs}'
 
 
 class Transition:
     def __init__(self, fromlocation_, tolocation_, method_=None,
-                 condition_=None, assignments_=None, output_=None):
-        self.fromLocation = fromlocation_
-        self.toLocation = tolocation_
+                 condition_=None, assignments_=None):
+        self.fromlocation = fromlocation_
+        self.tolocation = tolocation_
         self.method = method_
         self.guard = condition_
         self.assignments = assignments_
-        self.output = output_
 
     def __repr__(self) -> str:
         new_line = '\n'
-        return f'{new_line}{self.fromLocation}:{self.method}:{self.guard}:{self.assignments}:{self.output}:{self.toLocation}'
+        return f'{new_line}{self.fromlocation}:{self.method}:{self.guard}:{self.assignments}:{self.method.outputs}:{self.tolocation}'
