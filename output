@@ -1,0 +1,94 @@
+input/model.xml
+At location l0 for post-condition I_contains  ==  TRUE ::
+wp:  I_push_p1 == I_contains_p1
+Implies(True, I_push_p1 == I_contains_p1) sat
+
+At location l6 for post-condition I_contains  ==  TRUE ::
+wp:  Or(I_push_p1 == I_contains_p1, r1 == I_contains_p1)
+Implies(r1 == I_contains_p1,
+        Or(I_push_p1 == I_contains_p1, r1 == I_contains_p1)) sat
+
+Implies(Not(r1 == I_contains_p1),
+        Or(I_push_p1 == I_contains_p1, r1 == I_contains_p1)) sat
+
+At location l12 for post-condition I_contains  ==  TRUE ::
+wp:  Or(I_push_p1 == I_contains_p1,
+   r1 == I_contains_p1,
+   r2 == I_contains_p1)
+Implies(Or(r1 == I_contains_p1, r2 == I_contains_p1),
+        Or(I_push_p1 == I_contains_p1,
+           r1 == I_contains_p1,
+           r2 == I_contains_p1)) sat
+
+Implies(And(Not(r2 == I_contains_p1),
+            Not(r1 == I_contains_p1)),
+        Or(I_push_p1 == I_contains_p1,
+           r1 == I_contains_p1,
+           r2 == I_contains_p1)) sat
+
+At location l14 for post-condition I_contains  ==  TRUE ::
+wp:  Or(r1 == I_contains_p1,
+   r2 == I_contains_p1,
+   r3 == I_contains_p1)
+Implies(Or(r1 == I_contains_p1,
+           r2 == I_contains_p1,
+           r3 == I_contains_p1),
+        Or(r1 == I_contains_p1,
+           r2 == I_contains_p1,
+           r3 == I_contains_p1)) sat
+
+Implies(And(Not(r2 == I_contains_p1),
+            Not(r3 == I_contains_p1),
+            Not(r1 == I_contains_p1)),
+        Or(r1 == I_contains_p1,
+           r2 == I_contains_p1,
+           r3 == I_contains_p1)) sat
+
+At location l0 for post-condition I_contains  ==  FALSE ::
+wp:  Not(I_push_p1 == I_contains_p1)
+Implies(True, Not(I_push_p1 == I_contains_p1)) sat
+
+At location l6 for post-condition I_contains  ==  FALSE ::
+wp:  And(Not(r1 == I_contains_p1),
+    Not(I_push_p1 == I_contains_p1))
+Implies(r1 == I_contains_p1,
+        And(Not(r1 == I_contains_p1),
+            Not(I_push_p1 == I_contains_p1))) sat
+
+Implies(Not(r1 == I_contains_p1),
+        And(Not(r1 == I_contains_p1),
+            Not(I_push_p1 == I_contains_p1))) sat
+
+At location l12 for post-condition I_contains  ==  FALSE ::
+wp:  And(Not(r2 == I_contains_p1),
+    Not(r1 == I_contains_p1),
+    Not(I_push_p1 == I_contains_p1))
+Implies(Or(r2 == I_contains_p1, r1 == I_contains_p1),
+        And(Not(r2 == I_contains_p1),
+            Not(r1 == I_contains_p1),
+            Not(I_push_p1 == I_contains_p1))) sat
+
+Implies(And(Not(r2 == I_contains_p1),
+            Not(r1 == I_contains_p1)),
+        And(Not(r2 == I_contains_p1),
+            Not(r1 == I_contains_p1),
+            Not(I_push_p1 == I_contains_p1))) sat
+
+At location l14 for post-condition I_contains  ==  FALSE ::
+wp:  And(Not(r2 == I_contains_p1),
+    Not(r3 == I_contains_p1),
+    Not(r1 == I_contains_p1))
+Implies(Or(r1 == I_contains_p1,
+           r2 == I_contains_p1,
+           r3 == I_contains_p1),
+        And(Not(r2 == I_contains_p1),
+            Not(r3 == I_contains_p1),
+            Not(r1 == I_contains_p1))) sat
+
+Implies(And(Not(r2 == I_contains_p1),
+            Not(r3 == I_contains_p1),
+            Not(r1 == I_contains_p1)),
+        And(Not(r2 == I_contains_p1),
+            Not(r3 == I_contains_p1),
+            Not(r1 == I_contains_p1))) sat
+

@@ -27,7 +27,8 @@ def generate(automaton, modifier):
 
                 # derive weakest precondition at this location w.r.t. the observer and its output
                 weakest_pre = get_weakest_precondition(automaton, transitions, observer, output)
-
+                print('At location', location, 'for post-condition', observer, ' == ', output, '::')
+                print('wp: ', weakest_pre)
                 # list of all possible preconditions at the pre-location
                 preconditions = get_preconditions(automaton, observers, location)
 
@@ -49,6 +50,9 @@ def get_preconditions(automaton, observers, location):
     # initialize the list of possible pre-conditions
     preconditions = list()
 
+    # populate a list of transitions considered while obtaining precondition
+    precond_transitions = list()
+
     # obtain list of transitions at location
     transitions = automaton.get_transitions(source_=location, destination_=location)
 
@@ -67,6 +71,9 @@ def get_preconditions(automaton, observers, location):
                 # and produce same output as item[i][1]
                 if transitions[j].method.name == item[i][0] \
                         and transitions[j].output == item[i][1]:
+
+                    # insert the transition into the list of transitions considered
+                    precond_transitions.append(transitions[j])
 
                     # for first transition set the result
                     if i == 0:
