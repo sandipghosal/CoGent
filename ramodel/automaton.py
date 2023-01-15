@@ -1,12 +1,12 @@
 class Automaton:
     """ Class containing the data structure for holding a register automaton (RA) """
 
-    def __init__(self, methods_, constants_, registers_, transitions_, startlocation_) -> None:
+    def __init__(self, methods_, constants_, registers_, locations_, transitions_) -> None:
         self.methods = methods_
         self.constants = constants_
         self.registers = registers_
+        self.locations = locations_
         self.transitions = transitions_
-        self.startlocation = startlocation_
 
     def get_locations(self) -> list:
         """ Method returns a list of Location objects for all the locations in RA """
@@ -91,12 +91,13 @@ class Method:
 
 class Transition:
     def __init__(self, fromlocation_, tolocation_, method_=None,
-                 condition_=None, assignments_=None):
+                 condition_=None, assignments_=None, output_= None):
         self.fromlocation = fromlocation_
         self.tolocation = tolocation_
         self.method = method_
         self.guard = condition_
         self.assignments = assignments_
+        self.output = output_
 
     def __repr__(self) -> str:
         new_line = '\n'

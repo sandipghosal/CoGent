@@ -9,5 +9,6 @@ def build_expr(expression, method, registers, constants):
     tokens = lexer.create_tokens()
     tree = Parser(tokens, expression).parse()
     builder = Builder(method, registers, constants)
-    return builder.build(tree)
+    exp = builder.build(tree)
+    return exp
 

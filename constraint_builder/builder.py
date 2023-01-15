@@ -1,3 +1,5 @@
+import sys
+
 from constraint_builder.tokens import *
 from constraintsolver.solver import *
 
@@ -20,7 +22,7 @@ class Builder(NodeVisitor):
 
     def __init__(self, method_, registers_, constants_):
         self.method = method_
-        self.transition = registers_
+        self.registers = registers_
         self.constants = constants_
 
     def visit_BinaryOp(self, node):
@@ -52,11 +54,15 @@ class Builder(NodeVisitor):
             return self.constants[node.value][0]
         elif node.value in self.registers:
             return self.registers[node.value]
-        elif node.value in self.method.params:
-            pid = self.method.name + '_' + node.value
-            return get_int_object(pid)
+        elif self.method.params is not None \
+                and node.value in self.method.params:
+            return get_int_object(node.value)
+        elif self.method.outputs is not None \
+                and node.value in self.method.outputs:
+            return get_int_object(node.value)
         else:
-            raise ValueError()
+            print(node.value, 'No found')
+            sys.exit(0)
 
     def build(self, tree):
         return self.visit(tree)

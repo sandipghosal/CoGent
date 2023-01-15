@@ -4,34 +4,31 @@ from constraint_builder.build_expression import build_expr
 import constraintsolver.solver as S
 
 
-def get_transitions(root, methods, constants, registers, locations):
+def get_transitions(root, methods, constants, registers, locations, outputs):
     # populate the list of Transition objects
     progress = list()
 
     for transitions in root.iter(TRANSITIONS):
         for transition in transitions.iter(TRANSITION):
+            # get the source and destination location of a transition
             fromlocation = locations[transition.attrib[FROM]]
             tolocation = locations[transition.attrib[TO]]
 
             # obtain method name/output name causing this transition
             symbol = transition.attrib[SYMBOL]
 
-            # initialize a list of output parameters
-            outputs = list()
+            # initialize the output of the tranisition as None
+            output = None
 
             # store a Method object
-            method = None
+            method = Method(symbol)
             if symbol in methods.keys():
                 # create a Method object of input symbol
-                method = Method(name_=symbol, params_=methods[symbol])
+                method.params = methods[symbol]
             else:
-                for assigns in transition.iter(ASSIGNMENTS):
-                    for assign in assigns.iter(ASSIGN):
-                        if assign.attrib[TO]: outputs.append(assign.text)
-                    else:
-                        outputs.append(symbol)
                 # create a Method object of output symbol
-                method = Method(name_=symbol, output_=outputs)
+                method.outputs = outputs[symbol]
+                output = symbol
 
             # obtain guard condition for this transition
             expression = transition.find(GUARD).text if transition.find(GUARD) is not None else 'True'
@@ -50,12 +47,30 @@ def get_transitions(root, methods, constants, registers, locations):
                                       tolocation_=tolocation,
                                       method_=method,
                                       condition_=condition,
-                                      assignments_=assignments)
+                                      assignments_=assignments,
+                                      output_=output)
 
             # add the transition into the list of transitions
             progress.append(trans_object)
 
     return progress
+
+
+def get_outputs(root) -> dict:
+    """Method for extracting all possible outputs for transitions in RA"""
+    # list of outputs produce by the automaton
+    products = dict()
+
+    for outputs in root.iter(OUTPUTS):
+        for symbol in outputs.iter(SYMBOL):
+            # paramids = {"id" : id_obj}
+            paramids = dict()
+            for param in symbol.iter(PARAM):
+                paramids[param.attrib[NAME]] = S.get_int_object(param.attrib[NAME])
+
+            products[symbol.attrib[NAME]] = paramids
+
+    return products
 
 
 def get_locations(root):
@@ -107,4 +122,10 @@ def extract(tree):
     constants = get_constants(root)
     registers = get_registers(root)
     locations = get_locations(root)
-    transitions = get_transitions(root, methods, constants, registers, locations)
+    outputs = get_outputs(root)
+    transitions = get_transitions(root, methods, constants, registers, locations, outputs)
+    return Automaton(methods_=methods,
+                     constants_=constants,
+                     registers_=registers,
+                     locations_=locations,
+                     transitions_=transitions)
