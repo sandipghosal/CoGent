@@ -46,7 +46,7 @@ def main(argv):
 
         for option, argument in options:
             if option in ("-h", "--help"):
-                print('python main.py -i <XML file> -t <Target Method> -l <Log file> -g <ERROR|INFO|DEBUG>')
+                print('python main.py -i <XML file> -t <Target Method> -l <Log file> -g <ERROR|DEBUG>')
                 sys.exit()
 
             elif option in ("-i", "--input"):
@@ -66,7 +66,7 @@ def main(argv):
                 level = levels.get(option, logging.NOTSET)
 
     except (ValueError, getopt.GetoptError):
-        print('main.py -h [--help]')
+        print('python main.py -h [--help]')
         sys.exit(2)
 
     # set up the logging environment
