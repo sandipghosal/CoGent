@@ -82,11 +82,11 @@ class Method:
     # Instantiate a method with its name and list of input parameters
     def __init__(self, name_, params_=None, output_=None) -> None:
         self.name = name_
-        self.params = params_
-        self.outputs = output_
+        self.inparams = params_
+        self.outparams = output_
 
     def __repr__(self) -> str:
-        return f'{self.name}:{self.params}:{self.outputs}'
+        return f'{self.name}:{self.inparams}:{self.outparams}'
 
 
 class Transition:
@@ -101,4 +101,4 @@ class Transition:
 
     def __repr__(self) -> str:
         new_line = '\n'
-        return f'{new_line}{self.fromlocation}:{self.method}:{self.guard}:{self.assignments}:{self.method.outputs}:{self.tolocation}'
+        return f'{new_line}{self.fromlocation}:{self.method}:{self.guard}:{self.assignments}:{self.output}:{self.tolocation}'

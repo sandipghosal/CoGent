@@ -23,3 +23,8 @@ class InputsNotFound(Error):
 class InvalidInputFile(Error):
     def __init__(self, message=None):
         super().__init__(message=message)
+
+
+class ValueNotFound(Error):
+    def __init__(self, message=None):
+        super().__init__(message=message)

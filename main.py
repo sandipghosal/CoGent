@@ -41,11 +41,8 @@ def main(argv):
                                             "log=",
                                             "log-level="])
 
-        xmlfile = None
-        target = None
-        logfile = None
+        xmlfile = target = logfile = level = None
         logswitch = False
-        level = None
 
         for option, argument in options:
             if option in ("-h", "--help"):
@@ -86,13 +83,13 @@ def main(argv):
             raise InputsNotFound('Target method not found')
         else:
             logging.debug(pp('input XML file path: ' + xmlfile))
-            automaton = import_ra(xmlfile)
     except (InputsNotFound, getopt.GetoptError):
         print('python main.py -h [--help]')
         sys.exit(2)
 
+    automaton = import_ra(xmlfile)
     # generate(automaton, 'I_push')
-    pp(automaton.transitions)
+
 
     # print(automaton.getLocations())
     # for location in automaton.getLocations():

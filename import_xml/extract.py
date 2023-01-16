@@ -1,7 +1,10 @@
+import logging
+from pprint import pp
+
 from import_xml.xmltags import *
 from ramodel.automaton import *
 from constraint_builder.build_expression import build_expr
-import constraintsolver.solver as S
+from constraint_builder.constraint import *
 
 
 def get_transitions(root, methods, constants, registers, locations, outputs):
@@ -23,12 +26,15 @@ def get_transitions(root, methods, constants, registers, locations, outputs):
             # store a Method object
             method = Method(symbol)
             if symbol in methods.keys():
-                # create a Method object of input symbol
-                method.params = methods[symbol]
+                # create a Method object of input symbol with input parameters
+                method.inparams = methods[symbol]
             else:
-                # create a Method object of output symbol
-                method.outputs = outputs[symbol]
+                # create a Method object of output symbol with output parameters
+                method.outparams = outputs[symbol]
                 output = symbol
+                for assigns in transition.iter(ASSIGNMENTS):
+                    for assign in assigns.iter(ASSIGN):
+                        output = assign.text if assign.attrib[TO] in outputs[symbol] else symbol
 
             # obtain guard condition for this transition
             expression = transition.find(GUARD).text if transition.find(GUARD) is not None else 'True'
@@ -53,6 +59,8 @@ def get_transitions(root, methods, constants, registers, locations, outputs):
             # add the transition into the list of transitions
             progress.append(trans_object)
 
+    logging.debug('List of transitions imported from the file:')
+    logging.debug(pp(progress))
     return progress
 
 
@@ -63,13 +71,17 @@ def get_outputs(root) -> dict:
 
     for outputs in root.iter(OUTPUTS):
         for symbol in outputs.iter(SYMBOL):
-            # paramids = {"id" : id_obj}
-            paramids = dict()
+            # params = ['id1', ..]
+            params = list()
             for param in symbol.iter(PARAM):
-                paramids[param.attrib[NAME]] = S.get_int_object(param.attrib[NAME])
+                # paramids[param.attrib[NAME]] = S.get_int_object(param.attrib[NAME])
+                # paramids[param.attrib[NAME]] = IntID(param.attrib[NAME])
+                params.append(param.attrib[NAME])
 
-            products[symbol.attrib[NAME]] = paramids
+            products[symbol.attrib[NAME]] = params
 
+    logging.debug('Map of output symbols imported from the file:')
+    logging.debug(pp(products))
     return products
 
 
@@ -80,6 +92,10 @@ def get_locations(root):
     for states in root.iter(LOCATIONS):
         for state in states.iter(LOCATION):
             locations[state.attrib[NAME]] = Location(state.attrib[NAME])
+
+    logging.debug('Map of locations imported from the file:')
+    logging.debug(pp(locations))
+
     return locations
 
 
@@ -89,7 +105,10 @@ def get_registers(root):
     for _globals in root.iter(GLOBALS):
         for variable in _globals.iter(VARIABLE):
             # storing instance of each register object into the dictionary
-            registers[variable.attrib[NAME]] = S.get_int_object(variable.attrib[NAME])
+            registers[variable.attrib[NAME]] = IntID(variable.attrib[NAME])
+
+    logging.debug('Map of registers imported from the file:')
+    logging.debug(pp(registers))
     return registers
 
 
@@ -98,8 +117,10 @@ def get_constants(root):
     constants = dict()
     for consts in root.iter(CONSTANTS):
         for _id in consts.iter(CONSTANT):
-            constants[_id.attrib[NAME]] = [S.get_int_object(_id.attrib[NAME]), int(_id.text)]
-    # print(constants)
+            constants[_id.attrib[NAME]] = [IntID(_id.attrib[NAME]), int(_id.text)]
+
+    logging.debug('Map of constants imported from the file:')
+    logging.debug(pp(constants))
     return constants
 
 
@@ -113,6 +134,9 @@ def get_methods(root):
             for param in symbol.iter(PARAM):
                 params.append(param.attrib[NAME])
             methods[name] = params
+
+    logging.debug('Map of input symbols imported from the file:')
+    logging.debug(pp(methods))
     return methods
 
 
@@ -124,6 +148,7 @@ def extract(tree):
     locations = get_locations(root)
     outputs = get_outputs(root)
     transitions = get_transitions(root, methods, constants, registers, locations, outputs)
+
     return Automaton(methods_=methods,
                      constants_=constants,
                      registers_=registers,
