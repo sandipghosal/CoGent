@@ -1,4 +1,4 @@
-from constraint_builder.tokens import *
+from constraintbuilder.tokens import *
 
 
 ###############################

@@ -4,6 +4,7 @@ from z3 import *
 class Constraint:
     def __init__(self, arg):
         self.constraint = arg
+        self.constraint = self.do_simplify()
 
     def __repr__(self):
         return f'{self.constraint}'
@@ -26,12 +27,21 @@ class Constraint:
     def implies(self, other):
         return Constraint(Implies(self.constraint, other.constraint))
 
+    def do_substitute(self, args):
+        return self.weakest_pre(args)
+
     def weakest_pre(self, args):
         """ Obtain weakest precondition
         self: constraint object
         args: tuples of assignments
         """
         return Constraint(substitute(self.constraint, args))
+
+    def do_simplify(self):
+        if self.constraint in (BoolVal(True), BoolVal(False)):
+            return self.constraint
+        else:
+            return simplify(self.constraint)
 
 
 class BoolID(Constraint):

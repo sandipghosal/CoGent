@@ -1,42 +1,46 @@
 from z3 import *
 
 
-def get_int_object(id):
+def _int(id):
     """ Convert a string id to object of type Int """
     __id = Int(id)
     return __id
 
 
-def get_bool_object(arg):
+def _bool(arg):
     return BoolVal(True) if arg == True else BoolVal(False)
 
 
-def get_or(first, second):
+def _or(first, second):
     """ Returns disjunction of first and second constraints """
     return Or(first, second)
 
 
-def get_and(first, second):
+def _and(first, second):
     """ Returns conjunction of first and second constraints """
     return And(first, second)
 
 
-def get_neg(first):
+def _neg(first):
     """ Returns negation of the parameter """
     return Not(first)
 
 
-def get_neq(first, second):
+def _ne(first, second):
     """ Returns not equal expression of two parameters """
     return Not(first == second)
 
 
-def get_implies(first, second):
+def _eq(first, second):
+    return first == second
+
+
+def _implies(first, second):
     """ Returns implication where first implies second """
     return Implies(first, second)
 
 
-def weakest_precondition(argv, args) -> list:
+def weakest_pre(argv, args) -> list:
     """ This function derives the weakest precondition
         for a given goal as input parameter """
     # if len(args) > 0:
@@ -52,6 +56,10 @@ def weakest_precondition(argv, args) -> list:
     #     return argv
 
     return substitute(argv, args)
+
+
+def do_substitute(argv, args):
+    return weakest_pre(argv, args)
 
 
 def do_simplify(argv):

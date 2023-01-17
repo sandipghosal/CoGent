@@ -1,10 +1,10 @@
 import logging
 from pprint import pp
 
+import constraintsolver.solver as S
+from constraintbuilder.build_expression import build_expr
 from import_xml.xmltags import *
 from ramodel.automaton import *
-from constraint_builder.build_expression import build_expr
-from constraint_builder.constraint import *
 
 
 def get_transitions(root, methods, constants, registers, locations, outputs):
@@ -81,7 +81,7 @@ def get_outputs(root) -> dict:
             products[symbol.attrib[NAME]] = params
 
     logging.debug('Map of output symbols imported from the file:')
-    logging.debug(pp(products))
+    logging.debug(products)
     return products
 
 
@@ -105,10 +105,10 @@ def get_registers(root):
     for _globals in root.iter(GLOBALS):
         for variable in _globals.iter(VARIABLE):
             # storing instance of each register object into the dictionary
-            registers[variable.attrib[NAME]] = IntID(variable.attrib[NAME])
+            registers[variable.attrib[NAME]] = S._int(variable.attrib[NAME])
 
     logging.debug('Map of registers imported from the file:')
-    logging.debug(pp(registers))
+    logging.debug(registers)
     return registers
 
 
@@ -117,10 +117,10 @@ def get_constants(root):
     constants = dict()
     for consts in root.iter(CONSTANTS):
         for _id in consts.iter(CONSTANT):
-            constants[_id.attrib[NAME]] = [IntID(_id.attrib[NAME]), int(_id.text)]
+            constants[_id.attrib[NAME]] = [S._int(_id.attrib[NAME]), int(_id.text)]
 
     logging.debug('Map of constants imported from the file:')
-    logging.debug(pp(constants))
+    logging.debug(constants)
     return constants
 
 
@@ -136,7 +136,7 @@ def get_methods(root):
             methods[name] = params
 
     logging.debug('Map of input symbols imported from the file:')
-    logging.debug(pp(methods))
+    logging.debug(methods)
     return methods
 
 

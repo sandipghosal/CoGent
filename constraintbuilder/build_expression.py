@@ -1,6 +1,6 @@
-from constraint_builder.lexer import Lexer
-from constraint_builder.parser import Parser
-from constraint_builder.builder import Builder
+from constraintbuilder.builder import Builder
+from constraintbuilder.lexer import Lexer
+from constraintbuilder.parser import Parser
 
 
 def build_expr(expression, method, registers, constants):
@@ -11,4 +11,3 @@ def build_expr(expression, method, registers, constants):
     builder = Builder(method, registers, constants)
     exp = builder.build(tree)
     return exp
-

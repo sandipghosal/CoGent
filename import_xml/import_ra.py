@@ -1,8 +1,8 @@
-import logging
-from pprint import pp
 import xml.etree.ElementTree as ET
-from import_xml.extract import extract
+
+import constraintsolver.solver as S
 from errors import *
+from import_xml.extract import extract
 
 
 def condense(automaton):
@@ -21,7 +21,7 @@ def condense(automaton):
                     and outer.tolocation == inner.tolocation \
                     and outer.method.name == inner.method.name \
                     and outer.output == inner.output:
-                outer.guard = (outer.guard)._or(inner.guard)
+                outer.guard = S._or(outer.guard, inner.guard)
                 automaton.transitions.remove(inner)
     logging.debug('\n\nNew list of transitions after condensing:')
     logging.debug(pp(automaton.transitions))
@@ -57,11 +57,21 @@ def pruning(automaton):
     [newlist.remove(transition) for location in locations \
      for transition in newlist if transition.fromlocation == location]
 
-    # set the pruned list of transitions to automaton
+    # assign the pruned list of transitions to automaton
     automaton.transitions = newlist
 
     logging.debug('\n\nNew list of transitions after pruning:')
     logging.debug(pp(automaton.transitions))
+
+    # obtain a fresh list of locations from pruned transitions
+    locations = automaton.get_locations()
+    newlocations = dict()
+    for loc in locations:
+        newlocations[loc.name] = loc
+    automaton.locations = newlocations
+
+    logging.debug('\n\nNew list of locations after pruning:')
+    logging.debug(pp(automaton.locations))
 
     return automaton
 

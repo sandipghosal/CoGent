@@ -100,5 +100,5 @@ class Transition:
         self.output = output_
 
     def __repr__(self) -> str:
-        new_line = '\n'
-        return f'{new_line}{self.fromlocation}:{self.method}:{self.guard}:{self.assignments}:{self.output}:{self.tolocation}'
+        # new_line = '\n'
+        return f'{self.fromlocation}:{self.method}:{self.guard}:{self.assignments}:{self.output}:{self.tolocation}'

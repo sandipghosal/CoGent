@@ -1,8 +1,10 @@
-import os
-import getopt
 import datetime
+import getopt
+import logging
+import os
 
 from errors import *
+from generator import generate
 from import_xml import import_ra
 
 
@@ -13,19 +15,20 @@ def setuplogger(switch, logfile, loglevel=None):
     if not exist:
         os.makedirs(logpath)
 
-    if not switch:
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     if switch:
         if logfile is None:
             # create a default log file using the timestamp
             logfile = 'log/' + str(datetime.datetime.now()).split(' ')[1] + '.log'
         else:
             logfile = 'log/' + logfile
+
         if loglevel:
             logging.basicConfig(filename=logfile, level=loglevel)
         else:
             logging.basicConfig(filename=logfile, level=logging.DEBUG)
         print('log file created:' + logfile)
+    else:
+        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 def main(argv):
@@ -72,9 +75,6 @@ def main(argv):
     # set up the logging environment
     setuplogger(switch=logswitch, logfile=logfile, loglevel=level)
 
-    # import the automaton from the XML file
-    automaton = None
-
     # check if user has provided the XML file
     try:
         if not xmlfile:
@@ -82,14 +82,15 @@ def main(argv):
         elif not target:
             raise InputsNotFound('Target method not found')
         else:
-            logging.debug(pp('input XML file path: ' + xmlfile))
+            logging.debug('input XML file path:' + xmlfile)
     except (InputsNotFound, getopt.GetoptError):
         print('python main.py -h [--help]')
         sys.exit(2)
 
+    logging.debug('target method:' + target)
+    # import the automaton from the XML file
     automaton = import_ra(xmlfile)
-    # generate(automaton, 'I_push')
-
+    generate(automaton, target)
 
     # print(automaton.getLocations())
     # for location in automaton.getLocations():

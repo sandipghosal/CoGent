@@ -1,9 +1,6 @@
-import sys
-
-from constraint_builder.tokens import *
-from constraint_builder.constraint import *
+import constraintsolver.solver as S
+from constraintbuilder.tokens import *
 from errors import *
-from constraintsolver.solver import *
 
 
 class NodeVisitor:
@@ -29,29 +26,29 @@ class Builder(NodeVisitor):
 
     def visit_BinaryOp(self, node):
         if node.operator.type == OR:
-            return (self.visit(node.left))._or(self.visit(node.right))
-            # return get_or(self.visit(node.left), self.visit(node.right))
+            # return (self.visit(node.left))._or(self.visit(node.right))
+            return S._or(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == AND:
-            return (self.visit(node.left))._and(self.visit(node.right))
-            # return get_and(self.visit(node.left), self.visit(node.right))
+            # return (self.visit(node.left))._and(self.visit(node.right))
+            return S._and(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == NEQ:
-            return (self.visit(node.left))._ne(self.visit(node.right))
-            # return get_neq(self.visit(node.left), self.visit(node.right))
+            # return (self.visit(node.left))._ne(self.visit(node.right))
+            return S._ne(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == COMPARE:
-            return (self.visit(node.left))._eq(self.visit(node.right))
+            return S._eq(self.visit(node.left), self.visit(node.right))
         else:
             raise ValueNotFound('Node not found: ' + str(node))
 
     def visit_UnaryOp(self, node):
         if node.operator.type == NOT:
-            return (self.visit(node.expr))._neg()
+            return S._neg(self.visit(node.expr))
             # return get_neg(self.visit(node.expr))
         else:
             raise ValueNotFound('Node not found: ' + str(node))
 
     def visit_Boolean(self, node):
         if node.token.type == BOOL:
-            return BoolID(node.value)
+            return S._bool(node.value)
             # return get_bool_object(node.value)
         else:
             raise ValueNotFound('Node not found: ' + str(node))
@@ -63,10 +60,10 @@ class Builder(NodeVisitor):
             return self.registers[node.value]
         elif self.method.inparams is not None \
                 and node.value in self.method.inparams:
-            return IntID(node.value)
+            return S._int(node.value)
         elif self.method.outparams is not None \
                 and node.value in self.method.outparams:
-            return IntID(node.value)
+            return S._int(node.value)
         else:
             raise ValueNotFound('Node not found: ' + str(node))
 
