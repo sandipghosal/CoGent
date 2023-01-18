@@ -86,9 +86,9 @@ class Postcondition:
 
     def __repr__(self):
         if self.params:
-            return f'WP:{self.weakestpre} FOR {self.observer}({self.params}) == {self.output}'
+            return f'Weakest precondition:{self.weakestpre} for {self.observer}({self.params}) == {self.output}'
         else:
-            return f'WP:{self.weakestpre} FOR {self.observer}() == {self.output}'
+            return f'Weakest precondition:{self.weakestpre} for {self.observer}() == {self.output}'
 
 
 class Contract:
