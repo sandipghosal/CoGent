@@ -36,9 +36,14 @@ from z3 import *
 
 r1, r2, r3, p1, b0 = Ints('r1 r2 r3 p1 b0')
 s = Solver()
-# s.add(ForAll([p1, b0], And(BoolVal(True), Not(p1 == b0))))
+
 s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
 print(s.check())
+
+
+
+
+
 # print(s.model())
 
 # solve([y == x + 1, ForAll([y], Implies(y <= 0, x < y))])

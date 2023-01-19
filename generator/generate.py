@@ -43,7 +43,8 @@ def getcontract(automaton, target, pre, wp):
             for post in wp[location]:
                 logging.debug('Precondition: ' + str(precond))
                 logging.debug('Postcondition: ' + str(post))
-
+                logging.debug('Precondition expression: ' + str(precond.condition))
+                logging.debug('Postcondition expression: ' + str(post.condition.weakestpre))
                 for x in post.params:
                     params.add(x)
 

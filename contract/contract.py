@@ -134,10 +134,11 @@ class Contract:
         self.location = location
         self.pre = precondition
         self.post = postcondition
-        if self.check(params, registers, constants) == S._unsat():
-            self.result = S._sat()
-        else:
-            self.result = S._unsat()
+        # if self.check(params, registers, constants) == S._unsat():
+        #     self.result = S._sat()
+        # else:
+        #     self.result = S._unsat()
+        self.result = self.check(params, registers, constants)
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
 
@@ -157,9 +158,9 @@ class Contract:
         logging.debug('Checking validity of: ' + str(expr))
 
         # Do negation of the implication
-        expr = S._and(self.pre.condition, S._neg(self.post.condition.weakestpre))
+        # expr = S._and(self.pre.condition, S._neg(self.post.condition.weakestpre))
 
-        logging.debug('Negation of implication: ' + str(expr))
+        # logging.debug('Negation of implication: ' + str(expr))
 
         # Substitute constants with respective values
         expr = S.do_substitute(expr, constants)
@@ -168,13 +169,16 @@ class Contract:
 
         # Add forall parameters
         # expr = S._forall(params, expr)
-        expr = S._forall(registers, expr)
+        # expr = S._forall(registers, expr)
 
-        logging.debug('After adding for all: ' + str(expr))
+        # logging.debug('After adding for all: ' + str(expr))
 
         # Add exists registers
         # expr = S._exists(registers, expr)
-        expr = S._exists(params, expr)
+
+        params = params + registers
+
+        expr = S._forall(params, expr)
 
         logging.debug('Final expression before checking validity: ' + str(expr))
 
