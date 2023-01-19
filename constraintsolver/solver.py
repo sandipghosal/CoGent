@@ -11,6 +11,10 @@ def _bool(arg):
     return BoolVal(True) if arg == True else BoolVal(False)
 
 
+def _intval(arg):
+    return IntVal(arg)
+
+
 def _or(first, second):
     """ Returns disjunction of first and second constraints """
     return Or(first, second)
@@ -38,6 +42,22 @@ def _eq(first, second):
 def _implies(first, second):
     """ Returns implication where first implies second """
     return Implies(first, second)
+
+
+def _exists(list_, arg):
+    return Exists(list_, arg)
+
+
+def _forall(list_, arg):
+    return ForAll(list_, arg)
+
+
+def _sat():
+    return sat
+
+
+def _unsat():
+    return unsat
 
 
 def weakest_pre(argv, args) -> list:

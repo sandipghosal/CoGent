@@ -1,3 +1,5 @@
+import logging
+
 import constraintsolver.solver as S
 
 
@@ -16,11 +18,11 @@ class Observer:
             self.guard = S.do_substitute(condition, subargs)
         else:
             self.guard = condition
-        self.subs = subargs
+        self.subs = [x[1] for x in subargs]
         self.output = output
 
     def __repr__(self):
-        return f'{self.name}:{self.guard}:{self.output}'
+        return self.name + '(' + str(*self.subs) + ') == ' + self.output
 
 
 class WeakestPrecondition:
@@ -81,27 +83,103 @@ class Postcondition:
         """
         self.observer = observername
         self.params = params
-        self.weakestpre = weakestpre
+        self.condition = weakestpre
         self.output = output
 
     def __repr__(self):
         if self.params:
-            return f'Weakest precondition:{self.weakestpre} for {self.observer}({self.params}) == {self.output}'
+            # return f'{self.weakestpre} for {self.observer}({self.params}) == {self.output}'
+            return str(self.observer) + '(' + str(
+                *self.params) + ') == ' + str(
+                self.output + '\n')
         else:
-            return f'Weakest precondition:{self.weakestpre} for {self.observer}() == {self.output}'
+            # return f'{self.weakestpre} for {self.observer}() == {self.output}'
+            return str(self.observer) + '() == ' + str(
+                self.output + '\n')
+
+
+class Precondition:
+    def __init__(self, observers, condition):
+        """
+        Hold each precondition
+        :param observers: list of observer objects
+        :param condition: condition formed by conjunction of observer objects
+        """
+        self.observers = observers
+        self.condition = S.do_simplify(condition)
+
+    def __repr__(self):
+        output = None
+        for i in range(len(self.observers)):
+            if output:
+                output = output + ' and ' + str(self.observers[i])
+            else:
+                output = str(self.observers[i])
+        return output
 
 
 class Contract:
-    def __init__(self, observers, weakestpre):
+    def __init__(self, target, location, params, registers, constants, precondition, postcondition):
         """
         Hold a contract for a modifier in the form of precondition and postcondition
-        :param observers: list of Observers objects
-        :param weakestpre: object of WeakestPrecondition
+        :param target: target Method object
+        :param location: an object of Location
+        :param params: input parameters of target methods and observers
+        :param registers: list of registers
+        :param constants: list of constants [(id, value),..]
+        :param precondition: an object of Precondition
+        :param postcondition: object of Postcondition
         """
-        self.observers = observers
-        self.weakestpre = weakestpre
+        self.target = target
+        self.location = location
+        self.pre = precondition
+        self.post = postcondition
+        if self.check(params, registers, constants) == S._unsat():
+            self.result = S._sat()
+        else:
+            self.result = S._unsat()
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
 
-    def get_pre(self):
-        pass
+    def __repr__(self):
+        return 'Location ' + str(self.location) + ' : {' + str(self.pre) + '} ' + self.target.name + '(' + str(*self.target.inparams)+') {' + str(
+            self.post) + '} :: ' + str(self.result)
+
+    def check(self, params, registers, constants):
+        # Does it satisfy P->Q ?
+        # IF there is a solution to Not(P->Q) equiv to (P ^ Not Q) THEN
+        #   No
+        # ELSE
+        #   Yes
+
+        expr = S._implies(self.pre.condition, self.post.condition.weakestpre)
+
+        logging.debug('Checking validity of: ' + str(expr))
+
+        # Do negation of the implication
+        expr = S._and(self.pre.condition, S._neg(self.post.condition.weakestpre))
+
+        logging.debug('Negation of implication: ' + str(expr))
+
+        # Substitute constants with respective values
+        expr = S.do_substitute(expr, constants)
+
+        logging.debug('After constant substitution: ' + str(expr))
+
+        # Add forall parameters
+        # expr = S._forall(params, expr)
+        expr = S._forall(registers, expr)
+
+        logging.debug('After adding for all: ' + str(expr))
+
+        # Add exists registers
+        # expr = S._exists(registers, expr)
+        expr = S._exists(params, expr)
+
+        logging.debug('Final expression before checking validity: ' + str(expr))
+
+        # Check the validity
+        result = S.do_check(expr)
+
+        logging.debug('result: '+ str(result))
+        return result

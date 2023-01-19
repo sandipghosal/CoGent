@@ -117,7 +117,7 @@ def get_constants(root):
     constants = dict()
     for consts in root.iter(CONSTANTS):
         for _id in consts.iter(CONSTANT):
-            constants[_id.attrib[NAME]] = [S._int(_id.attrib[NAME]), int(_id.text)]
+            constants[_id.attrib[NAME]] = [S._int(_id.attrib[NAME]), S._intval(_id.text)]
 
     logging.debug('Map of constants imported from the file:')
     logging.debug(constants)

@@ -1,5 +1,8 @@
 import datetime
 import getopt
+import inspect
+import logging
+
 from customlogger.logging import CustomFormatter
 import os
 
@@ -8,8 +11,9 @@ from generator import generate
 from import_xml import import_ra
 
 
-def setuplogger(switch, logfile, loglevel=None):
-    logger = logging.getLogger("CoGent")
+def setuplogger(switch, logfile, loglevel=logging.DEBUG):
+    # logger_name = inspect.stack()[1][3]
+    # logger = logging.getLogger(logger_name)
     if switch:
         logpath = 'log'
         exist = os.path.exists(logpath)
@@ -23,17 +27,21 @@ def setuplogger(switch, logfile, loglevel=None):
         else:
             logfile = 'log/' + logfile
 
-        if loglevel:
-            logging.basicConfig(filename=logfile, level=loglevel)
-        else:
-            logging.basicConfig(filename=logfile, level=logging.DEBUG)
         print('log file created:' + logfile)
+        logging.basicConfig(filename=logfile, level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
+        # fhandler = logging.FileHandler(logfile)
+        # fhandler.setLevel(loglevel)
+        # fhandler.setFormatter(CustomFormatter())
+        # logger.addHandler(fhandler)
     else:
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
-        ch.setFormatter(CustomFormatter())
-        logger.addHandler(ch)
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+        logging.basicConfig(stream=sys.stdout, level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
+        # chandler = logging.StreamHandler()
+        # chandler.setLevel(logging.DEBUG)
+        # chandler.setFormatter(CustomFormatter())
+        # logger.addHandler(chandler)
+
+    # return logger
+
 
 
 def main(argv):
@@ -49,8 +57,9 @@ def main(argv):
                                             "log=",
                                             "log-level="])
 
-        xmlfile = target = logfile = level = None
+        xmlfile = target = logfile = None
         logswitch = False
+        level = logging.DEBUG
 
         for option, argument in options:
             if option in ("-h", "--help"):
@@ -96,7 +105,11 @@ def main(argv):
     logging.debug('target method:' + target)
     # import the automaton from the XML file
     automaton = import_ra(xmlfile)
-    generate(automaton, target)
+    contract = generate(automaton, target)
+
+    pp('============ GENERATED CONTRACT============')
+    for item in contract:
+        pp(item)
 
     # print(automaton.getLocations())
     # for location in automaton.getLocations():

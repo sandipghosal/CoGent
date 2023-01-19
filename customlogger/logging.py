@@ -9,7 +9,7 @@ class CustomFormatter(logging.Formatter):
     reset = "\x1b[0m"
     name = "CoGent"
     # format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
-    format = "%(name)s - %(levelname)s - %(message)s"
+    format = "%(name)s - %(levelname)s : %(message)s"
 
     FORMATS = {
         logging.DEBUG: grey + format + reset,
