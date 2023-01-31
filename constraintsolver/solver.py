@@ -93,3 +93,14 @@ def do_check(*args):
     for argv in args:
         s.add(argv)
     return s.check()
+
+
+def elminate(argv, args):
+    g = Goal()
+    g.add(_exists(argv, args))
+    t = Tactic('qe')
+    return t(g)[0]
+
+
+def boolreftoStr(argv):
+    return obj_to_string(argv)

@@ -5,7 +5,7 @@ from pprint import pp
 import constraintsolver.solver as S
 from contract.contract import *
 from ramodel import Method
-
+import constraintbuilder.build_expression as BE
 
 ################# Data Structure ##################
 ### Map of States = {l0, l1, ... , ln}
@@ -41,10 +41,12 @@ def getcontract(automaton, target, pre, wp):
         logging.debug('\nGenerate contract at ' + str(location))
         for precond in pre[location]:
             for post in wp[location]:
-                logging.debug('Precondition: ' + str(precond))
+                logging.debug('Location: ' + str(location))
                 logging.debug('Postcondition: ' + str(post))
-                logging.debug('Precondition expression: ' + str(precond.condition))
-                logging.debug('Postcondition expression: ' + str(post.condition.weakestpre))
+                logging.debug('Weakest Precondition (consequent): ' + str(post.condition.weakestpre))
+                logging.debug('Precondition: ' + str(precond))
+                logging.debug('Precondition expression (antecedent): ' + str(precond.condition))
+
                 for x in post.params:
                     params.add(x)
 
@@ -72,7 +74,22 @@ def getpre(automaton, target):
     for x in automaton.methods[target]:
         params.append(x)
 
-    product_ = list(itertools.product(observers, params))
+
+    product_ = list()
+    for i in range(len(observers)):
+        observer = list()
+        observer.append(observers[i])
+        if automaton.methods[observers[i]]:
+            # cross product of parameterized observers and parameters
+            product_ = product_ + list(itertools.product(observer, params))
+        else:
+            # adding non-parameterized observer into the list with blank parameter
+            product_ = product_ + [(observer[0], '')]
+
+    # obtain all possible combinations of parameters
+    paramcomb = list(itertools.combinations(params, 2))
+    for comb in paramcomb:
+        product_.append((comb, ''))
 
     # generate the monomials
     temp = [list(zip(product_, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(product_))]
@@ -103,6 +120,23 @@ def getpre(automaton, target):
                 output = row[index][1]
                 inputid = row[index][2]
 
+                if type(method) is tuple:
+                    expr = None
+                    if output == 'TRUE':
+                        expr = method[0] + ' == ' + method[1]
+                        expr = BE.build_expr(expr, None, automaton.registers, automaton.constants)
+                    if output == 'FALSE':
+                        expr = method[0] + ' != ' + method[1]
+                        expr = BE.build_expr(expr, None, automaton.registers, automaton.constants)
+                    if result is not None:
+                        result = S._and(result, expr)
+
+                    observer = Observer(name='__equality__',
+                                        condition=expr,
+                                        output=output,
+                                        subargs=[])
+                    obslist.append(observer)
+                    continue
                 # obtain the transition for the method and output
                 logging.debug('Fetching transition for method ' + method + '(' + inputid + ')' + ' == ' + output)
                 transition = automaton.get_transitions(source_=location,
@@ -176,7 +210,7 @@ def getwp(automaton, target):
 
             # for each kind of possible output (later extend beyond true/false)
             for output in ['TRUE', 'FALSE']:
-                logging.debug('Evaluate WP for ' + obsname + ' == ' + output)
+                logging.debug('Obtain WP for ' + obsname + ' == ' + output)
                 # initialize the list of (transition, postobserver) tuples
                 args = list()
 

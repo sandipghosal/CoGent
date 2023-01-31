@@ -15,6 +15,21 @@ from z3 import *
 # print('qe', t.help(), t.param_descrs())
 
 
+r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
+# s = Solver()
+
+# s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
+g = Goal()
+g.add(Exists([r1, r2], Or(p1 == b0, r1 == b0)))
+# print(g)
+t = Tactic('qe')
+print(t(g))
+
+# print(s.check())
+
+
+# print(obj_to_string(Exists([r1, r2], Or(r1 == b0, r2 == b0))))
+
 # x1, x2, p_prime, r = Reals('x1 x2 p_prime r')
 # g = Goal()
 # g.add(x1 == r, Or(x1 == p_prime, x2 == p_prime))
@@ -34,15 +49,7 @@ from z3 import *
 # print(substitute(e, [(a, b)]))
 # print(substitute(e, [(a, z3.IntVal(3))]))
 
-r1, r2, r3, p1, b0 = Ints('r1 r2 r3 p1 b0')
-s = Solver()
-
-s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
-print(s.check())
-
-
-
-
+print(substitute(Or(r1 == b0, r2 == b0), [(r1, p1), (r2, r1)]))
 
 # print(s.model())
 

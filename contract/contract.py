@@ -13,7 +13,6 @@ class Observer:
         :param subargs: list of tuples to substitute (oldparam, newparam)
         """
         self.name = name
-        print(type(condition))
         if subargs:
             self.guard = S.do_substitute(condition, subargs)
         else:
@@ -22,7 +21,10 @@ class Observer:
         self.output = output
 
     def __repr__(self):
-        return self.name + '(' + str(*self.subs) + ') == ' + self.output
+        if self.name == '__equality__':
+            return S.boolreftoStr(self.guard)
+        else:
+            return self.name + '(' + str(*self.subs) + ') == ' + self.output
 
 
 class WeakestPrecondition:
@@ -91,11 +93,11 @@ class Postcondition:
             # return f'{self.weakestpre} for {self.observer}({self.params}) == {self.output}'
             return str(self.observer) + '(' + str(
                 *self.params) + ') == ' + str(
-                self.output + '\n')
+                self.output)
         else:
             # return f'{self.weakestpre} for {self.observer}() == {self.output}'
             return str(self.observer) + '() == ' + str(
-                self.output + '\n')
+                self.output)
 
 
 class Precondition:
@@ -134,33 +136,45 @@ class Contract:
         self.location = location
         self.pre = precondition
         self.post = postcondition
-        # if self.check(params, registers, constants) == S._unsat():
-        #     self.result = S._sat()
-        # else:
-        #     self.result = S._unsat()
-        self.result = self.check(params, registers, constants)
+        if self.check(params, registers, constants) == S._sat():
+            self.result = 'False'
+        else:
+            self.result = 'True'
+        # self.result = self.check(params, registers, constants)
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
 
     def __repr__(self):
-        return 'Location ' + str(self.location) + ' : {' + str(self.pre) + '} ' + self.target.name + '(' + str(*self.target.inparams)+') {' + str(
+        return 'Location ' + str(self.location) + ' : {' + str(self.pre) + '} ' + self.target.name + '(' + str(
+            *self.target.inparams) + ') {' + str(
             self.post) + '} :: ' + str(self.result)
 
     def check(self, params, registers, constants):
         # Does it satisfy P->Q ?
         # IF there is a solution to Not(P->Q) equiv to (P ^ Not Q) THEN
-        #   No
+        #   no
         # ELSE
-        #   Yes
+        #   yes
+
+        # First derive the quantifier eliminated expresseion
+        # qe_expr = None
+        # if self.post.condition.weakestpre not in (S._bool(True), S._bool(False)):
+        #     qe_expr = S.elminate(registers, self.post.condition.weakestpre)
+        #
+        # logging.debug('quantifier eliminated expression:', qe_expr)
+
+        # if qe_expr is not None:
+        #     for i in range(qe_expr[0].num_args()):
+        #         print(qe_expr[0].arg(i))
 
         expr = S._implies(self.pre.condition, self.post.condition.weakestpre)
 
-        logging.debug('Checking validity of: ' + str(expr))
+        logging.debug('Checking SAT for: ' + str(expr))
 
         # Do negation of the implication
-        # expr = S._and(self.pre.condition, S._neg(self.post.condition.weakestpre))
+        expr = S._and(self.pre.condition, S._neg(self.post.condition.weakestpre))
 
-        # logging.debug('Negation of implication: ' + str(expr))
+        logging.debug('Negation of implication: ' + str(expr))
 
         # Substitute constants with respective values
         expr = S.do_substitute(expr, constants)
@@ -173,17 +187,17 @@ class Contract:
 
         # logging.debug('After adding for all: ' + str(expr))
 
-        # Add exists registers
-        # expr = S._exists(registers, expr)
-
         params = params + registers
 
-        expr = S._forall(params, expr)
+        # Add exists parameters and registers
+        expr = S._exists(params, expr)
 
-        logging.debug('Final expression before checking validity: ' + str(expr))
+        # expr = S._forall(params, expr)
+
+        logging.debug('Final expression before checking SAT: ' + str(expr))
 
         # Check the validity
         result = S.do_check(expr)
 
-        logging.debug('result: '+ str(result))
+        logging.debug('result: ' + str(result) + '\n')
         return result
