@@ -54,18 +54,19 @@ class Builder(NodeVisitor):
             raise ValueNotFound('Node not found: ' + str(node))
 
     def visit_Variable(self, node):
-        if node.value in self.constants:
-            return self.constants[node.value][0]
-        elif node.value in self.registers:
-            return self.registers[node.value]
+        return S._int(node.value)
+        # if node.value in self.constants:
+        #     return self.constants[node.value][0]
+        # elif node.value in self.registers:
+        #     return self.registers[node.value]
         # elif self.method.inparams is not None \
         #         and node.value in self.method.inparams:
         #     return S._int(node.value)
         # elif self.method.outparams is not None \
         #         and node.value in self.method.outparams:
         #     return S._int(node.value)
-        else:
-            return S._int(node.value)
+        # else:
+        #     return S._int(node.value)
             # raise ValueNotFound('Node not found: ' + str(node))
 
     def build(self, tree):
