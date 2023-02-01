@@ -19,11 +19,6 @@ class NodeVisitor:
 
 class Builder(NodeVisitor):
 
-    def __init__(self, registers_, constants_):
-        # self.method = method_
-        self.registers = registers_
-        self.constants = constants_
-
     def visit_BinaryOp(self, node):
         if node.operator.type == OR:
             # return (self.visit(node.left))._or(self.visit(node.right))
@@ -55,19 +50,7 @@ class Builder(NodeVisitor):
 
     def visit_Variable(self, node):
         return S._int(node.value)
-        # if node.value in self.constants:
-        #     return self.constants[node.value][0]
-        # elif node.value in self.registers:
-        #     return self.registers[node.value]
-        # elif self.method.inparams is not None \
-        #         and node.value in self.method.inparams:
-        #     return S._int(node.value)
-        # elif self.method.outparams is not None \
-        #         and node.value in self.method.outparams:
-        #     return S._int(node.value)
-        # else:
-        #     return S._int(node.value)
-            # raise ValueNotFound('Node not found: ' + str(node))
+
 
     def build(self, tree):
         return self.visit(tree)
