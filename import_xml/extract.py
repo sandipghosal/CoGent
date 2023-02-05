@@ -37,7 +37,7 @@ def get_transitions(root, methods, constants, registers, locations, outputs):
                         output = assign.text if assign.attrib[TO] in outputs[symbol] else symbol
             # obtain guard condition for this transition
             expression = transition.find(GUARD).text if transition.find(GUARD) is not None else 'True'
-            condition = build_expr(expression, method, registers, constants)
+            condition = build_expr(expression)
 
             # obtain a list of assignments performed while this transition
             # list of tuples of the format [(key, value)] where key and value are z3 objects
@@ -45,8 +45,8 @@ def get_transitions(root, methods, constants, registers, locations, outputs):
             for assigns in transition.iter(ASSIGNMENTS):
                 for assign in assigns.iter(ASSIGN):
                     # assignments.append(assign.attrib[TO] + '==' + assign.text)
-                    assignments.append((build_expr(assign.attrib[TO], method, registers, constants),
-                                        build_expr(assign.text, method, registers, constants)))
+                    assignments.append((build_expr(assign.attrib[TO]),
+                                        build_expr(assign.text)))
 
             trans_object = Transition(fromlocation_=fromlocation,
                                       tolocation_=tolocation,
