@@ -1,4 +1,5 @@
 import logging
+from pprint import pp
 
 import constraintsolver.solver as S
 from ramodel import Method
@@ -21,9 +22,9 @@ class Contract:
         self.pre = precondition
         self.post = postcondition
         if self.check(params, registers, constants) == S._sat():
-            self.result = 'False'
+            self.result = False
         else:
-            self.result = 'True'
+            self.result = True
         # self.result = self.check(params, registers, constants)
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
@@ -88,7 +89,7 @@ class Contract:
 
 
 
-def get_contract(automaton, target, pre, wp):
+def get_contracts(automaton, target, pre, wp):
     logging.debug('\n\nStarting Contract Generation')
     contract = list()
     targetobj = Method(name_=target, params_=automaton.methods[target])
@@ -130,4 +131,7 @@ def get_contract(automaton, target, pre, wp):
                                          constants=const,
                                          precondition=precond,
                                          postcondition=post))
+    pp('============= GENERATED CONTRACT AT EACH LOCATION ===========')
+    for item in contract:
+        pp(item)
     return contract

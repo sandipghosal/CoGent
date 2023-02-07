@@ -46,10 +46,14 @@ def generate_pre(monomials):
                     if result is not None:
                         result = S._and(result, expr)
 
+                    # populate a list if parameters for the equality
+                    params = list()
+                    params.append(method[0])
+                    params.append(method[1])
                     observer = Condition(name='__equality__',
                                          condition=expr,
                                          output=output,
-                                         args=[])
+                                         args=params)
                     obslist.append(observer)
                     continue
                 # obtain the transition for the method and output

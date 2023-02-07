@@ -1,9 +1,9 @@
 
 
 from generator.calculatewp import get_wp
-from generator.contract import get_contract
+from generator.contract import get_contracts
 from generator.obtainpre import get_pre
-
+from generator.synthesize import synthesize
 
 
 ################# Data Structure ##################
@@ -21,5 +21,6 @@ from generator.obtainpre import get_pre
 def generate(automaton, target):
     wp = get_wp(automaton, target)
     pre = get_pre(automaton, target)
-    contract = get_contract(automaton, target, pre, wp)
-    return contract
+    contracts = get_contracts(automaton, target, pre, wp)
+    contracts = synthesize(automaton, contracts)
+    return contracts

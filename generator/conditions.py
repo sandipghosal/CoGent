@@ -13,13 +13,19 @@ class Condition:
         :param args: arguments to substitute as a list of tuples [(old, new)]
         """
         self.name = name
-        self.guard = S.do_substitute(condition, args) if args else condition
+        if name != '__equality__':
+            self.guard = S.do_substitute(condition, args)
+            self.params = [x[1] for x in args]
+        else:
+            self.guard = condition
+            self.params = args
+
         self.output = output
-        self.params = [x[1] for x in args]
+
 
     def __repr__(self):
         if self.name == '__equality__':
-            return S.boolreftoStr(self.guard)
+            return S.z3reftoStr(self.guard)
         else:
             return self.name + '(' + str(*self.params) + ') == ' + self.output
 
@@ -34,7 +40,7 @@ class Precondition:
     def __init__(self, observers, condition):
         """
         Hold each precondition
-        :param observers: list of observer objects
+        :param observers: list of condition objects
         :param condition: condition formed by conjunction of observer objects
         """
         self.observers = observers

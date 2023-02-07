@@ -107,9 +107,7 @@ def main(argv):
     automaton = import_ra(xmlfile)
     contract = generate(automaton, target)
 
-    pp('============= GENERATED CONTRACT AT EACH LOCATION ===========')
-    for item in contract:
-        pp(item)
+
 
     # print(automaton.getLocations())
     # for location in automaton.getLocations():

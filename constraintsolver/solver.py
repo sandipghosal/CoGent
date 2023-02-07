@@ -6,8 +6,12 @@ def _int(id):
     __id = Int(id)
     return __id
 
+def _bool(id):
+    """ Convert a string id to object of type Boolean """
+    __id = Bool(id)
+    return __id
 
-def _bool(arg):
+def _boolval(arg):
     return BoolVal(True) if arg == True else BoolVal(False)
 
 
@@ -102,5 +106,6 @@ def elminate(argv, args):
     return t(g)[0]
 
 
-def boolreftoStr(argv):
+def z3reftoStr(argv):
     return obj_to_string(argv)
+

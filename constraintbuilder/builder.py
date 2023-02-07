@@ -43,7 +43,7 @@ class Builder(NodeVisitor):
 
     def visit_Boolean(self, node):
         if node.token.type == BOOL:
-            return S._bool(node.value)
+            return S._boolval(node.value)
             # return get_bool_object(node.value)
         else:
             raise ValueNotFound('Node not found: ' + str(node))
