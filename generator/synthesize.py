@@ -1,3 +1,4 @@
+import logging
 import re
 
 import constraintsolver.solver as S
@@ -5,7 +6,7 @@ from constraintbuilder import build_str
 
 automaton = None
 contracts = None
-
+literals = dict()
 
 class SynthesizedContract:
     def __init__(self, pre, post, result):
@@ -43,72 +44,69 @@ class Literal:
         # return self.condition.name + ' ' + str(self.params)
 
 
-def build_binary_expr(contract, binary, expr=None):
+def build_binary_expr(contract, expr=None):
     for observer in contract.pre.observers:
         if expr is None:
             if observer.output == 'TRUE':
-                expr = S._bool(binary[Literal(observer)])
+                expr = S._bool(literals[Literal(observer)])
             else:
-                expr = S._neg(S._bool(binary[Literal(observer)]))
+                expr = S._neg(S._bool(literals[Literal(observer)]))
         else:
             if observer.output == 'TRUE':
-                expr = S._and(expr, S._bool(binary[Literal(observer)]))
+                expr = S._and(expr, S._bool(literals[Literal(observer)]))
             else:
-                expr = S._and(expr, S._bool(binary[Literal(observer)]))
+                expr = S._and(expr, S._bool(literals[Literal(observer)]))
     return expr
 
 
-def expr_to_contract(expr, binary):
+def expr_to_contract(expr):
     expr = S.z3reftoStr(expr)
     strexpr = build_str(expr)
-    for key in binary.keys():
+    for key in literals.keys():
         if key.condition.name == '__equality__':
-            expr = strexpr.replace(binary[key], S.z3reftoStr(key.condition.guard))
+            expr = strexpr.replace(literals[key], S.z3reftoStr(key.condition.guard))
         else:
             oldvalue = strexpr.replace
     print(expr)
 
 
 
-def contract_wrt_output(observer, binary, output):
+def contract_wrt_output(observer, output):
     expr = None
     for index in range(len(contracts)):
         if contracts[index].post.name == observer \
                 and contracts[index].post.output == output:
             if expr is None:
-                expr = build_binary_expr(contracts[index], binary)
+                expr = build_binary_expr(contracts[index])
             else:
-                expr = S._or(expr, build_binary_expr(contracts[index], binary))
+                expr = S._or(expr, build_binary_expr(contracts[index]))
 
     expr = S.do_simplify(expr)
     return expr
 
 
-def populate_binary(contract, binary):
+def create_literals(contract):
+    global literals
     for observer in contract.pre.observers:
         newobject = Literal(observer)
-        if newobject not in binary.keys():
-            binary[newobject] = 'a' + str(len(binary))
-    return binary
+        if newobject not in literals.keys():
+            literals[newobject] = 'a' + str(len(literals))
+    # return literals
 
 
 def synthesize(automaton_, contracts_):
     global automaton, contracts
     automaton = automaton_
     contracts = contracts_
-    binary = dict()
+    # literals = dict()
     for contract in contracts:
-        binary = populate_binary(contract, binary)
+        create_literals(contract)
 
     for observer in automaton.get_observers():
-        expr_true = contract_wrt_output(observer, binary, 'TRUE')
-        expr_false = contract_wrt_output(observer, binary, 'FALSE')
+        expr = contract_wrt_output(observer, 'TRUE')
+        # expr_false = contract_wrt_output(observer, binary, 'FALSE')
 
-        print(expr_true)
-        print(expr_false)
-
-        expr = S.do_simplify(S._or(expr_true, S._neg(expr_false)))
-        print('Final contract for', observer, '== TRUE', ':')
-        print(expr)
-        print('\n\n')
-    expr_to_contract(expr, binary)
+        logging.debug('Final contract for ' + observer + ' == TRUE :')
+        logging.debug(S.z3reftoStr(expr))
+        logging.debug('\n\n')
+    expr_to_contract(expr)
