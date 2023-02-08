@@ -122,8 +122,11 @@ def synthesize(automaton_, contracts_):
 
     logging.debug('Observer to Boolean literal mapping:')
     logging.debug(literals)
+
+    # fetch target from any contract say from the first one
     target = contracts[0].target
 
+    # obtain the list of unique Postcondtion objects
     posts = list_of_postconditions()
     # list to hold all synthesized contracts
 

@@ -101,15 +101,14 @@ def do_check(*args):
     return s.check()
 
 
-def check_sat(params, antecedent, consequent):
+def check_sat(vars, antecedent, consequent):
     # Do negation of the implication
     expr = _and(antecedent, _neg(consequent))
     logging.debug('Negation of implication: ' + str(expr))
     # Add exists parameters and registers
-    expr = _exists(params, expr)
+    expr = _exists(vars, expr)
     logging.debug('Final expression before checking SAT: ' + str(expr))
     # Check the validity
-    print(expr)
     result = do_check(expr)
     return result
 

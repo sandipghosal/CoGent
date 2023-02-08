@@ -23,6 +23,6 @@ def generate(automaton, target):
     wp = get_wp(automaton, target)
     pre = get_pre(automaton, target)
     contracts = get_contracts(automaton, target, pre, wp)
-    # contracts = refine(contracts)
+    contracts = refine(contracts)
     contracts = synthesize(automaton, contracts)
     return contracts

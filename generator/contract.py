@@ -22,7 +22,8 @@ class Contract:
         self.pre = precondition
         self.post = postcondition
         self.variables = params + registers
-        if self.check(constants) == S._sat():
+        self.constants = constants
+        if self.check() == S._sat():
             self.result = False
         else:
             self.result = True
@@ -30,12 +31,13 @@ class Contract:
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
 
+
     def __repr__(self):
         return 'Location ' + str(self.location) + ' : {' + str(self.pre) + '} ' + self.target.name + '(' + str(
             *self.target.inparams) + ') {' + str(
             self.post) + '} :: ' + str(self.result)
 
-    def check(self, constants):
+    def check(self):
         # Does it satisfy P->Q ?
         # IF there is a solution to Not(P->Q) equiv to (P ^ Not Q) THEN
         #   unsat
@@ -43,8 +45,8 @@ class Contract:
         #   no
 
         # Substitute constants with respective values
-        pre = S.do_substitute(self.pre.condition, constants)
-        post = S.do_substitute(self.post.guard, constants)
+        pre = S.do_substitute(self.pre.condition, self.constants)
+        post = S.do_substitute(self.post.guard, self.constants)
 
         logging.debug('Checking SAT for: ' + str(pre) + ' => ' + str(post))
 
@@ -56,7 +58,7 @@ class Contract:
 
 
 def remove_invalids(contracts):
-    for contract in contracts:
+    for contract in contracts[:]:
         if not contract.result:
             contracts.remove(contract)
     return contracts
@@ -64,7 +66,7 @@ def remove_invalids(contracts):
 
 def get_contracts(automaton, target, pre, wp):
     logging.debug('\n\nStarting Contract Generation')
-    contract = list()
+    contracts = list()
     targetobj = Method(name_=target, params_=automaton.methods[target])
     # gather registers that would be needed for checking validity
     reg = list()
@@ -85,7 +87,7 @@ def get_contracts(automaton, target, pre, wp):
         params.add(S._int(x))
 
     for location in automaton.get_locations():
-        logging.debug('\nGenerate contract at ' + str(location))
+        logging.debug('\nGenerate contracts at ' + str(location))
         for precond in pre[location]:
             for post in wp[location]:
                 logging.debug('Location: ' + str(location))
@@ -97,21 +99,21 @@ def get_contracts(automaton, target, pre, wp):
                 for x in post.params:
                     params.add(x)
 
-                contract.append(Contract(target=targetobj,
+                contracts.append(Contract(target=targetobj,
                                          location=location,
                                          params=list(params),
                                          registers=reg,
                                          constants=const,
                                          precondition=precond,
                                          postcondition=post))
-    pp('============= GENERATED CONTRACT AT EACH LOCATION ===========')
-    for item in contract:
-        pp(item)
+    logging.debug('\n\n============= GENERATED CONTRACT AT EACH LOCATION ===========')
+    for item in contracts:
+        logging.debug(item)
 
     # remove all the invalid contracts that results False
-    contracts = remove_invalids(contract)
+    contracts = remove_invalids(contracts)
 
-    pp('============= LIST OF VALID CONTRACTS ===========')
-    for item in contract:
-        pp(item)
+    logging.debug('\n\n============= LIST OF VALID CONTRACTS ===========')
+    for item in contracts:
+        logging.debug(item)
     return contracts
