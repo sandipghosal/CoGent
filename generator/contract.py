@@ -21,7 +21,8 @@ class Contract:
         self.location = location
         self.pre = precondition
         self.post = postcondition
-        if self.check(params, registers, constants) == S._sat():
+        self.variables = params + registers
+        if self.check(constants) == S._sat():
             self.result = False
         else:
             self.result = True
@@ -34,7 +35,7 @@ class Contract:
             *self.target.inparams) + ') {' + str(
             self.post) + '} :: ' + str(self.result)
 
-    def check(self, params, registers, constants):
+    def check(self, constants):
         # Does it satisfy P->Q ?
         # IF there is a solution to Not(P->Q) equiv to (P ^ Not Q) THEN
         #   unsat
@@ -47,10 +48,8 @@ class Contract:
 
         logging.debug('Checking SAT for: ' + str(pre) + ' => ' + str(post))
 
-        params = params + registers
-
         # Check the validity
-        result = S.check_sat(params, pre, post)
+        result = S.check_sat(self.variables, pre, post)
 
         logging.debug('result: ' + str(result) + '\n')
         return result
