@@ -37,56 +37,30 @@ class Contract:
     def check(self, params, registers, constants):
         # Does it satisfy P->Q ?
         # IF there is a solution to Not(P->Q) equiv to (P ^ Not Q) THEN
-        #   no
+        #   unsat
         # ELSE
-        #   yes
-
-        # First derive the quantifier eliminated expresseion
-        # qe_expr = None
-        # if self.post.condition.weakestpre not in (S._bool(True), S._bool(False)):
-        #     qe_expr = S.elminate(registers, self.post.condition.weakestpre)
-        #
-        # logging.debug('quantifier eliminated expression:', qe_expr)
-
-        # if qe_expr is not None:
-        #     for i in range(qe_expr[0].num_args()):
-        #         print(qe_expr[0].arg(i))
-
-        expr = S._implies(self.pre.condition, self.post.guard)
-
-        logging.debug('Checking SAT for: ' + str(expr))
-
-        # Do negation of the implication
-        expr = S._and(self.pre.condition, S._neg(self.post.guard))
-
-        logging.debug('Negation of implication: ' + str(expr))
+        #   no
 
         # Substitute constants with respective values
-        expr = S.do_substitute(expr, constants)
+        pre = S.do_substitute(self.pre.condition, constants)
+        post = S.do_substitute(self.post.guard, constants)
 
-        logging.debug('After constant substitution: ' + str(expr))
-
-        # Add forall parameters
-        # expr = S._forall(params, expr)
-        # expr = S._forall(registers, expr)
-
-        # logging.debug('After adding for all: ' + str(expr))
+        logging.debug('Checking SAT for: ' + str(pre) + ' => ' + str(post))
 
         params = params + registers
 
-        # Add exists parameters and registers
-        expr = S._exists(params, expr)
-
-        # expr = S._forall(params, expr)
-
-        logging.debug('Final expression before checking SAT: ' + str(expr))
-
         # Check the validity
-        result = S.do_check(expr)
+        result = S.check_sat(params, pre, post)
 
         logging.debug('result: ' + str(result) + '\n')
         return result
 
+
+def remove_invalids(contracts):
+    for contract in contracts:
+        if not contract.result:
+            contracts.remove(contract)
+    return contracts
 
 
 def get_contracts(automaton, target, pre, wp):
@@ -134,4 +108,11 @@ def get_contracts(automaton, target, pre, wp):
     pp('============= GENERATED CONTRACT AT EACH LOCATION ===========')
     for item in contract:
         pp(item)
-    return contract
+
+    # remove all the invalid contracts that results False
+    contracts = remove_invalids(contract)
+
+    pp('============= LIST OF VALID CONTRACTS ===========')
+    for item in contract:
+        pp(item)
+    return contracts

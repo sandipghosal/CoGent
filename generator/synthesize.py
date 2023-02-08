@@ -8,12 +8,16 @@ automaton = None
 contracts = None
 literals = dict()
 
+
 class SynthesizedContract:
-    def __init__(self, pre, post, result):
+    def __init__(self, pre, post, target):
         self.pre = pre
         self.post = post
-        self.result = result
+        self.target = target
 
+    def __repr__(self):
+        return '{' + self.pre + '} ' + self.target.name + '(' + \
+            str(*self.target.inparams) + ') {' + self.post + '}'
 
 class Literal:
     def __init__(self, condition):
@@ -55,7 +59,7 @@ def build_binary_expr(contract, expr=None):
             if observer.output == 'TRUE':
                 expr = S._and(expr, S._bool(literals[Literal(observer)]))
             else:
-                expr = S._and(expr, S._bool(literals[Literal(observer)]))
+                expr = S._and(expr, S._neg(S._bool(literals[Literal(observer)])))
     return expr
 
 
@@ -64,11 +68,17 @@ def expr_to_contract(expr):
     strexpr = build_str(expr)
     for key in literals.keys():
         if key.condition.name == '__equality__':
-            expr = strexpr.replace(literals[key], S.z3reftoStr(key.condition.guard))
+            strexpr = strexpr.replace(literals[key], S.z3reftoStr(key.condition.guard))
         else:
-            oldvalue = strexpr.replace
-    print(expr)
+            # creating old value such as Not(a1)
+            old_false = 'Not(' + literals[key] + ')'
+            new_false = '(' + str(key) + ' == False)'
+            old_true = literals[key]
+            new_true = '(' + str(key) + ' == True)'
+            strexpr = strexpr.replace(old_false, new_false)
+            strexpr = strexpr.replace(old_true, new_true)
 
+    return strexpr
 
 
 def contract_wrt_output(observer, output):
@@ -85,6 +95,14 @@ def contract_wrt_output(observer, output):
     return expr
 
 
+def list_of_postconditions():
+    l = list()
+    for contract in contracts:
+        if contract.post not in l:
+            l.append(contract.post)
+    return l
+
+
 def create_literals(contract):
     global literals
     for observer in contract.pre.observers:
@@ -98,15 +116,46 @@ def synthesize(automaton_, contracts_):
     global automaton, contracts
     automaton = automaton_
     contracts = contracts_
-    # literals = dict()
+
     for contract in contracts:
         create_literals(contract)
 
-    for observer in automaton.get_observers():
-        expr = contract_wrt_output(observer, 'TRUE')
-        # expr_false = contract_wrt_output(observer, binary, 'FALSE')
+    logging.debug('Observer to Boolean literal mapping:')
+    logging.debug(literals)
+    target = contracts[0].target
 
-        logging.debug('Final contract for ' + observer + ' == TRUE :')
+    posts = list_of_postconditions()
+    # list to hold all synthesized contracts
+
+    # expr_true = contract_wrt_output('I_contains', 'TRUE')
+    # expr_false = contract_wrt_output('I_contains', 'FALSE')
+    # check(expr_true, expr_false)
+
+    syn_contract = list()
+    for condition in posts:
+        expr = contract_wrt_output(condition.name, condition.output)
+        logging.debug('Contract for ' + str(condition))
         logging.debug(S.z3reftoStr(expr))
-        logging.debug('\n\n')
-    expr_to_contract(expr)
+        pre = expr_to_contract(expr)
+        post = str(condition)
+        result = condition.output
+        syn_contract.append(SynthesizedContract(pre, post, target))
+
+    return syn_contract
+
+def check(expr_true, expr_false):
+
+    params = list()
+    for key in literals.keys():
+        params.append(S._bool(literals[key]))
+
+    # Do negation of the implication
+    expr = S._and(expr_true, S._neg(expr_false))
+
+    # Add exists parameters
+    expr = S._exists(params, expr)
+
+    # Check the validity
+    result = S.do_check(expr)
+
+    print(result)

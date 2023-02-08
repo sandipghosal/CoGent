@@ -106,7 +106,13 @@ def main(argv):
     # import the automaton from the XML file
     automaton = import_ra(xmlfile)
     contract = generate(automaton, target)
+    pp('\n\n')
+    pp('============= FINAL CONTRACTS ===========')
+    for item in contract:
+        pp(item)
+        print('\n')
 
+    pp('Contract Synthesis Completed')
 
 
     # print(automaton.getLocations())

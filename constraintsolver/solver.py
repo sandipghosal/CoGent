@@ -1,3 +1,5 @@
+import logging
+
 from z3 import *
 
 
@@ -99,7 +101,20 @@ def do_check(*args):
     return s.check()
 
 
-def elminate(argv, args):
+def check_sat(params, antecedent, consequent):
+    # Do negation of the implication
+    expr = _and(antecedent, _neg(consequent))
+    logging.debug('Negation of implication: ' + str(expr))
+    # Add exists parameters and registers
+    expr = _exists(params, expr)
+    logging.debug('Final expression before checking SAT: ' + str(expr))
+    # Check the validity
+    print(expr)
+    result = do_check(expr)
+    return result
+
+
+def eliminate(argv, args):
     g = Goal()
     g.add(_exists(argv, args))
     t = Tactic('qe')

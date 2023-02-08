@@ -32,9 +32,14 @@ class Condition:
 
 class Postcondition(Condition):
     def __init__(self, name, precondition, output, args=None):
-        super().__init__(name=name, condition=precondition, output=output, args=args)
+        self.name = name
+        self.guard = precondition
+        self.output = output
+        self.params = [x[1] for x in args]
+        # super().__init__(name=name, condition=precondition, output=output, args=args)
 
-
+    def __eq__(self, other):
+        return self.name == other.name and self.params == other.params and self.output == other.output
 
 class Precondition:
     def __init__(self, observers, condition):
