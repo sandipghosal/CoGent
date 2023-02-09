@@ -1,5 +1,5 @@
 import logging
-import re
+from errors import *
 
 import constraintsolver.solver as S
 from constraintbuilder import build_str
@@ -19,8 +19,12 @@ class SynthesizedContract:
         return '{' + self.pre + '} ' + self.target.name + '(' + \
             str(*self.target.inparams) + ') {' + self.post + '}'
 
+
 class Literal:
     def __init__(self, condition):
+        if condition.output == 'FALSE':
+            condition.guard = S._neg(condition.guard)
+            condition.output = 'TRUE'
         self.condition = condition
         self.params = self.to_string(condition.params)
 
@@ -124,7 +128,10 @@ def synthesize(automaton_, contracts_):
     logging.debug(literals)
 
     # fetch target from any contract say from the first one
-    target = contracts[0].target
+    try:
+        target = contracts[0].target
+    except:
+        raise ValueNotFound('Contract not found')
 
     # obtain the list of unique Postcondtion objects
     posts = list_of_postconditions()
@@ -146,8 +153,8 @@ def synthesize(automaton_, contracts_):
 
     return syn_contract
 
-def check(expr_true, expr_false):
 
+def check(expr_true, expr_false):
     params = list()
     for key in literals.keys():
         params.append(S._bool(literals[key]))

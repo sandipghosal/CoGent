@@ -8,10 +8,12 @@ def _int(id):
     __id = Int(id)
     return __id
 
+
 def _bool(id):
     """ Convert a string id to object of type Boolean """
     __id = Bool(id)
     return __id
+
 
 def _boolval(arg):
     return BoolVal(True) if arg == True else BoolVal(False)
@@ -23,22 +25,22 @@ def _intval(arg):
 
 def _or(first, second):
     """ Returns disjunction of first and second constraints """
-    return Or(first, second)
+    return simplify(Or(first, second))
 
 
 def _and(first, second):
     """ Returns conjunction of first and second constraints """
-    return And(first, second)
+    return simplify(And(first, second))
 
 
 def _neg(first):
     """ Returns negation of the parameter """
-    return Not(first)
+    return simplify(Not(first))
 
 
 def _ne(first, second):
     """ Returns not equal expression of two parameters """
-    return Not(first == second)
+    return simplify(Not(first == second))
 
 
 def _eq(first, second):
@@ -89,9 +91,20 @@ def do_substitute(argv, args):
 
 
 def do_simplify(argv):
+    # simplify using simple simplify() technique
     if argv in (BoolVal(True), BoolVal(False)):
         return argv
     return simplify(argv)
+
+
+# def do_simplify(argv):
+#     # simplify using simple Tactic('ctx-solver-simplify')
+#     if argv in (BoolVal(True), BoolVal(False)):
+#         return argv
+#     g = Goal()
+#     g.add(argv)
+#     t = Tactic('ctx-solver-simplify')
+#     return *t(g)
 
 
 def do_check(*args):
@@ -122,4 +135,3 @@ def eliminate(argv, args):
 
 def z3reftoStr(argv):
     return obj_to_string(argv)
-

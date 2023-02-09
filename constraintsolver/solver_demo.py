@@ -15,15 +15,15 @@ from z3 import *
 # print('qe', t.help(), t.param_descrs())
 
 
-r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
+# r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
 # s = Solver()
 
 # s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
-g = Goal()
-g.add(Exists([r1, r2], Or(p1 == b0, r1 == b0)))
+# g = Goal()
+# g.add(Exists([r1, r2], Or(p1 == b0, r1 == b0)))
 # print(g)
-t = Tactic('qe')
-print(t(g))
+# t = Tactic('qe')
+# print(t(g))
 
 # print(s.check())
 
@@ -49,7 +49,7 @@ print(t(g))
 # print(substitute(e, [(a, b)]))
 # print(substitute(e, [(a, z3.IntVal(3))]))
 
-print(substitute(Or(r1 == b0, r2 == b0), [(r1, p1), (r2, r1)]))
+# print(substitute(Or(r1 == b0, r2 == b0), [(r1, p1), (r2, r1)]))
 
 # print(s.model())
 
@@ -66,3 +66,20 @@ print(substitute(Or(r1 == b0, r2 == b0), [(r1, p1), (r2, r1)]))
 
 # s.add(Implies(r1 == I_contains_p1, Or(I_push_p1==I_contains_p1, r1==I_contains_p1)))
 # print(s.check())
+
+
+a0, a1, a2 = Bools('a0 a1 a2')
+# g = Goal()
+# g.add(And(a0, Not(And(a1, a0))))
+# t = Tactic('ctx-solver-simplify')
+#
+# l = list()
+#
+# for i in t(g):
+#     for j in i:
+#         print(j)
+
+
+s = Solver()
+s.add(And(And(Not(a0),Not(a1),Not(a2)), Not(And(Not(a0),a1,Not(a2)))))
+print(s.check())

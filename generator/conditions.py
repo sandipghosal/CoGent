@@ -29,6 +29,9 @@ class Condition:
         else:
             return self.name + '(' + str(*self.params) + ') == ' + self.output
 
+    def __eq__(self, other):
+        return self.name == other.name and self.params == other.params and self.output == other.output
+
 
 class Postcondition(Condition):
     def __init__(self, name, precondition, output, args=None):
@@ -40,6 +43,7 @@ class Postcondition(Condition):
 
     def __eq__(self, other):
         return self.name == other.name and self.params == other.params and self.output == other.output
+
 
 class Precondition:
     def __init__(self, observers, condition):
@@ -59,6 +63,9 @@ class Precondition:
             else:
                 output = str(self.observers[i])
         return output
+
+    def __eq__(self, other):
+        return self.observers == other.observers
 
 
 

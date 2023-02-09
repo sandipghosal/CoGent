@@ -35,6 +35,7 @@ def get_transitions(root, methods, constants, registers, locations, outputs):
                 for assigns in transition.iter(ASSIGNMENTS):
                     for assign in assigns.iter(ASSIGN):
                         output = assign.text if assign.attrib[TO] in outputs[symbol] else symbol
+
             # obtain guard condition for this transition
             expression = transition.find(GUARD).text if transition.find(GUARD) is not None else 'True'
             condition = build_expr(expression)

@@ -31,6 +31,11 @@ class Contract:
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
 
+    def __eq__(self, other):
+        return self.pre == other.pre and self.post == other.post
+
+    def __hash__(self):
+        return hash(str(self.pre) + str(self.post))
 
     def __repr__(self):
         return 'Location ' + str(self.location) + ' : {' + str(self.pre) + '} ' + self.target.name + '(' + str(
@@ -58,9 +63,7 @@ class Contract:
 
 
 def remove_invalids(contracts):
-    for contract in contracts[:]:
-        if not contract.result:
-            contracts.remove(contract)
+    contracts[:] = [x for x in contracts if x.result]
     return contracts
 
 
@@ -100,12 +103,12 @@ def get_contracts(automaton, target, pre, wp):
                     params.add(x)
 
                 contracts.append(Contract(target=targetobj,
-                                         location=location,
-                                         params=list(params),
-                                         registers=reg,
-                                         constants=const,
-                                         precondition=precond,
-                                         postcondition=post))
+                                          location=location,
+                                          params=list(params),
+                                          registers=reg,
+                                          constants=const,
+                                          precondition=precond,
+                                          postcondition=post))
     logging.debug('\n\n============= GENERATED CONTRACT AT EACH LOCATION ===========')
     for item in contracts:
         logging.debug(item)
