@@ -1,8 +1,10 @@
+import copy
 import logging
 from errors import *
 
 import constraintsolver.solver as S
 from constraintbuilder import build_str
+from generator.conditions import Condition
 
 automaton = None
 contracts = None
@@ -21,10 +23,12 @@ class SynthesizedContract:
 
 
 class Literal:
-    def __init__(self, condition):
-        if condition.output == 'FALSE':
-            condition.guard = S._neg(condition.guard)
-            condition.output = 'TRUE'
+    def __init__(self, condition_):
+        condition = copy.copy(condition_)
+        if condition.name == '__equality__':
+            if condition.output == 'FALSE':
+                condition.guard = S._neg(condition.guard)
+                condition.output = 'TRUE'
         self.condition = condition
         self.params = self.to_string(condition.params)
 
@@ -148,7 +152,6 @@ def synthesize(automaton_, contracts_):
         logging.debug(S.z3reftoStr(expr))
         pre = expr_to_contract(expr)
         post = str(condition)
-        result = condition.output
         syn_contract.append(SynthesizedContract(pre, post, target))
 
     return syn_contract

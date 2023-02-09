@@ -46,6 +46,7 @@ def subsumes(first, second):
 
 def check_subsumption():
     temp = list()
+    # for i in range(len(contracts)-1, -1, -1):
     for first in contracts:
         # due to transitivity property if a contract is checked
         # to be subsumed by another (hence in the list temp)
@@ -99,7 +100,7 @@ def remove_inconsistency():
                     temp_list.add(second)
 
     contracts[:] = [item for item in contracts if item not in temp_list]
-    logging.debug('\n\n============= CONTRACTS AFTER REMOVING INCONSISTENCY ===========')
+    logging.debug('\n\n============= CONTRACTS AFTER REMOVING INCONSISTENCIES ===========')
     for item in contracts:
         logging.debug(item)
     logging.debug('\n')
