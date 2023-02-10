@@ -131,27 +131,27 @@ def generate_monomials():
     for comb in paramcomb:
         product_.append((comb, ''))
 
-    # comment below 8 lines if do not want to generate monomials for
+    # comment below 8 lines if one do not want to generate monomials for
     # all possible combinations of 1 to len(product_) sizes
-    # combinations = list()
-    # for i in range(1, len(product_)+1):
-    #     for comb in itertools.combinations(product_, i):
-    #         combinations.append(comb)
-    # temp = list()
-    # for index in range(len(combinations)):
-    #     comb = [x for x in combinations[index]]
-    #     temp.append([list(zip(comb, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(comb))])
+    combinations = list()
+    for i in range(1, len(product_)+1):
+        for comb in itertools.combinations(product_, i):
+            combinations.append(comb)
+    temp = list()
+    for index in range(len(combinations)):
+        comb = [x for x in combinations[index]]
+        temp.append([list(zip(comb, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(comb))])
     # generate the monomials
     # unomment the following if commented above 8 lines
-    temp = [list(zip(product_, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(product_))]
+    # temp = [list(zip(product_, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(product_))]
     # massage the final list of monomials: list of lists
     # each inner list is a tuple (methodname, output, param)
-    # monomials = list()
-    # for i in range(len(temp)):
-    #     for item in temp[i]:
-    #         monomials.append([(x[0][0], x[1], x[0][1]) for x in item])
+    monomials = list()
+    for i in range(len(temp)):
+        for item in temp[i]:
+            monomials.append([(x[0][0], x[1], x[0][1]) for x in item])
     # unomment the following if commented above 8 lines
-    monomials = [[(inner[0][0], inner[1], inner[0][1]) for inner in outer] for outer in temp]
+    # monomials = [[(inner[0][0], inner[1], inner[0][1]) for inner in outer] for outer in temp]
     logging.debug('List of monomials:')
     logging.debug(pp(monomials))
     return monomials
