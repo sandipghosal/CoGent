@@ -81,5 +81,5 @@ a0, a1, a2 = Bools('a0 a1 a2')
 
 
 s = Solver()
-s.add(And(And(Not(a0),Not(a1),Not(a2)), Not(And(Not(a0),a1,Not(a2)))))
+s.add(And(a0, Not(a1), a1))
 print(s.check())

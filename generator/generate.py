@@ -1,4 +1,5 @@
-
+import itertools
+import logging
 
 from generator.calculatewp import get_wp
 from generator.contract import get_contracts
@@ -19,10 +20,23 @@ from generator.synthesize import synthesize
 
 
 
-def generate(automaton, target):
-    wp = get_wp(automaton, target)
-    pre = get_pre(automaton, target)
-    contracts = get_contracts(automaton, target, pre, wp)
-    contracts = refine(contracts)
-    contracts = synthesize(automaton, contracts)
-    return contracts
+
+def generate(config):
+    logging.debug('\n\nStarting Contract Generation')
+    for location in config.LOCATIONS.values():
+        for key, output in itertools.product(config.OBSERVERS, ['TRUE', 'FALSE']):
+            observer = config.OBSERVERS[key]
+            observer.output = config.OUTPUTS[output]
+            # Obtain wp as an object of Observer class
+            wp = get_wp(config, location, observer)
+            if not wp: continue
+            # Obtain a list of Contract objects
+            contracts = get_contracts(config, location, wp)
+            location.contracts = contracts
+    config.print_contract('================ LIST OF ALL CONTRACTS ====================')
+    refine(config)
+    # pre = get_pre(automaton, target)
+    # contracts = get_contracts(automaton, target, pre, wp)
+    # contracts = refine(contracts)
+    # contracts = synthesize(automaton, contracts)
+

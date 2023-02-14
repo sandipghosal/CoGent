@@ -1,46 +1,41 @@
+import copy
 import logging
 from pprint import pp
-
+import constraintbuilder
 import constraintsolver.solver as S
 from ramodel import Method
+from ramodel.config import Monomial
+
+automaton = None
+location = None
+wp = None
 
 
 class Contract:
-    def __init__(self, target, location, params, registers, constants, precondition, postcondition):
+    def __init__(self, monomial, observer):
         """
-        Hold a contract for a modifier in the form of precondition and postcondition
-        :param target: target Method object
-        :param location: an object of Location
-        :param params: input parameters of target methods and observers
-        :param registers: list of registers
-        :param constants: list of constants [(id, value),..]
-        :param precondition: an object of Precondition
-        :param postcondition: object of Postcondition
+        Hold a contract for a location
+        :param monomial: Object of Monomial class that serves the precondition
+        :param observer: Object of Observer class that serves the postcondition
+        :param result: Result True/False representing a valid or invalid contract
         """
-        self.target = target
-        self.location = location
-        self.pre = precondition
-        self.post = postcondition
-        self.variables = params + registers
-        self.constants = constants
-        if self.check() == S._sat():
-            self.result = False
-        else:
-            self.result = True
+
+        self.monomial = monomial
+        self.wp = observer
+        self.result = self.check()
+
         # self.result = self.check(params, registers, constants)
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
 
     def __eq__(self, other):
-        return self.pre == other.pre and self.post == other.post
+        return self.monomial == other.monomial and self.wp == other.wp and self.result == other.result
 
     def __hash__(self):
-        return hash(str(self.pre) + str(self.post))
+        return hash(str(self.monomial) + str(self.wp))
 
     def __repr__(self):
-        return 'Location ' + str(self.location) + ' : {' + str(self.pre) + '} ' + self.target.name + '(' + str(
-            *self.target.inparams) + ') {' + str(
-            self.post) + '} :: ' + str(self.result)
+        return '{' + str(self.monomial) + '} ' + ' {' + str(self.wp) + '} :: ' + str(self.result)
 
     def check(self):
         # Does it satisfy P->Q ?
@@ -49,17 +44,35 @@ class Contract:
         # ELSE
         #   no
 
+        params = set()
+        constants = list()
+        # gather the constants for substitution
+        for c, k in automaton.CONSTANTS:
+            constants.append((S._int(c), S._intval(k)))
+
+        # gather all the registers and parameters
+        for observer in self.monomial.observers:
+            for x in observer.method.inputs:
+                params.add(S._int(x))
+
+        for r in (*automaton.REGISTERS, *automaton.TARGET.inputs):
+            params.add(S._int(r) )
+
         # Substitute constants with respective values
-        pre = S.do_substitute(self.pre.condition, self.constants)
-        post = S.do_substitute(self.post.guard, self.constants)
+        pre = S.do_substitute(self.monomial.condition, constants)
+        post = S.do_substitute(self.wp.method.guard, constants)
 
         logging.debug('Checking SAT for: ' + str(pre) + ' => ' + str(post))
 
         # Check the validity
-        result = S.check_sat(self.variables, pre, post)
+        result = S.check_sat(vars=list(params), antecedent=pre, consequent=post)
 
         logging.debug('result: ' + str(result) + '\n')
-        return result
+
+        if result == S._sat():
+            return False
+        else:
+            return True
 
 
 def remove_invalids(contracts):
@@ -67,56 +80,86 @@ def remove_invalids(contracts):
     return contracts
 
 
-def get_contracts(automaton, target, pre, wp):
-    logging.debug('\n\nStarting Contract Generation')
-    contracts = list()
-    targetobj = Method(name_=target, params_=automaton.methods[target])
-    # gather registers that would be needed for checking validity
-    reg = list()
-    for id_ in automaton.registers.keys():
-        reg.append(automaton.registers[id_])
-    logging.debug('List of defined registers: ' + str(reg))
-
-    # gather defined constants that would be needed to
-    # substitute constant values before checking validity
-    const = list()
-    for id_ in automaton.constants.keys():
-        const.append((automaton.constants[id_][0], automaton.constants[id_][1]))
-    logging.debug('List of defined constants: ' + str(const))
-
-    # gather the list of parameters
+def create_pre(monomial_):
+    observers = copy.deepcopy(monomial_.observers)
+    result = None
     params = set()
-    for x in automaton.methods[target]:
-        params.add(S._int(x))
+    constants = list()
+    # gather the constants for substitution
+    for c, k in automaton.CONSTANTS:
+        constants.append((S._int(c), S._intval(k)))
 
-    for location in automaton.get_locations():
-        logging.debug('\nGenerate contracts at ' + str(location))
-        for precond in pre[location]:
-            for post in wp[location]:
-                logging.debug('Location: ' + str(location))
-                logging.debug('Postcondition: ' + str(post))
-                logging.debug('Weakest Precondition (consequent): ' + str(post.guard))
-                logging.debug('Precondition: ' + str(precond))
-                logging.debug('Precondition expression (antecedent): ' + str(precond.condition))
+    logging.debug('Precondition: ' + str(observers))
 
-                for x in post.params:
-                    params.add(x)
+    for i in range(len(observers)):
+        # iterate for each observer in the monomial
+        if observers[i].method.name.find('__equality__') != -1:
+            # if the observer is an equality build the equality expression based on the expected output
+            if observers[i].output == automaton.OUTPUTS['TRUE']:
+                observers[i].method.guard = constraintbuilder.build_expr(
+                    observers[i].method.inputs[0] + '==' + observers[i].method.inputs[1])
+            else:
+                observers[i].method.guard = constraintbuilder.build_expr(
+                    observers[i].method.inputs[0] + '!=' + observers[i].method.inputs[1])
+        else:
+            # for an observer method obtain the transition due to the method
+            transition = location.get_transitions(destination=location, method=observers[i].method,
+                                                  output=observers[i].output)
+            # if there is no transition found continue the iteration
+            if not transition:
+                logging.debug('No transition found\n')
+                continue
+            # build the list of tuple to substitute method's parameter with the observer's parameter
+            _args = [(S._int(transition[0].method.inputs[0]), S._int(observers[i].method.inputs[0]))]
+            # get the method condition by substituting
+            observers[i].method.guard = S.do_substitute(transition[0].method.guard, _args)
 
-                contracts.append(Contract(target=targetobj,
-                                          location=location,
-                                          params=list(params),
-                                          registers=reg,
-                                          constants=const,
-                                          precondition=precond,
-                                          postcondition=post))
-    logging.debug('\n\n============= GENERATED CONTRACT AT EACH LOCATION ===========')
-    for item in contracts:
-        logging.debug(item)
+        if result is not None:
+            # do the conjunction for more than one observers
+            result = S._and(result, observers[i].method.guard)
+        else:
+            result = observers[i].method.guard
 
-    # remove all the invalid contracts that results False
-    contracts = remove_invalids(contracts)
+        # substitute the constants first
+        # result = S.do_substitute(result, constants)
 
-    logging.debug('\n\n============= LIST OF VALID CONTRACTS ===========')
-    for item in contracts:
-        logging.debug(item)
+        # gather all the registers and parameters
+        # for p in (*observers[i].method.inputs, *automaton.REGISTERS, *automaton.TARGET.inputs):
+        #     params.add(S._int(p))
+
+        # logging.debug('Precondition expression (antecedent): ' + str(result))
+        #
+        # if S.check_sat(list(params), result) == S._sat():
+        #     # if any part of the result is unsat abort the building process
+        #     # and return None
+        #     logging.debug('Precondition Inconsistent\n')
+        #     return Monomial(observers, None)
+        # else:
+        #     logging.debug('Precondition Consistent')
+    logging.debug('Precondition (antecedent): ' + str(result))
+    monomial = Monomial(observers, result)
+
+    return monomial
+
+
+def get_contracts(config_, location_, wp_):
+    global automaton, location, wp
+    automaton = config_
+    location = location_
+    wp = wp_
+
+    # initialize the list of contracts
+    contracts = list()
+
+    for monomial in automaton.MONOMIALS:
+        logging.debug('Location: ' + str(location))
+        logging.debug('Postcondition: ' + str(wp))
+        logging.debug('Weakest Precondition (consequent): ' + str(wp.method.guard))
+        monomial_obj = create_pre(monomial)
+        if monomial_obj.condition is None:
+            continue
+        else:
+            contracts.append(Contract(monomial_obj, wp))
     return contracts
+
+

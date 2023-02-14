@@ -114,9 +114,12 @@ def do_check(*args):
     return s.check()
 
 
-def check_sat(vars, antecedent, consequent):
+def check_sat(vars, antecedent, consequent=None):
     # Do negation of the implication
-    expr = _and(antecedent, _neg(consequent))
+    if consequent is not None:
+        expr = _and(antecedent, _neg(consequent))
+    else:
+        expr = _neg(antecedent)
     logging.debug('Negation of implication: ' + str(expr))
     # Add exists parameters and registers
     expr = _exists(vars, expr)

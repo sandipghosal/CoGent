@@ -5,7 +5,7 @@ import logging
 
 from customlogger.logging import CustomFormatter
 import os
-
+import ramodel.config
 from errors import *
 from generator import generate
 from import_xml import import_ra
@@ -104,13 +104,16 @@ def main(argv):
 
     logging.debug('target method:' + target)
     # import the automaton from the XML file
-    automaton = import_ra(xmlfile)
-    contract = generate(automaton, target)
-    print('\n\n')
-    print('============= FINAL CONTRACTS ===========')
-    for item in contract:
-        pp(item)
-        print('\n')
+    # automaton = import_ra(xmlfile)
+    config = ramodel.Config(xmlfile)
+    config.config(target)
+    generate(config)
+    # contract = generate(automaton, target)
+    # print('\n\n')
+    # print('============= FINAL CONTRACTS ===========')
+    # for item in contract:
+    #     pp(item)
+    #     print('\n')
 
     print('Contract Synthesis Completed')
 

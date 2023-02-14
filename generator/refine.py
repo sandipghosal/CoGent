@@ -2,7 +2,7 @@ import logging
 
 import constraintsolver.solver as S
 
-contracts = None
+automaton = None
 
 
 def check_post(first, second):
@@ -106,9 +106,9 @@ def remove_inconsistency():
     logging.debug('\n')
 
 
-def refine(contracts_):
-    global contracts
-    contracts = contracts_
+def refine(config):
+    global automaton
+    automaton = config
     logging.debug('\n\nStarting Contract Refinement')
     remove_inconsistency()
     remove_duplicates()

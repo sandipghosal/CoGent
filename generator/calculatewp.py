@@ -1,9 +1,11 @@
+import copy
 import logging
 from generator.conditions import *
 import constraintsolver.solver as S
 
 automaton = None
-target = None
+location = None
+observer = None
 
 
 def get_disjunction(args, index, result=None):
@@ -15,11 +17,11 @@ def get_disjunction(args, index, result=None):
     :return: BoolRef object result, disjunction of all constraints for the transitions
     """
     if index == 0:
-        return get_disjunction(args, index + 1, (args[index][0]).guard)
+        return get_disjunction(args, index + 1, (args[index][0]).method.guard)
     elif index == len(args):
         return result
     else:
-        return S._or(result, get_disjunction(args, index + 1, (args[index][0]).guard))
+        return S._or(result, get_disjunction(args, index + 1, (args[index][0]).method.guard))
 
     # for index in range(len(args)):
     #     if index == 0:
@@ -42,94 +44,86 @@ def get_implication(args):
     result = None
     # for each of the tuple in the list
     for index in range(len(args)):
-        wp = S.weakest_pre(args[index][1].guard, args[index][0].assignments)
+        wp = S.weakest_pre(args[index][1].method.guard, args[index][0].assignments)
         if index == 0:
-            result = S._implies(args[index][0].guard, wp)
+            result = S._implies(args[index][0].method.guard, wp)
         else:
-            result = S._and(result, S._implies(args[index][0].guard, wp))
+            result = S._and(result, S._implies(args[index][0].method.guard, wp))
 
     return result
 
 
-def get_observer_at_poststate(location, observer, output, substitutes):
-    logging.debug('Obtain WP for ' + observer + ' == ' + output)
+def get_observer_at_poststate(substitutes):
+    global automaton, location, observer
+    logging.debug('Obtain WP for ' + str(observer))
     # initialize the list of (transition, postobserver) tuples
     args = list()
 
     # for each transition originating from this location
-    for transition in automaton.get_transitions(source_=location, method_=target):
+    for transition in location.get_transitions(method=automaton.TARGET):
         # obtain the destination location
-        dest = transition.tolocation
-
+        dest = transition.toLocation
         # obtain the transitions for observer at destination
-        obstrans = automaton.get_transitions(source_=dest,
-                                             destination_=dest,
-                                             method_=observer,
-                                             output_=output)
+        obstrans = dest.get_transitions(destination=dest,
+                                        method=observer.method,
+                                        output=observer.output)
         # if obstrans is empty continue with next transition
         if not obstrans:
             continue
-
         logging.debug('Consider transitions at post-state:')
         logging.debug(obstrans)
 
+        # obtain the observer method for this transition at destination
+        method = obstrans[0].method
+        # change the input parameter of the method
+        method.inputs = [S.z3reftoStr(x[1]) for x in substitutes]
         # obtain the condition for observer at destination
-        guard = obstrans[0].guard
+        method.guard = S.do_substitute(obstrans[0].method.guard, substitutes)
         # create an observer object
-        observer = Condition(name=observer,
-                             condition=guard,
-                             output=output, args=substitutes)
+        newobserver = copy.deepcopy(automaton.OBSERVERS[method.name])
+        newobserver.method = method
+        newobserver.output = observer.output
 
         logging.debug('Observer method at destination:')
-        logging.debug(observer)
-
+        logging.debug(newobserver)
+        logging.debug('\n')
         # add (transition, observer) tuple into the list
-        args.append((transition, observer))
+        args.append((transition, newobserver))
 
     return args
 
 
-def get_wp_at_location(location):
+def observer_wrt_wp():
+    global location, observer
     logging.debug('Evaluating weakest precondition at location: ' + str(location))
 
-    # initialize the list for containing the postconditions
-    postconds = list()
+    _args = list()
+    # prepare the substitution for param ids
+    params = observer.method.inputs
+    for i in range(len(params)):
+        _args.append((S._int(params[i]), S._int('b' + str(i))))
+    # gather a list of (transition, postobserver) tuples
+    # respective to eah transition originating at current location
+    args = get_observer_at_poststate(_args)
 
-    # for each of the observer in the automaton
-    for observer in automaton.get_observers():
-        # prepare the substitution for param ids
-        _args = list()
-        params = automaton.methods[observer]
-        for i in range(len(params)):
-            _args.append((S._int(params[i]), S._int('b' + str(i))))
-        for output in ['TRUE', 'FALSE']:
-            # gather a list of (transition, postobserver) tuples
-            # respective to eah transition originating at current location
-            args = get_observer_at_poststate(location, observer, output, _args)
-            if not args:
-                continue
-            # obtain the weakest precondition for observer and output
-            wp = S.do_simplify(S._and(get_disjunction(args, 0),
-                                      get_implication(args)))
+    if not args:
+        return None
 
-            postconds.append(Postcondition(name=observer,
-                                           precondition=wp,
-                                           output=output,
-                                           args= _args))
+    # obtain the weakest precondition for observer and output
+    wp = S.do_simplify(S._and(get_disjunction(args, 0), get_implication(args)))
 
-    return postconds
+    newobserver = copy.deepcopy(args[0][1])
+    newobserver.method.guard = wp
+
+    return newobserver
 
 
-def get_wp(automaton_, target_):
-    # initialize global automaton and target
-    global automaton, target
-    automaton = automaton_
-    target = target_
-
+def get_wp(config, location_, observer_):
+    global automaton, location, observer
+    automaton = config
+    location = location_
+    observer = observer_
     # initialize the dictionary for containing all
     # the mappings of location to postconditions
-    wp = dict()
-    for location in automaton.get_locations():
-        conditions = get_wp_at_location(location)
-        wp[location] = conditions
+    wp = observer_wrt_wp()
     return wp
