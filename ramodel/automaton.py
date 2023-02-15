@@ -38,7 +38,9 @@ class Observer(Method):
         self.output = output
 
     def __eq__(self, other):
+        # comparing output would produce different literals for same observer with different outputs
         return self.method == other.method and self.method.inputs == other.method.inputs
+
 
     def __hash__(self):
         return hash(str(self.method) + str(self.method.inputs))

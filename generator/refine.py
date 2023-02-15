@@ -19,10 +19,20 @@ def check_post(first, second):
 
 def check_pre(first, second):
     # check if second.pre => first.pre
-    vars = list(set(first.variables) | set(second.variables))
-    first_pre = S.do_substitute(first.pre.condition, first.constants)
-    second_pre = S.do_substitute(second.pre.condition, second.constants)
-    if S.check_sat(vars, second_pre, first_pre) == S._sat():
+    params = set()
+    constants = list()
+    # gather the constants for substitution
+    for c, k in automaton.CONSTANTS:
+        constants.append((S._int(c), S._intval(k)))
+
+    # gather all the registers and parameters
+    for observer in list(set(first.monomial.observers) | set(second.monomial.observers)):
+        for x in observer.method.inputs:
+            params.add(S._int(x))
+
+    first_pre = S.do_substitute(first.monomial.condition, constants)
+    second_pre = S.do_substitute(second.monomial.condition, constants)
+    if S.check_sat(list(params), second_pre, first_pre) == S._sat():
         return False
     else:
         return True
@@ -45,77 +55,75 @@ def subsumes(first, second):
 
 
 def check_subsumption():
-    temp = list()
-    # for i in range(len(contracts)-1, -1, -1):
-    for first in contracts:
-        # due to transitivity property if a contract is checked
-        # to be subsumed by another (hence in the list temp)
-        # we do not need to investigate that contract further
-        if first in temp:
-            continue
-        for second in contracts:
-            if id(first) == id(second):
-                # if first and second referring to same contract object
+    for location in automaton.LOCATIONS.values():
+        temp = list()
+
+        # for i in range(len(contracts)-1, -1, -1):
+        for first in location.contracts:
+            # due to transitivity property if a contract is checked
+            # to be subsumed by another (hence in the list temp)
+            # we do not need to investigate that contract further
+            if first in temp:
                 continue
-            # do subsumption check only if two contracts are not same but their post-conditions are same
-            if first.post == second.post:
-                if subsumes(first, second):
-                    logging.debug('Result: True')
-                    logging.debug('Adding the following into the list of possible abandoned contracts:')
-                    temp.append(second)
-                    logging.debug(second)
-                    logging.debug('\n')
-                else:
-                    logging.debug('Result: False\n')
-    contracts[:] = [item for item in contracts if item not in temp]
+            for second in location.contracts:
+                if id(first) == id(second):
+                    # if first and second referring to same contract object
+                    continue
+                # do subsumption check only if two contracts are not same but their post-conditions are same
+                if first.wp == second.wp:
+                    if subsumes(first, second):
+                        logging.debug('Result: True')
+                        logging.debug('Adding the following into the list of possible abandoned contracts:')
+                        temp.append(second)
+                        logging.debug(second)
+                        logging.debug('\n')
+                    else:
+                        logging.debug('Result: False\n')
+        location.contracts[:] = [item for item in location.contracts if item not in temp]
+
+    automaton.print_contracts('============= CONTRACTS AFTER REFINEMENT ===========')
 
 
 def remove_duplicates():
-    global contracts
-    contracts = list(set(contracts))
-    logging.debug('\n\n============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
-    for item in contracts:
-        logging.debug(item)
-    logging.debug('\n')
+    for location in automaton.LOCATIONS.values():
+        for contract1 in location.contracts[:]:
+            for contract2 in location.contracts[:]:
+                if id(contract1) != id(contract2) and contract1 == contract2:
+                    location.contracts.remove(contract2)
+
+    automaton.print_contracts('============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
 
 
 def remove_inconsistency():
     temp_list = set()
     logging.debug('Inconsistent contracts:')
-    for first in contracts:
-        if first in temp_list:
-            continue
-        flag = False
-        logging.debug('\n')
-        for second in contracts:
-            if id(first) != id(second) and (first.pre == second.pre):
-                if flag:
-                    temp_list.add(second)
-                    logging.debug(second)
-                if first.post.output != second.post.output:
-                    flag = True
-                    logging.debug(first)
-                    logging.debug(second)
-                    temp_list.add(first)
-                    temp_list.add(second)
+    for location in automaton.LOCATIONS.values():
+        for first in location.contracts:
+            if first in temp_list:
+                continue
+            flag = False
+            logging.debug('\n')
+            for second in location.contracts:
+                if id(first) != id(second) and (first.monomial == second.monomial):
+                    if flag:
+                        temp_list.add(second)
+                        logging.debug(second)
+                    if first.post.output != second.post.output:
+                        flag = True
+                        logging.debug(first)
+                        logging.debug(second)
+                        temp_list.add(first)
+                        temp_list.add(second)
 
-    contracts[:] = [item for item in contracts if item not in temp_list]
-    logging.debug('\n\n============= CONTRACTS AFTER REMOVING INCONSISTENCIES ===========')
-    for item in contracts:
-        logging.debug(item)
-    logging.debug('\n')
+        location.contracts[:] = [item for item in location.contracts if item not in temp_list]
+
+    automaton.print_contract('============= CONTRACTS AFTER REMOVING INCONSISTENCIES ===========')
 
 
 def refine(config):
     global automaton
     automaton = config
-    logging.debug('\n\nStarting Contract Refinement')
-    remove_inconsistency()
+    logging.debug('\n====================== Starting Contract Refinement ==========================')
+    # remove_inconsistency()
     remove_duplicates()
     check_subsumption()
-
-    logging.debug('\n\n============= CONTRACTS AFTER REFINEMENT ===========')
-    for item in contracts:
-        logging.debug(item)
-    logging.debug('\n')
-    return contracts

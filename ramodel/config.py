@@ -3,6 +3,7 @@ import itertools
 import logging
 from pprint import pp
 
+import constraintbuilder
 import import_xml
 import ramodel.automaton as ra
 
@@ -12,8 +13,8 @@ class Monomial:
         self.observers = observers
         self.condition = condition
 
-    def __le__(self, other):
-        pass
+    def __eq__(self, other):
+        return self.observers == other.observers
 
     def __len__(self):
         return len(self.observers)
@@ -84,6 +85,14 @@ class Config:
             params.append(x)
 
         product_ = list()
+
+        # obtain all possible combinations of parameters
+        paramcomb = list(itertools.combinations(params, 2))
+        for comb in paramcomb:
+            observer = ra.Observer(ra.Method('__equality__' + str(comb)))
+            # self.OBSERVERS['__equality__' + str(comb)] = observer
+            product_.append((observer, comb))
+
         # for i in range(len(self.OBSERVERS)):
         for key in self.OBSERVERS.keys():
             observer = list()
@@ -95,12 +104,7 @@ class Config:
                 # adding non-parameterized observer into the list with blank parameter
                 product_ = product_ + [(self.OBSERVERS[key], '')]
 
-        # obtain all possible combinations of parameters
-        paramcomb = list(itertools.combinations(params, 2))
-        for comb in paramcomb:
-            observer = ra.Observer(ra.Method('__equality__' + str(comb)))
-            # self.OBSERVERS['__equality__' + str(comb)] = observer
-            product_.append((observer, comb))
+
 
         # Following 8 lines will generate monomials for
         # all possible combinations of 1 to len(product_) sizes
@@ -130,9 +134,14 @@ class Config:
                     if observer.method.name.find('__equality__') != -1:
                         # the observer testing parameters' equality
                         observer.method.inputs = list(x[0][1])
+                        if x[1] == 'TRUE':
+                            observer.method.guard = constraintbuilder.build_expr(x[0][1][0] + ' == '+ x[0][1][1])
+                        else:
+                            observer.method.guard = constraintbuilder.build_expr(x[0][1][0] + ' != ' + x[0][1][1])
                     else:
                         # the observer is something else
-                        observer.method.inputs = [x[0][1]]
+                        if x[0][1] != '':
+                            observer.method.inputs = [x[0][1]]
 
                     observer.output = self.OUTPUTS[x[1]]
 
@@ -154,11 +163,11 @@ class Config:
         logging.debug('List of monomials:')
         logging.debug(pp(self.MONOMIALS))
 
-    def print_contract(self, message):
+    def print_contracts(self, message):
         logging.debug('\n\n' + message)
         for location in self.LOCATIONS.values():
             for contract in location.contracts:
-                logging.debug('Location: ' + str(location) + ' {' + str(contract.monomial) + '} ' + str(self.TARGET) +
+                logging.debug('Location: ' + str(location) + ': {' + str(contract.monomial) + '} ' + str(self.TARGET) +
                               ' {' + str(contract.wp) + '} :: ' + str(contract.result))
 
     def config(self, target):

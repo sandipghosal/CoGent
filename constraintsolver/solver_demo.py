@@ -79,7 +79,7 @@ a0, a1, a2 = Bools('a0 a1 a2')
 #     for j in i:
 #         print(j)
 
-
-s = Solver()
-s.add(And(a0, Not(a1), a1))
-print(s.check())
+print(simplify(And(Implies(a0, a2), Implies(a1, a2))))
+# s = Solver()
+# s.add(And(Implies(a0, a2), Implies(a1, a2)))
+# print(s.check())

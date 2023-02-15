@@ -12,7 +12,7 @@ wp = None
 
 
 class Contract:
-    def __init__(self, monomial, observer):
+    def __init__(self, monomial, observer, result=None):
         """
         Hold a contract for a location
         :param monomial: Object of Monomial class that serves the precondition
@@ -22,14 +22,17 @@ class Contract:
 
         self.monomial = monomial
         self.wp = observer
-        self.result = self.check()
+        if result is not None:
+            self.result = result
+        else:
+            self.result = self.check()
 
         # self.result = self.check(params, registers, constants)
         # obtain precondition from the observers
         # check of precondition => weakestpre is satisfied and store into self.result
 
     def __eq__(self, other):
-        return self.monomial == other.monomial and self.wp == other.wp and self.result == other.result
+        return self.monomial == other.monomial and self.wp == other.wp and self.wp.output == other.wp.output and self.result == other.result
 
     def __hash__(self):
         return hash(str(self.monomial) + str(self.wp))
@@ -56,7 +59,7 @@ class Contract:
                 params.add(S._int(x))
 
         for r in (*automaton.REGISTERS, *automaton.TARGET.inputs):
-            params.add(S._int(r) )
+            params.add(S._int(r))
 
         # Substitute constants with respective values
         pre = S.do_substitute(self.monomial.condition, constants)
@@ -80,17 +83,32 @@ def remove_invalids(contracts):
     return contracts
 
 
-def create_pre(monomial_):
+def apply_equalities(submonomial):
+    substitute = list()
+    logging.debug('Check for equalities')
+    for observer in submonomial:
+        if observer.method.name.find('__equality__') != -1 and observer.output == automaton.OUTPUTS['TRUE']:
+            substitute.append((S._int(observer.method.inputs[0]), S._int(observer.method.inputs[1])))
+    if not substitute:
+        logging.debug('No equality found')
+        return submonomial
+
+    for first in submonomial:
+        for second in submonomial:
+            if second.method.name.find('__equality__') != -1 or id(first) == id(second):
+                continue
+            if first.method == second.method and first.method.guard == S.do_substitute(second.method.guard, substitute):
+                logging.debug(str(first) + ' == ' + str(second))
+                logging.debug('Removing observer: ' + str(second))
+                submonomial.remove(second)
+    return submonomial
+
+
+def create_contract(monomial_):
     observers = copy.deepcopy(monomial_.observers)
     result = None
-    params = set()
-    constants = list()
-    # gather the constants for substitution
-    for c, k in automaton.CONSTANTS:
-        constants.append((S._int(c), S._intval(k)))
-
-    logging.debug('Precondition: ' + str(observers))
-
+    last_contract = None
+    submonomial = list()
     for i in range(len(observers)):
         # iterate for each observer in the monomial
         if observers[i].method.name.find('__equality__') != -1:
@@ -107,12 +125,15 @@ def create_pre(monomial_):
                                                   output=observers[i].output)
             # if there is no transition found continue the iteration
             if not transition:
-                logging.debug('No transition found\n')
                 continue
-            # build the list of tuple to substitute method's parameter with the observer's parameter
-            _args = [(S._int(transition[0].method.inputs[0]), S._int(observers[i].method.inputs[0]))]
-            # get the method condition by substituting
-            observers[i].method.guard = S.do_substitute(transition[0].method.guard, _args)
+
+            if observers[i].method.inputs != []:
+                # build the list of tuple to substitute method's parameter with the observer's parameter
+                _args = [(S._int(transition[0].method.inputs[0]), S._int(observers[i].method.inputs[0]))]
+                # get the method condition by substituting
+                observers[i].method.guard = S.do_substitute(transition[0].method.guard, _args)
+            else:
+                observers[i].method.guard = transition[0].method.guard
 
         if result is not None:
             # do the conjunction for more than one observers
@@ -120,26 +141,46 @@ def create_pre(monomial_):
         else:
             result = observers[i].method.guard
 
-        # substitute the constants first
-        # result = S.do_substitute(result, constants)
+        # add the subset of the monomial into the list
+        submonomial.append(observers[i])
 
-        # gather all the registers and parameters
+        logging.debug('Location: ' + str(location))
+        logging.debug('Postcondition: ' + str(wp))
+        logging.debug('Weakest Precondition (consequent): ' + str(wp.method.guard))
+        logging.debug('Precondition: ' + str(submonomial))
+        logging.debug('Precondition (antecedent): ' + str(result))
+
+        submonomial = apply_equalities(submonomial)
+
+        # create a monomial object with the subset
+        mobj = Monomial(submonomial, result)
+
+        # create contract with this submonomial
+        last_contract = Contract(mobj, wp)
+
+        if not last_contract.result:
+            # if any part of the result is unsat abort the building process
+            # and return None
+            logging.debug('Precondition is inconsistent\n')
+            for observer in submonomial:
+                if observer.method.name.find('__equality__') == -1:
+                    # make sure at least one non-equality observer is present in the monomial
+                    # then last obtained consistent contract
+                    return last_contract
+        else:
+            logging.debug('Precondition is consistent\n')
+            last_contract = last_contract
+
+        # # substitute the constants first
+        # result = S.do_substitute(result, constants)
+        #
+        # # gather all the registers and parameters
         # for p in (*observers[i].method.inputs, *automaton.REGISTERS, *automaton.TARGET.inputs):
         #     params.add(S._int(p))
-
-        # logging.debug('Precondition expression (antecedent): ' + str(result))
         #
-        # if S.check_sat(list(params), result) == S._sat():
-        #     # if any part of the result is unsat abort the building process
-        #     # and return None
-        #     logging.debug('Precondition Inconsistent\n')
-        #     return Monomial(observers, None)
-        # else:
-        #     logging.debug('Precondition Consistent')
-    logging.debug('Precondition (antecedent): ' + str(result))
-    monomial = Monomial(observers, result)
+        # logging.debug('Precondition expression (antecedent): ' + str(result))
 
-    return monomial
+    return last_contract
 
 
 def get_contracts(config_, location_, wp_):
@@ -152,14 +193,12 @@ def get_contracts(config_, location_, wp_):
     contracts = list()
 
     for monomial in automaton.MONOMIALS:
-        logging.debug('Location: ' + str(location))
-        logging.debug('Postcondition: ' + str(wp))
-        logging.debug('Weakest Precondition (consequent): ' + str(wp.method.guard))
-        monomial_obj = create_pre(monomial)
-        if monomial_obj.condition is None:
+        logging.debug('\n')
+        logging.debug('Generate contract for the monomial: ' + str(monomial))
+        contract = create_contract(monomial)
+        if contract is None:
             continue
-        else:
-            contracts.append(Contract(monomial_obj, wp))
+        if contract.result:
+            logging.debug(contract)
+            contracts.append(contract)
     return contracts
-
-

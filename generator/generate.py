@@ -22,7 +22,7 @@ from generator.synthesize import synthesize
 
 
 def generate(config):
-    logging.debug('\n\nStarting Contract Generation')
+    logging.debug('\n\n=========== Starting Contract Generation =================')
     for location in config.LOCATIONS.values():
         for key, output in itertools.product(config.OBSERVERS, ['TRUE', 'FALSE']):
             observer = config.OBSERVERS[key]
@@ -32,11 +32,13 @@ def generate(config):
             if not wp: continue
             # Obtain a list of Contract objects
             contracts = get_contracts(config, location, wp)
-            location.contracts = contracts
-    config.print_contract('================ LIST OF ALL CONTRACTS ====================')
+            [location.contracts.append(contract) for contract in contracts]
+    config.print_contracts('================ LIST OF VALID CONTRACTS ====================')
+
+    # for location in config.LOCATIONS.values():
+    #     location.contracts[:] = [item for item in location.contracts if item.result == True]
+    # config.print_contract('================ LIST OF ALL VALID CONTRACTS ====================')
+    
     refine(config)
-    # pre = get_pre(automaton, target)
-    # contracts = get_contracts(automaton, target, pre, wp)
-    # contracts = refine(contracts)
-    # contracts = synthesize(automaton, contracts)
+    # synthesize(config)
 

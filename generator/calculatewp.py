@@ -55,7 +55,6 @@ def get_implication(args):
 
 def get_observer_at_poststate(substitutes):
     global automaton, location, observer
-    logging.debug('Obtain WP for ' + str(observer))
     # initialize the list of (transition, postobserver) tuples
     args = list()
 
@@ -70,8 +69,6 @@ def get_observer_at_poststate(substitutes):
         # if obstrans is empty continue with next transition
         if not obstrans:
             continue
-        logging.debug('Consider transitions at post-state:')
-        logging.debug(obstrans)
 
         # obtain the observer method for this transition at destination
         method = obstrans[0].method
@@ -84,7 +81,6 @@ def get_observer_at_poststate(substitutes):
         newobserver.method = method
         newobserver.output = observer.output
 
-        logging.debug('Observer method at destination:')
         logging.debug(newobserver)
         logging.debug('\n')
         # add (transition, observer) tuple into the list
@@ -95,7 +91,6 @@ def get_observer_at_poststate(substitutes):
 
 def observer_wrt_wp():
     global location, observer
-    logging.debug('Evaluating weakest precondition at location: ' + str(location))
 
     _args = list()
     # prepare the substitution for param ids
@@ -114,7 +109,7 @@ def observer_wrt_wp():
 
     newobserver = copy.deepcopy(args[0][1])
     newobserver.method.guard = wp
-
+    newobserver.literal = automaton.LITERALS[args[0][1]]
     return newobserver
 
 
