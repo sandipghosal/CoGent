@@ -48,14 +48,15 @@ def simplify(location):
     print('Contract for location :', location)
     visited = list()
     for first in location.contracts:
+        if first in visited: continue
         result = None
         for second in location.contracts:
             if second not in visited and first.wp == second.wp and first.wp.output == second.wp.output:
                 visited.append(second)
                 if result is not None:
-                    result = S._or(result, build_binary_expr(second, result))
+                    result = S._or(result, build_binary_expr(second))
                 else:
-                    result = build_binary_expr(second, result)
+                    result = build_binary_expr(second)
         pre = expr_to_contract(result)
         post = first.wp
         print('{' + pre + '} ' + str(automaton.TARGET) + ' {' + str(post) + '}')

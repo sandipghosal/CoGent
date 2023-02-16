@@ -122,7 +122,8 @@ def check_sat(vars, antecedent, consequent=None):
         expr = _neg(antecedent)
     logging.debug('Negation of implication: ' + str(expr))
     # Add exists parameters and registers
-    expr = _exists(vars, expr)
+    if vars != []:
+        expr = _exists(vars, expr)
     logging.debug('Final expression before checking SAT: ' + str(expr))
     # Check the validity
     result = do_check(expr)

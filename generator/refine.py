@@ -32,6 +32,7 @@ def check_pre(first, second):
 
     first_pre = S.do_substitute(first.monomial.condition, constants)
     second_pre = S.do_substitute(second.monomial.condition, constants)
+
     if S.check_sat(list(params), second_pre, first_pre) == S._sat():
         return False
     else:
@@ -57,20 +58,22 @@ def subsumes(first, second):
 def check_subsumption():
     for location in automaton.LOCATIONS.values():
         temp = list()
-
-        # for i in range(len(contracts)-1, -1, -1):
-        for first in location.contracts:
+        location.contracts.sort(key=lambda x: len(x.monomial), reverse=True)
+        for i in range(len(location.contracts)):
+            first = location.contracts[i]
             # due to transitivity property if a contract is checked
             # to be subsumed by another (hence in the list temp)
             # we do not need to investigate that contract further
             if first in temp:
                 continue
-            for second in location.contracts:
+            for j in range(len(location.contracts)):
+                second = location.contracts[j]
                 if id(first) == id(second):
                     # if first and second referring to same contract object
                     continue
                 # do subsumption check only if two contracts are not same but their post-conditions are same
-                if first.wp == second.wp:
+                if first.wp == second.wp and first.wp.output == second.wp.output and first.monomial.subset(second.monomial):
+                # if first.wp == second.wp and first.wp.output == second.wp.output:
                     if subsumes(first, second):
                         logging.debug('Result: True')
                         logging.debug('Adding the following into the list of possible abandoned contracts:')
@@ -86,10 +89,23 @@ def check_subsumption():
 
 def remove_duplicates():
     for location in automaton.LOCATIONS.values():
-        for contract1 in location.contracts[:]:
-            for contract2 in location.contracts[:]:
-                if id(contract1) != id(contract2) and contract1 == contract2:
-                    location.contracts.remove(contract2)
+        contracts = location.contracts
+
+        [contracts.remove(contract2) for contract1 in location.contracts \
+         for contract2 in contracts.copy() if id(contract1) != id(contract2) and contract1 == contract2]
+
+        location.contracts = contracts
+
+        # for contract1 in location.contracts:
+        #     if contract1 in contracts:
+        #         continue
+        #     else:
+        #
+        #     for contract2 in location.contracts:
+        #         if contract2 in contracts:
+        #             continue
+        #         if id(contract1) != id(contract2) and contract1 == contract2:
+        #             contracts.remove(contract2)
 
     automaton.print_contracts('============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
 

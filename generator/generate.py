@@ -3,7 +3,6 @@ import logging
 
 from generator.calculatewp import get_wp
 from generator.contract import get_contracts
-from generator.obtainpre import get_pre
 from generator.refine import refine
 from generator.synthesize import synthesize
 
@@ -14,11 +13,6 @@ from generator.synthesize import synthesize
 ### Postcondition:: observername, params, output, weakestpre
 ### Precondition:: list of Observer output,
 ###################################################
-
-
-
-
-
 
 
 def generate(config):
@@ -38,7 +32,6 @@ def generate(config):
     # for location in config.LOCATIONS.values():
     #     location.contracts[:] = [item for item in location.contracts if item.result == True]
     # config.print_contract('================ LIST OF ALL VALID CONTRACTS ====================')
-    
-    refine(config)
-    # synthesize(config)
 
+    refine(config)
+    synthesize(config)

@@ -28,6 +28,27 @@ class Monomial:
                 string = string + ' and ' + str(self.observers[i])
         return string
 
+    def subset(self, other):
+        """
+        Check if self is subset of other
+        :param other: Object of Monomial
+        :return: Boolean value True/False
+        """
+        # if length of other is less than self then self is not a subset
+        if (len(other.observers) - len(self.observers)) < 0:
+            return False
+
+        for observer in self.observers:
+            if observer in other.observers and observer.output == other.observers[
+                other.observers.index(observer)].output:
+                # i = other.observers.index(observer)
+                # if observer.output == other.observers[i].output:
+                continue
+            else:
+                return False
+
+        return True
+
 
 class Config:
     # Path to XML file
@@ -104,8 +125,6 @@ class Config:
                 # adding non-parameterized observer into the list with blank parameter
                 product_ = product_ + [(self.OBSERVERS[key], '')]
 
-
-
         # Following 8 lines will generate monomials for
         # all possible combinations of 1 to len(product_) sizes
         combinations = list()
@@ -135,7 +154,7 @@ class Config:
                         # the observer testing parameters' equality
                         observer.method.inputs = list(x[0][1])
                         if x[1] == 'TRUE':
-                            observer.method.guard = constraintbuilder.build_expr(x[0][1][0] + ' == '+ x[0][1][1])
+                            observer.method.guard = constraintbuilder.build_expr(x[0][1][0] + ' == ' + x[0][1][1])
                         else:
                             observer.method.guard = constraintbuilder.build_expr(x[0][1][0] + ' != ' + x[0][1][1])
                     else:
@@ -169,6 +188,7 @@ class Config:
             for contract in location.contracts:
                 logging.debug('Location: ' + str(location) + ': {' + str(contract.monomial) + '} ' + str(self.TARGET) +
                               ' {' + str(contract.wp) + '} :: ' + str(contract.result))
+        logging.debug('\n')
 
     def config(self, target):
         import_xml.import_ra(self)
