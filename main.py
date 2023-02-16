@@ -108,12 +108,6 @@ def main(argv):
     config = ramodel.Config(xmlfile)
     config.config(target)
     generate(config)
-    # contract = generate(automaton, target)
-    # print('\n\n')
-    # print('============= FINAL CONTRACTS ===========')
-    # for item in contract:
-    #     pp(item)
-    #     print('\n')
 
     print('Contract Synthesis Completed')
 

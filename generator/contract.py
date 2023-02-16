@@ -40,8 +40,6 @@ class Contract:
     def __repr__(self):
         return '{' + str(self.monomial) + '} ' + ' {' + str(self.wp) + '} :: ' + str(self.result)
 
-
-
     def check(self):
         # Does it satisfy P->Q ?
         # IF there is a solution to Not(P->Q) equiv to (P ^ Not Q) THEN

@@ -14,7 +14,14 @@ class Monomial:
         self.condition = condition
 
     def __eq__(self, other):
-        return self.observers == other.observers
+        if len(self.observers) != len(other.observers): return False
+        for i in range(len(self.observers)):
+            if self.observers[i] == other.observers[i] \
+                    and self.observers[i].output == other.observers[i].output:
+                continue
+            else:
+                return False
+        return True
 
     def __len__(self):
         return len(self.observers)

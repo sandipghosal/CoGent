@@ -1,3 +1,4 @@
+import copy
 import logging
 
 import constraintsolver.solver as S
@@ -58,7 +59,7 @@ def subsumes(first, second):
 def check_subsumption():
     for location in automaton.LOCATIONS.values():
         temp = list()
-        location.contracts.sort(key=lambda x: len(x.monomial), reverse=True)
+        location.contracts.sort(key=lambda x: len(x.monomial))
         for i in range(len(location.contracts)):
             first = location.contracts[i]
             # due to transitivity property if a contract is checked
@@ -89,51 +90,10 @@ def check_subsumption():
 
 def remove_duplicates():
     for location in automaton.LOCATIONS.values():
-        contracts = location.contracts
-
-        [contracts.remove(contract2) for contract1 in location.contracts \
-         for contract2 in contracts.copy() if id(contract1) != id(contract2) and contract1 == contract2]
-
-        location.contracts = contracts
-
-        # for contract1 in location.contracts:
-        #     if contract1 in contracts:
-        #         continue
-        #     else:
-        #
-        #     for contract2 in location.contracts:
-        #         if contract2 in contracts:
-        #             continue
-        #         if id(contract1) != id(contract2) and contract1 == contract2:
-        #             contracts.remove(contract2)
+        location.contracts = list(dict.fromkeys(location.contracts))
 
     automaton.print_contracts('============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
 
-
-def remove_inconsistency():
-    temp_list = set()
-    logging.debug('Inconsistent contracts:')
-    for location in automaton.LOCATIONS.values():
-        for first in location.contracts:
-            if first in temp_list:
-                continue
-            flag = False
-            logging.debug('\n')
-            for second in location.contracts:
-                if id(first) != id(second) and (first.monomial == second.monomial):
-                    if flag:
-                        temp_list.add(second)
-                        logging.debug(second)
-                    if first.post.output != second.post.output:
-                        flag = True
-                        logging.debug(first)
-                        logging.debug(second)
-                        temp_list.add(first)
-                        temp_list.add(second)
-
-        location.contracts[:] = [item for item in location.contracts if item not in temp_list]
-
-    automaton.print_contract('============= CONTRACTS AFTER REMOVING INCONSISTENCIES ===========')
 
 
 def refine(config):
