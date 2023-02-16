@@ -37,7 +37,7 @@ def condense(transitions, config):
                 location.transitions.remove(transition)
 
     logging.debug('\n\nNew list of transitions after condensing:')
-    logging.debug(pp(transitions))
+    logging.debug(transitions)
 
 
 def pruning(transitions, config):
@@ -64,12 +64,12 @@ def pruning(transitions, config):
      for transition in newlist if transition.fromLocation == location]
 
     logging.debug('\n\nNew list of transitions after pruning:')
-    logging.debug(pp(newlist))
+    logging.debug(newlist)
 
     for location in deletedlocations: del (config.LOCATIONS[location.name])
 
     logging.debug('\n\nNew list of locations after pruning:')
-    logging.debug(pp(config.LOCATIONS))
+    logging.debug(config.LOCATIONS)
 
     return newlist
 

@@ -69,7 +69,7 @@ def synthesize(config):
 
     logging.debug('\n\nObserver to Boolean literal mapping:')
     logging.debug(config.LITERALS)
-    logging.debug('\n\n===================== FINAL CONTRACT =====================')
+    print('\n\n===================== FINAL CONTRACT =====================')
     for location in automaton.LOCATIONS.values():
         simplify(location)
 

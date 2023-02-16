@@ -73,11 +73,13 @@ def check_subsumption():
                     # if first and second referring to same contract object
                     continue
                 # do subsumption check only if two contracts are not same but their post-conditions are same
-                if first.wp == second.wp and first.wp.output == second.wp.output and first.monomial.subset(second.monomial):
+                # if first.wp == second.wp and first.wp.output == second.wp.output and first.monomial.subset(second.monomial):
+                if first.wp == second.wp and first.wp.output == second.wp.output:
+                    logging.debug('Location: ' + str(location))
                 # if first.wp == second.wp and first.wp.output == second.wp.output:
                     if subsumes(first, second):
                         logging.debug('Result: True')
-                        logging.debug('Adding the following into the list of possible abandoned contracts:')
+                        logging.debug('Adding the following into the list of abandoned contracts:')
                         temp.append(second)
                         logging.debug(second)
                         logging.debug('\n')

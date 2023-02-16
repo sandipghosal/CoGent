@@ -45,14 +45,20 @@ class Monomial:
         if (len(other.observers) - len(self.observers)) < 0:
             return False
 
-        for observer in self.observers:
-            if observer in other.observers and observer.output == other.observers[
-                other.observers.index(observer)].output:
-                # i = other.observers.index(observer)
-                # if observer.output == other.observers[i].output:
+        for i in range(len(self.observers)):
+            if self.observers[i].method == other.observers[i].method \
+                    and self.observers[i].output == other.observers[i].output:
                 continue
             else:
                 return False
+        # for observer in self.observers:
+        #     if observer in other.observers and observer.output == other.observers[
+        #         other.observers.index(observer)].output:
+        #         # i = other.observers.index(observer)
+        #         # if observer.output == other.observers[i].output:
+        #         continue
+        #     else:
+        #         return False
 
         return True
 
@@ -186,8 +192,8 @@ class Config:
         # monomials of observer methods for fixed size i.e., length of product_
         # monomials = [[(inner[0][0], inner[1], inner[0][1]) for inner in outer] for outer in temp]
 
-        logging.debug('List of monomials:')
-        logging.debug(pp(self.MONOMIALS))
+        logging.debug('\n\nList of monomials:')
+        logging.debug(self.MONOMIALS)
 
     def print_contracts(self, message):
         logging.debug('\n\n' + message)

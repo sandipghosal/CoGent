@@ -11,7 +11,7 @@ from generator import generate
 from import_xml import import_ra
 
 
-def setuplogger(switch, logfile, loglevel=logging.DEBUG):
+def setuplogger(switch, logfile_, loglevel=logging.DEBUG):
     # logger_name = inspect.stack()[1][3]
     # logger = logging.getLogger(logger_name)
     if switch:
@@ -21,20 +21,20 @@ def setuplogger(switch, logfile, loglevel=logging.DEBUG):
         if not exist:
             os.makedirs(logpath)
 
-        if logfile is None:
+        if logfile_ is None:
             # create a default log file using the timestamp
             logfile = 'log/' + str(datetime.datetime.now()).split(' ')[1] + '.log'
         else:
-            logfile = 'log/' + logfile
+            logfile = logfile_
 
         print('log file created:' + logfile)
-        logging.basicConfig(filename=logfile, level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
+        logging.basicConfig(filename=logfile, filemode='w', level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
         # fhandler = logging.FileHandler(logfile)
         # fhandler.setLevel(loglevel)
         # fhandler.setFormatter(CustomFormatter())
         # logger.addHandler(fhandler)
     else:
-        logging.basicConfig(stream=sys.stdout, level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
+        logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
         # chandler = logging.StreamHandler()
         # chandler.setLevel(logging.DEBUG)
         # chandler.setFormatter(CustomFormatter())
@@ -88,7 +88,7 @@ def main(argv):
         sys.exit(2)
 
     # set up the logging environment
-    setuplogger(switch=logswitch, logfile=logfile, loglevel=level)
+    setuplogger(switch=logswitch, logfile_=logfile, loglevel=level)
 
     # check if user has provided the XML file
     try:
