@@ -83,7 +83,7 @@ def weakest_pre(argv, args) -> list:
     # else:
     #     return argv
 
-    return substitute(argv, args)
+    return simplify(substitute(argv, args))
 
 
 def do_substitute(argv, args):

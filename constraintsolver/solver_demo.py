@@ -15,8 +15,9 @@ from z3 import *
 # print('qe', t.help(), t.param_descrs())
 
 
-# r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
-# s = Solver()
+r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
+
+print(substitute(r1 == b0, [(r1, b0)]))
 
 # s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
 # g = Goal()
@@ -68,7 +69,7 @@ from z3 import *
 # print(s.check())
 
 
-a0, a1, a2 = Bools('a0 a1 a2')
+# a0, a1, a2 = Bools('a0 a1 a2')
 # g = Goal()
 # g.add(And(a0, Not(And(a1, a0))))
 # t = Tactic('ctx-solver-simplify')
@@ -79,7 +80,7 @@ a0, a1, a2 = Bools('a0 a1 a2')
 #     for j in i:
 #         print(j)
 
-print(simplify(And(Implies(a0, a2), Implies(a1, a2))))
+# print(simplify(And(Implies(a0, a2), Implies(a1, a2))))
 # s = Solver()
 # s.add(And(Implies(a0, a2), Implies(a1, a2)))
 # print(s.check())

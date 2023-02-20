@@ -6,6 +6,29 @@ import constraintsolver.solver as S
 automaton = None
 
 
+def reformat():
+    """
+    Substitute condition of equalities such as (a==b) to (b==b) or True
+    """
+    for location in automaton.LOCATIONS.values():
+        for contract in location.contracts:
+            if len(contract.monomial.observers) != 1:
+                continue
+            substitute = list()
+            for observer in contract.monomial.observers:
+                if observer.method.name.find('__equality__') != -1 and observer.output == automaton.OUTPUTS['TRUE']:
+                    for i in range(len(observer.method.inputs)):
+                        substitute.append((S._int(observer.method.inputs[i]), S._int(contract.wp.method.inputs[0])))
+                    observer.method.inputs = contract.wp.method.inputs
+                    observer.method.guard = S.do_substitute(observer.method.guard, substitute)
+            if substitute != [] and contract.target.inputs:
+                for i in range(len(substitute)):
+                    for j in range(len(contract.target.inputs)):
+                        param = S.z3reftoStr(substitute[i][0])
+                        if contract.target.inputs[j] == param:
+                            contract.target.inputs[j] = S.z3reftoStr(substitute[i][1])
+
+
 def check_post(first, second):
     # check if first.post and second.pre => second.post
     vars = list(set(first.variables) | set(second.variables))
@@ -76,7 +99,7 @@ def check_subsumption():
                 # if first.wp == second.wp and first.wp.output == second.wp.output and first.monomial.subset(second.monomial):
                 if first.wp == second.wp and first.wp.output == second.wp.output:
                     logging.debug('Location: ' + str(location))
-                # if first.wp == second.wp and first.wp.output == second.wp.output:
+                    # if first.wp == second.wp and first.wp.output == second.wp.output:
                     if subsumes(first, second):
                         logging.debug('Result: True')
                         logging.debug('Adding the following into the list of abandoned contracts:')
@@ -87,14 +110,11 @@ def check_subsumption():
                         logging.debug('Result: False\n')
         location.contracts[:] = [item for item in location.contracts if item not in temp]
 
-    automaton.print_contracts('============= CONTRACTS AFTER REFINEMENT ===========')
 
 
 def remove_duplicates():
     for location in automaton.LOCATIONS.values():
         location.contracts = list(dict.fromkeys(location.contracts))
-
-    automaton.print_contracts('============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
 
 
 
@@ -104,4 +124,7 @@ def refine(config):
     logging.debug('\n====================== Starting Contract Refinement ==========================')
     # remove_inconsistency()
     remove_duplicates()
+    automaton.print_contracts('============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
     check_subsumption()
+    reformat()
+    automaton.print_contracts('============= CONTRACTS AFTER REFINEMENT ===========')

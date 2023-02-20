@@ -114,10 +114,18 @@ class Config:
     def get_monomials(self):
         # considering observer methods have only one input parameter 'b0'
         # form the list of parameters
-        params = ['b0']
+        params = set(['b0'])
         for x in self.TARGET.inputs:
-            params.append(x)
+            params.add(x)
 
+        # add the output parameters of the target method in the list of paramaters
+        for location in self.LOCATIONS.values():
+            transitions = location.get_transitions(method=self.TARGET)
+            for transition in transitions:
+                if transition.output.outparams:
+                    params.add(*transition.output.outparams)
+
+        params = list(params)
         product_ = list()
 
         # obtain all possible combinations of parameters
@@ -199,8 +207,7 @@ class Config:
         logging.debug('\n\n' + message)
         for location in self.LOCATIONS.values():
             for contract in location.contracts:
-                logging.debug('Location: ' + str(location) + ': {' + str(contract.monomial) + '} ' + str(self.TARGET) +
-                              ' {' + str(contract.wp) + '} :: ' + str(contract.result))
+                logging.debug('Location: ' + str(location) + ': '+ str(contract))
         logging.debug('\n')
 
     def config(self, target):

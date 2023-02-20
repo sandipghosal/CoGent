@@ -12,7 +12,7 @@ wp = None
 
 
 class Contract:
-    def __init__(self, monomial, observer, result=None):
+    def __init__(self, monomial, target, observer, result=None):
         """
         Hold a contract for a location
         :param monomial: Object of Monomial class that serves the precondition
@@ -21,6 +21,7 @@ class Contract:
         """
 
         self.monomial = monomial
+        self.target = target
         self.wp = observer
         if result is not None:
             self.result = result
@@ -38,7 +39,7 @@ class Contract:
         return hash(str(self.monomial) + str(self.wp))
 
     def __repr__(self):
-        return '{' + str(self.monomial) + '} ' + ' {' + str(self.wp) + '} :: ' + str(self.result)
+        return '{' + str(self.monomial) + '} ' + str(self.target) + ' {' + str(self.wp) + '} :: ' + str(self.result)
 
     def check(self):
         # Does it satisfy P->Q ?
@@ -155,8 +156,10 @@ def create_contract(monomial_):
         # create a monomial object with the subset
         mobj = Monomial(submonomial, result)
 
+        target = copy.deepcopy(automaton.TARGET)
+
         # create contract with this submonomial
-        last_contract = Contract(mobj, wp)
+        last_contract = Contract(mobj, target, wp)
 
         if not last_contract.result:
             # if any part of the result is unsat abort the building process

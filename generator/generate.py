@@ -34,4 +34,4 @@ def generate(config):
     # config.print_contract('================ LIST OF ALL VALID CONTRACTS ====================')
 
     refine(config)
-    synthesize(config)
+    # synthesize(config)

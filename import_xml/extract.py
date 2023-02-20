@@ -55,6 +55,7 @@ def pruning(transitions, config):
             # insert the output location into the list to be deleted
             deletedlocations.add(current_dest)
             current_trans.output = next_transition.method
+            current_trans.assignments = current_trans.assignments + next_transition.assignments
             current_trans.toLocation = next_transition.toLocation
 
         newlist.append(current_trans)

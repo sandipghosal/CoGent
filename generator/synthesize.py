@@ -45,6 +45,7 @@ def build_binary_expr(contract, expr=None):
 
 
 def simplify(location):
+    logging.info('Contract for location :%s', location)
     print('Contract for location :', location)
     visited = list()
     for first in location.contracts:
@@ -59,7 +60,10 @@ def simplify(location):
                     result = build_binary_expr(second)
         pre = expr_to_contract(result)
         post = first.wp
-        print('{' + pre + '} ' + str(automaton.TARGET) + ' {' + str(post) + '}')
+        contract = '{' + pre + '} ' + str(automaton.TARGET) + ' {' + str(post) + '}'
+        logging.info(contract)
+        print(contract)
+    logging.info('\n')
     print('\n')
 
 
@@ -69,23 +73,8 @@ def synthesize(config):
 
     logging.debug('\n\nObserver to Boolean literal mapping:')
     logging.debug(config.LITERALS)
+    logging.info('\n\n===================== FINAL CONTRACT =====================')
     print('\n\n===================== FINAL CONTRACT =====================')
     for location in automaton.LOCATIONS.values():
         simplify(location)
 
-
-def check(expr_true, expr_false):
-    params = list()
-    for key in literals.keys():
-        params.append(S._bool(literals[key]))
-
-    # Do negation of the implication
-    expr = S._and(expr_true, S._neg(expr_false))
-
-    # Add exists parameters
-    expr = S._exists(params, expr)
-
-    # Check the validity
-    result = S.do_check(expr)
-
-    print(result)
