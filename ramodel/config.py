@@ -46,11 +46,16 @@ class Monomial:
             return False
 
         for i in range(len(self.observers)):
-            if self.observers[i].method == other.observers[i].method \
-                    and self.observers[i].output == other.observers[i].output:
-                continue
-            else:
+            flag = False
+            for j in range(len(other.observers)):
+                if self.observers[i].method == other.observers[j].method \
+                        and self.observers[i].output == other.observers[j].output:
+                    flag = True
+                    break
+            if not flag:
                 return False
+
+        return True
         # for observer in self.observers:
         #     if observer in other.observers and observer.output == other.observers[
         #         other.observers.index(observer)].output:
@@ -60,7 +65,6 @@ class Monomial:
         #     else:
         #         return False
 
-        return True
 
 
 class Config:
@@ -207,7 +211,7 @@ class Config:
         logging.debug('\n\n' + message)
         for location in self.LOCATIONS.values():
             for contract in location.contracts:
-                logging.debug('Location: ' + str(location) + ': '+ str(contract))
+                logging.debug('Location: ' + str(location) + ': ' + str(contract))
         logging.debug('\n')
 
     def config(self, target):

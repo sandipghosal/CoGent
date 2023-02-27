@@ -17,7 +17,6 @@ from z3 import *
 
 r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
 
-print(substitute(r1 == b0, [(r1, b0)]))
 
 # s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
 # g = Goal()
@@ -69,18 +68,22 @@ print(substitute(r1 == b0, [(r1, b0)]))
 # print(s.check())
 
 
-# a0, a1, a2 = Bools('a0 a1 a2')
-# g = Goal()
-# g.add(And(a0, Not(And(a1, a0))))
-# t = Tactic('ctx-solver-simplify')
-#
-# l = list()
-#
-# for i in t(g):
-#     for j in i:
-#         print(j)
+a0, a1, a2, a3, a4 = Bools('a0 a1 a2 a3 a4')
 
-# print(simplify(And(Implies(a0, a2), Implies(a1, a2))))
-# s = Solver()
-# s.add(And(Implies(a0, a2), Implies(a1, a2)))
-# print(s.check())
+# simple simplify()
+print(simplify(And(a0, Not(And(a1, a0)))))
+
+g = Goal()
+g.add(And(a0, Not(And(a1, a0))))
+
+# simplify using Tactic 'ctx-simplify'
+t1 = Tactic('ctx-simplify')
+print(t1(g))
+
+# simplify using Tactic 'ctx-solver-simplify'
+t2 = Tactic('ctx-solver-simplify')
+print(t2(g))
+
+
+
+And(Or(a2, Not(a0)), Or(a0, Not(a2)), Or(Not(a0), Not(a3)), Or())

@@ -150,6 +150,7 @@
         </transition>
         <transition from="l16" to="l15" symbol="I_push">
             <assignments>
+                <assign to="r1">r1</assign>
                 <assign to="r2">r3</assign>
                 <assign to="r3">r2</assign>
             </assignments>
