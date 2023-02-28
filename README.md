@@ -11,7 +11,7 @@ CoGent is a Python tool for generating contracts from a given register automaton
    2. Clone the repository using *git* command
 
 ```bash
-git clone -b redesigned-code https://gitlab.com/sandipghosal/CoGent.git
+git clone https://gitlab.com/sandipghosal/CoGent.git
 ```
 Find an example of XML file inside the folder *input*
 
