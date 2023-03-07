@@ -29,9 +29,5 @@ def generate(config):
             [location.contracts.append(contract) for contract in contracts]
     config.print_contracts('================ LIST OF VALID CONTRACTS ====================')
 
-    # for location in config.LOCATIONS.values():
-    #     location.contracts[:] = [item for item in location.contracts if item.result == True]
-    # config.print_contract('================ LIST OF ALL VALID CONTRACTS ====================')
-
     refine(config)
     synthesize(config)

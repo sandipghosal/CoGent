@@ -9,103 +9,100 @@ from constraintbuilder import build_str
 automaton = None
 
 
-def expr_to_contract(expr):
-    expr = S.z3reftoStr(expr)
-    strexpr = build_str(expr)
-
-    for key in automaton.LITERALS.keys():
-        if key.method.name.find('__equality__') != -1:
-            strexpr = strexpr.replace(automaton.LITERALS[key], S.z3reftoStr(key.method.guard))
-        else:
-            # creating old value such as Not(a1)
-            old_false = 'Not(' + automaton.LITERALS[key] + ')'
-            new_false = '(' + str(key.method) + ' == FALSE)'
-            old_true = automaton.LITERALS[key]
-            new_true = '(' + str(key.method) + ' == TRUE)'
-            strexpr = strexpr.replace(old_false, new_false)
-            strexpr = strexpr.replace(old_true, new_true)
-
-    return strexpr
 
 
-def build_binary_expr(observers, expr=None):
-    for observer in observers:
-        if expr is None:
-            if observer.output == automaton.OUTPUTS['TRUE']:
-                expr = S._bool(observer.literal)
-            else:
-                expr = S._neg(S._bool(observer.literal))
-        else:
-            if observer.output == automaton.OUTPUTS['TRUE']:
-                expr = S._and(expr, S._bool(observer.literal))
-            else:
-                expr = S._and(expr, S._neg(S._bool(observer.literal)))
-    return S.do_simplify(expr)
 
 
-def meet(pre, post, contract):
-    if pre is not None:
-        pre = S._or(pre, build_binary_expr(contract.monomial.observers))
-        post = S._and(post,
-                      S._implies(build_binary_expr(contract.monomial.observers), build_binary_expr([contract.wp])))
-    else:
-        pre = build_binary_expr(contract.monomial.observers)
-        post = S._implies(build_binary_expr(contract.monomial.observers), build_binary_expr([contract.wp]))
 
-    return pre, post
-
-
-def join(pre, post, contract):
-    if pre is not None:
-        pre = S._and(pre, build_binary_expr(contract.monomial.observers))
-        post = S._or(post, build_binary_expr(contract.wp))
-    else:
-        pre = build_binary_expr(contract.monomial.observers)
-        post = build_binary_expr(contract.wp)
-
-    return pre, post
-
-
-def simplify(location):
+def meet_per_location(location):
     if not location.contracts:
         return
     logging.info('Contract for location :%s', location)
-    print('Contract for location :', location)
-    pre = None
-    post = None
+    for contract1 in location.contracts:
+        for contract2 in location.contracts:
+            if id(contract1) != id(contract2) and contract1.post == contract2.post:
+                logging.debug('Meet of the following two contracts:')
+                logging.debug('Contract 1: ' + str(contract1))
+                logging.debug('Contract 1 Exp: ' + S.z3reftoStr(contract1.pre.expression) + ' ' + S.z3reftoStr(contract1.post.expression))
+                logging.debug('Contract 2: ' + str(contract2))
+                logging.debug('Contract 2 Exp: ' + S.z3reftoStr(contract2.pre.expression) + ' ' + S.z3reftoStr(contract1.post.expression))
+                contract1 = contract1 & contract2
+                logging.debug('New contract: '+ str(contract1))
+                logging.debug('New Exp: ' + S.z3reftoStr(contract1.pre.expression) + ' ' + S.z3reftoStr(contract1.post.expression))
+                location.contracts.remove(contract2)
+        logging.info(contract1)
+        logging.info('\n')
+
+
+def join_contracts(post):
+    result = None
+    for loc in automaton.LOCATIONS.values():
+        for contract in loc.get_contracts(post=post):
+            if not result:
+                result = contract
+            else:
+                result = result | contract
+    return result
+
+
+
+
+def append(location, observers):
     for contract in location.contracts:
-        pre, post = meet(pre, post, contract)
-        # pre , post = join(pre, post, contract)
+        for observer in observers:
+            contract.monomial.observers.append(observer)
 
-    pre = expr_to_contract(pre)
-    post = expr_to_contract(post)
-    # visited = list()
-    # for first in location.contracts:
-    #     if first in visited: continue
-    #     result = None
-    #     for second in location.contracts:
-    #         if second not in visited and first.wp == second.wp and first.wp.output == second.wp.output:
-    #             visited.append(second)
-    #             if result is not None:
-    #                 result = S._or(result, build_binary_expr(second))
-    #             else:
-    #                 result = build_binary_expr(second)
-    #     pre = expr_to_contract(result)
-    #     post = first.wp
-    contract = '{' + pre + '} ' + str(automaton.TARGET) + ' {' + str(post) + '}'
-    logging.info(contract)
-    print(contract)
-    logging.info('\n')
-    print('\n')
 
+def padding(location, methods):
+    transitions = location.get_transitions(location)
+    if transitions == []:
+        return
+    observers = list()
+    for method in methods:
+        for transition in transitions:
+            if transition.method == method:
+                observer = copy.deepcopy(automaton.OBSERVERS[transition.method.name])
+                observer.method = transition.method
+                observer.output = transition.output
+                observer.literal = automaton.LITERALS[observer]
+                observers.append(observer)
+    if observers == []:
+        return
+    append(location, observers)
+
+def methods_for_padding():
+    methods = list()
+    for observer in automaton.OBSERVERS.values():
+        methods.append(observer.method)
+    for location in automaton.LOCATIONS.values():
+        for contract in location.contracts:
+            for observer in contract.monomial.observers:
+                if observer.method.name.find('__equality__') != -1:
+                    continue
+                if observer.method in methods and S.z3reftoStr(observer.method.guard) != 'True':
+                    methods.remove(observer.method)
+    return methods
 
 def synthesize(config):
     global automaton
     automaton = config
-
     logging.debug('\n\nObserver to Boolean literal mapping:')
     logging.debug(config.LITERALS)
+
+    for location in automaton.LOCATIONS.values():
+        meet_per_location(location)
+    automaton.print_contracts('================ CONTRACTS PER LOCATION ====================')
+
     logging.info('\n\n===================== FINAL CONTRACT =====================')
     print('\n\n===================== FINAL CONTRACT =====================')
+    posts = set()
     for location in automaton.LOCATIONS.values():
-        simplify(location)
+        for contract in location.contracts:
+            posts.add(contract.post)
+    for x in posts:
+        final = join_contracts(x)
+        logging.info(final)
+        print(final)
+
+
+

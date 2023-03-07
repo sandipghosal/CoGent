@@ -38,7 +38,6 @@ class Method:
         return self.name == other.name
 
 
-
 class Observer(Method):
     def __init__(self, method, literal=None, output=None):
         self.method = method
@@ -49,7 +48,6 @@ class Observer(Method):
         # comparing output would produce different literals for same observer with different outputs
         return self.method == other.method and self.method.inputs == other.method.inputs
 
-
     def __hash__(self):
         return hash(str(self.method) + str(self.method.inputs))
 
@@ -57,8 +55,11 @@ class Observer(Method):
         if self.method.name.find('__equality__') != -1:
             # return str(self.method)
             return '(' + str(self.method) + ')' if self.output.name == 'TRUE' else 'Not(' + str(self.method) + ')'
-        elif self.output is not None:
-            return str(self.method) + ' == ' + str(self.output)
+        elif str(self.output.name) == 'TRUE':
+            return str(self.method) + ' == ' + str(True)
+        elif str(self.output.name) == 'FALSE':
+            return str(self.method) + ' == ' + str(False)
+            # return str(self.method) + ' == ' + str(self.output)
         else:
             return str(self.method)
 
@@ -139,4 +140,19 @@ class Location:
                 locations.add(transition.toLocation)
         return list(locations)
 
-
+    def get_contracts(self, pre=None, post=None):
+        """
+        Returns the list of contracts with matching given observer as postcondition
+        :param observer: an Observer object with output
+        :return: a list of Contract objects
+        """
+        if not self.contracts:
+            return []
+        contracts = list()
+        for contract in self.contracts:
+            if pre is None \
+                    or contract.pre == pre:
+                if post is None \
+                        or contract.post == post:
+                    contracts.append(contract)
+        return contracts

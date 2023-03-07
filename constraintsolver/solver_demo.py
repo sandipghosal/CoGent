@@ -17,7 +17,6 @@ from z3 import *
 
 r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
 
-
 # s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
 # g = Goal()
 # g.add(Exists([r1, r2], Or(p1 == b0, r1 == b0)))
@@ -70,20 +69,93 @@ r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
 
 a0, a1, a2, a3, a4 = Bools('a0 a1 a2 a3 a4')
 
-# simple simplify()
-print(simplify(And(a0, Not(And(a1, a0)))))
 
-g = Goal()
-g.add(And(a0, Not(And(a1, a0))))
+# simple simplify()
+# print(simplify(Or(True, a1)))
+
+# g = Goal()
+# g.add(And(a0, Not(And(a1, a0))))
+# g.add(And(Or(a2, Not(a0)), Or(Not(a2), Not(And(Not(a0), a1))), Or(Not(a2), Not(And(Not(a0), Not(a2))))))
 
 # simplify using Tactic 'ctx-simplify'
-t1 = Tactic('ctx-simplify')
-print(t1(g))
+# t1 = Tactic('ctx-simplify')
+# print(t1(g))
 
 # simplify using Tactic 'ctx-solver-simplify'
-t2 = Tactic('ctx-solver-simplify')
-print(t2(g))
+# t2 = Tactic('ctx-solver-simplify')
+# print(t2(g))
+#
+# print('\n\n Split cause:')
+# t3 = Tactic('split-clause')
+# print(t3(g))
 
 
+def is_atom(t):
+    if not is_bool(t):
+        return False
+    if not is_app(t):
+        return False
+    k = t.decl().kind()
+    if k == Z3_OP_AND or k == Z3_OP_OR or k == Z3_OP_IMPLIES:
+        return False
+    if k == Z3_OP_EQ and t.arg(0).is_bool():
+        return False
+    if k == Z3_OP_TRUE or k == Z3_OP_FALSE or k == Z3_OP_XOR or k == Z3_OP_NOT:
+        return False
+    return True
 
-And(Or(a2, Not(a0)), Or(a0, Not(a2)), Or(Not(a0), Not(a3)), Or())
+
+def atoms(fml):
+    visited = set([])
+    atms = set([])
+
+    def atoms_rec(t, visited, atms):
+        if t in visited:
+            return
+        visited |= {t}
+        if is_atom(t):
+            atms |= {t}
+        for s in t.children():
+            atoms_rec(s, visited, atms)
+
+    atoms_rec(fml, visited, atms)
+    return atms
+
+
+def atom2literal(m, a):
+    if is_true(m.eval(a)):
+        return a
+    return Not(a)
+
+
+def implicant(atoms, s, snot):
+    m = snot.model()
+    lits = [atom2literal(m, a) for a in atoms]
+    is_sat = s.check(lits)
+    assert is_sat == unsat
+    core = s.unsat_core()
+    # return Or([mk_not(c) for c in core])
+    return Or([mk_not(c) for c in core])
+
+
+def to_cnf(fml):
+    atms = atoms(fml)
+    s = Solver()
+    snot = Solver()
+    snot.add(Not(fml))
+    s.add(fml)
+
+    while sat == snot.check():
+        clause = implicant(atms, s, snot)
+        yield clause
+        snot.add(clause)
+
+
+a, b, c, = Bools('a b c')
+# fml = And(Or(a2, Not(a0)), Or(Not(a2), Not(And(Not(a0), a1))), Or(Not(a2), Not(And(Not(a0), Not(a2)))))
+fml = Or(And(a, b), And(Not(a), c))
+# fml = Or(a2, And(Not(a1),Not(a3)))
+
+for clause in to_cnf(fml):
+    print(clause)
+    pass

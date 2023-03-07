@@ -4,16 +4,20 @@ import logging
 from pprint import pp
 
 import constraintbuilder
+import constraintsolver.solver as S
 import import_xml
 import ramodel.automaton as ra
 
 
 class Monomial:
-    def __init__(self, observers, condition=None):
+    def __init__(self, observers, condition=None, substitute=None):
         self.observers = observers
         self.condition = condition
+        # list of tuples
+        self.substitutes = substitute if substitute is not None else list()
 
     def __eq__(self, other):
+        if id(self) == id(other): return True
         if len(self.observers) != len(other.observers): return False
         for i in range(len(self.observers)):
             if self.observers[i] == other.observers[i] \
@@ -66,7 +70,6 @@ class Monomial:
         #         return False
 
 
-
 class Config:
     # Path to XML file
     PATH = None
@@ -91,11 +94,14 @@ class Config:
     # Mapping of location name to Location object
     LOCATIONS = dict()
 
-    # Mapping of observer name to Method object
+    # Mapping of observer name to Observer object
     OBSERVERS = dict()
 
     # List of all possible monomials (a list of lists) sorted according to size
     MONOMIALS = list()
+
+    # List of methods that characterizes each location of an automata, e.g., isfull() or isempty()
+    STATE_SYMBOLS = list()
 
     # Mapping of Observer to Boolean literals
     LITERALS = dict()
@@ -103,7 +109,45 @@ class Config:
     def __init__(self, file):
         self.PATH = file
 
-    def get_observers(self):
+    def add_tranistions(self):
+        """ Augment the automaton with dummy transitions """
+        # loop through the list of observers in STATE_SYMBOLS
+        # loop through the list of locations
+        # get the list of transitions for a location wrt to an observer method
+        # if there exists two transitions corresponding to each possible outcome TRUE/FALSE then do nothing
+        # if there exists outcome TRUE add a transition with FALSE and vice versa
+        for method in self.STATE_SYMBOLS:
+            for location in self.LOCATIONS.values():
+                transitions = location.get_transitions(destination=location, method=method)
+                if not transitions:
+                    continue
+                # length should be two for two possible outputs
+                if len(transitions) == 1:
+                    trans = copy.deepcopy(transitions[0])
+                    trans.method.guard = S._neg(transitions[0].method.guard)
+                    if transitions[0].output == self.OUTPUTS['TRUE']:
+                        trans.output = self.OUTPUTS['FALSE']
+                        location.transitions.append(trans)
+                    if transitions[0].output == self.OUTPUTS['FALSE']:
+                        trans.output = self.OUTPUTS['TRUE']
+                        location.transitions.append(trans)
+
+    def populate_state_symbols(self):
+        """ populate the list of methods that enable to characterize a location in the automaton """
+        methods = list()
+        for observer in self.OBSERVERS.values():
+            methods.append(observer.method)
+
+        for location in self.LOCATIONS.values():
+            transitions = location.get_transitions(destination=location)
+            for transition in transitions:
+                guard = S.z3reftoStr(transition.method.guard)
+                if transition.method in methods and guard not in ('True', 'False'):
+                    methods.remove(transition.method)
+
+        self.STATE_SYMBOLS = methods
+
+    def populate_observers(self):
         observers = dict(self.METHODS)
         for location in self.LOCATIONS.values():
             for transition in location.transitions:
@@ -115,7 +159,7 @@ class Config:
         for key in observers.keys():
             self.OBSERVERS[key] = ra.Observer(observers[key])
 
-    def get_monomials(self):
+    def populate_monomials(self):
         # considering observer methods have only one input parameter 'b0'
         # form the list of parameters
         params = set(['b0'])
@@ -217,5 +261,7 @@ class Config:
     def config(self, target):
         import_xml.import_ra(self)
         self.TARGET = self.METHODS[target]
-        self.get_observers()
-        self.get_monomials()
+        self.populate_observers()
+        self.populate_state_symbols()
+        self.add_tranistions()
+        self.populate_monomials()

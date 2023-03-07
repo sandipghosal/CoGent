@@ -15,11 +15,13 @@ def reformat():
             # if len(contract.monomial.observers) != 1:
             #     continue
             substitute = list()
-            for observer in contract.monomial.observers:
+            for observer in contract.pre.monomials[0].observers:
+            # for observer in contract.monomial.observers:
                 if observer.method.name.find('__equality__') != -1 and observer.output == automaton.OUTPUTS['TRUE']:
                     for item in (contract.target.inputs or contract.target.outputs):
                         for i in range(len(observer.method.inputs)):
                             if i == 0:
+
                                 other = observer.method.inputs[i + 1]
                             else:
                                 other = observer.method.inputs[i - 1]
@@ -34,13 +36,12 @@ def reformat():
                     # insert an observer with only b0 into dict of LITERALS and map to a0
                     automaton.LITERALS[observer] = 'a0'
 
-
-                if substitute != [] and observer.method.inputs:
-                    for i in range(len(substitute)):
-                        for j in range(len(observer.method.inputs)):
-                            param = S.z3reftoStr(substitute[i][0])
-                            if observer.method.inputs[j] == param:
-                                observer.method.inputs[j] = S.z3reftoStr(substitute[i][1])
+                # if substitute != [] and observer.method.inputs:
+                #     for i in range(len(substitute)):
+                #         for j in range(len(observer.method.inputs)):
+                #             param = S.z3reftoStr(substitute[i][0])
+                #             if observer.method.inputs[j] == param:
+                #                 observer.method.inputs[j] = S.z3reftoStr(substitute[i][1])
 
             if substitute != [] and contract.target.inputs:
                 for i in range(len(substitute)):
@@ -71,15 +72,18 @@ def check_pre(first, second):
         constants.append((S._int(c), S._intval(k)))
 
     # gather all the registers and parameters
-    for observer in list(set(first.monomial.observers) | set(second.monomial.observers)):
+    for observer in list(set(first.pre.monomials[0].observers) | set(second.pre.monomials[0].observers)):
+    # for observer in list(set(first.monomial.observers) | set(second.monomial.observers)):
         for x in observer.method.inputs:
             params.add(S._int(x))
 
     for reg in automaton.REGISTERS:
         params.add(S._int(reg))
 
-    first_pre = S.do_substitute(first.monomial.condition, constants)
-    second_pre = S.do_substitute(second.monomial.condition, constants)
+    first_pre = S.do_substitute(first.pre.condition, constants)
+    second_pre = S.do_substitute(second.pre.condition, constants)
+    # first_pre = S.do_substitute(first.monomial.condition, constants)
+    # second_pre = S.do_substitute(second.monomial.condition, constants)
 
     if S.check_sat(list(params), second_pre, first_pre) == S._sat():
         return False
@@ -106,7 +110,8 @@ def subsumes(first, second):
 def check_subsumption():
     for location in automaton.LOCATIONS.values():
         temp = list()
-        location.contracts.sort(key=lambda x: len(x.monomial))
+        # location.contracts.sort(key=lambda x: len(x.monomial))
+        location.contracts.sort(key=lambda x: len(x.pre.monomials[0]))
         for i in range(len(location.contracts)):
             first = location.contracts[i]
             # due to transitivity property if a contract is checked
@@ -120,9 +125,9 @@ def check_subsumption():
                     # if first and second referring to same contract object
                     continue
                 # do subsumption check only if two contracts are not same but their post-conditions are same
-                if first.wp == second.wp and first.wp.output == second.wp.output and first.monomial.subset(
-                        second.monomial):
-                # if first.wp == second.wp and first.wp.output == second.wp.output:
+                if first.post == second.post and first.pre.monomials[0].subset(second.pre.monomials[0]):
+                # if first.wp == second.wp and first.monomial.subset(second.monomial):
+                    # if first.wp == second.wp and first.wp.output == second.wp.output:
                     logging.debug('Location: ' + str(location))
                     # if first.wp == second.wp and first.wp.output == second.wp.output:
                     if subsumes(first, second):
@@ -149,5 +154,5 @@ def refine(config):
     remove_duplicates()
     automaton.print_contracts('============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
     check_subsumption()
-    reformat()
+    # reformat()
     automaton.print_contracts('============= CONTRACTS AFTER REFINEMENT ===========')

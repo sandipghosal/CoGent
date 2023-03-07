@@ -243,4 +243,3 @@ def extract(tree, config):
     for location in config.LOCATIONS.copy():
         if not config.LOCATIONS[location].transitions:
             config.LOCATIONS.pop(location)
-
