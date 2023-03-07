@@ -9,11 +9,6 @@ from constraintbuilder import build_str
 automaton = None
 
 
-
-
-
-
-
 def meet_per_location(location):
     if not location.contracts:
         return
@@ -23,12 +18,15 @@ def meet_per_location(location):
             if id(contract1) != id(contract2) and contract1.post == contract2.post:
                 logging.debug('Meet of the following two contracts:')
                 logging.debug('Contract 1: ' + str(contract1))
-                logging.debug('Contract 1 Exp: ' + S.z3reftoStr(contract1.pre.expression) + ' ' + S.z3reftoStr(contract1.post.expression))
+                logging.debug('Contract 1 Exp: ' + S.z3reftoStr(contract1.pre.expression) + ' ' + S.z3reftoStr(
+                    contract1.post.expression))
                 logging.debug('Contract 2: ' + str(contract2))
-                logging.debug('Contract 2 Exp: ' + S.z3reftoStr(contract2.pre.expression) + ' ' + S.z3reftoStr(contract1.post.expression))
+                logging.debug('Contract 2 Exp: ' + S.z3reftoStr(contract2.pre.expression) + ' ' + S.z3reftoStr(
+                    contract1.post.expression))
                 contract1 = contract1 & contract2
-                logging.debug('New contract: '+ str(contract1))
-                logging.debug('New Exp: ' + S.z3reftoStr(contract1.pre.expression) + ' ' + S.z3reftoStr(contract1.post.expression))
+                logging.debug('New contract: ' + str(contract1))
+                logging.debug('New Exp: ' + S.z3reftoStr(contract1.pre.expression) + ' ' + S.z3reftoStr(
+                    contract1.post.expression))
                 location.contracts.remove(contract2)
         logging.info(contract1)
         logging.info('\n')
@@ -43,8 +41,6 @@ def join_contracts(post):
             else:
                 result = result | contract
     return result
-
-
 
 
 def append(location, observers):
@@ -70,6 +66,7 @@ def padding(location, methods):
         return
     append(location, observers)
 
+
 def methods_for_padding():
     methods = list()
     for observer in automaton.OBSERVERS.values():
@@ -82,6 +79,7 @@ def methods_for_padding():
                 if observer.method in methods and S.z3reftoStr(observer.method.guard) != 'True':
                     methods.remove(observer.method)
     return methods
+
 
 def synthesize(config):
     global automaton
@@ -103,6 +101,3 @@ def synthesize(config):
         final = join_contracts(x)
         logging.info(final)
         print(final)
-
-
-

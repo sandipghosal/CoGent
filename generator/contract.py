@@ -69,12 +69,16 @@ class Contract:
         """
         self.pre = self.pre & other.pre
         self.post = self.post | other.post
-        if self.target.inputs != other.target.inputs:
-            inputs = list()
-            for x in automaton.TARGET.inputs:
-                if x in (*self.target.inputs, *other.target.inputs):
-                    inputs.append(x)
+        inputs = set()
+        for monomial in self.pre.monomials:
+            for observer in monomial.observers:
+                {inputs.add(x) for x in observer.method.inputs}
+        inputs = list(inputs)
+        if len(inputs) == 1:
             self.target.inputs = inputs
+        else:
+            self.target.inputs = automaton.TARGET.inputs
+
         return self
 
     def __and__(self, other):
@@ -87,12 +91,17 @@ class Contract:
         # if the postconditions are same perform the disjunction of preconditions
         if self.post != other.post:
             self.post = self.pre.implies(self.post) & other.pre.implies(other.post)
-        if self.target.inputs != other.target.inputs:
-            inputs = list()
-            for x in automaton.TARGET.inputs:
-                if x in (*self.target.inputs, *other.target.inputs):
-                    inputs.append(x)
+        inputs = set()
+        for monomial in self.pre.monomials:
+            for observer in monomial.observers:
+                {inputs.add(x) for x in observer.method.inputs}
+        inputs = list(inputs)
+        if len(inputs) == 1:
             self.target.inputs = inputs
+        else:
+            self.target.inputs = automaton.TARGET.inputs
+
+
         return self
 
     def apply_equalities(self):
