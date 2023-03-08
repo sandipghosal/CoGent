@@ -1,10 +1,10 @@
 import copy
-import itertools
-import logging
 from errors import *
 
 import constraintsolver.solver as S
-from constraintbuilder import build_str
+import ramodel.config as CONFIG
+from conditionbuilder import condition
+from generator.contract import Contract
 
 automaton = None
 
@@ -43,42 +43,47 @@ def join_contracts(post):
     return result
 
 
-def append(location, observers):
-    for contract in location.contracts:
-        for observer in observers:
-            contract.monomial.observers.append(observer)
+def append(contract, observers):
+    conjunct = None
+    for observer in observers:
+        if conjunct is None:
+            conjunct = observer.method.guard
+        else:
+            conjunct = S._and(conjunct, observer.method.guard)
+
+    monomial = CONFIG.Monomial(observers=observers, condition=conjunct)
+    pre = condition.Condition([monomial], automaton)
+    post = copy.copy(contract.post)
+    newcontract = Contract(pre, contract.target, post, True)
+    contract.pre = newcontract.pre.implies(contract.pre)
+    return contract
 
 
-def padding(location, methods):
-    transitions = location.get_transitions(location)
-    if transitions == []:
-        return
+def padding(location):
+    """
+    pad STATE_SYMBOLS with each contract if the location
+    :param location:
+    :return:
+    """
+    # for each observer in STATE_SYMBOL
+    # get the transition wrt. the symbol
+    # prepare the observer method
+    # for each contract in location
+    # append the precondition with the observer method
     observers = list()
-    for method in methods:
-        for transition in transitions:
-            if transition.method == method:
-                observer = copy.deepcopy(automaton.OBSERVERS[transition.method.name])
-                observer.method = transition.method
-                observer.output = transition.output
-                observer.literal = automaton.LITERALS[observer]
-                observers.append(observer)
-    if observers == []:
-        return
-    append(location, observers)
+    for x in automaton.STATE_SYMBOLS:
+        transitions = location.get_transitions(destination=location, method=x, output=automaton.OUTPUTS['TRUE'])
+        if not transitions:
+            transitions = location.get_transitions(destination=location, method=x, output=automaton.OUTPUTS['FALSE'])
+        assert len(transitions) == 1
+        observer = copy.deepcopy(automaton.OBSERVERS[transitions[0].method.name])
+        observer.method = transitions[0].method
+        observer.output = transitions[0].output
+        observer.literal = automaton.LITERALS[observer]
+        observers.append(observer)
 
-
-def methods_for_padding():
-    methods = list()
-    for observer in automaton.OBSERVERS.values():
-        methods.append(observer.method)
-    for location in automaton.LOCATIONS.values():
-        for contract in location.contracts:
-            for observer in contract.monomial.observers:
-                if observer.method.name.find('__equality__') != -1:
-                    continue
-                if observer.method in methods and S.z3reftoStr(observer.method.guard) != 'True':
-                    methods.remove(observer.method)
-    return methods
+    for contract in location.contracts:
+        contract = append(contract, observers)
 
 
 def synthesize(config):
@@ -89,6 +94,8 @@ def synthesize(config):
 
     for location in automaton.LOCATIONS.values():
         meet_per_location(location)
+        if automaton.STATE_SYMBOLS and location.contracts:
+            padding(location)
     automaton.print_contracts('================ CONTRACTS PER LOCATION ====================')
 
     logging.info('\n\n===================== FINAL CONTRACT =====================')

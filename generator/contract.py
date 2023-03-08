@@ -41,19 +41,6 @@ class Contract:
         else:
             return True
 
-        # # following checks are performed for the postconditions
-        # for monomial in self.post.monomials:
-        #     # first check if each monomial from self exists in other
-        #     assert monomial in other.post.monomials
-        #     i = other.post.monomials.index(monomial)
-        #     for observer in monomial.observers:
-        #         # check each observer of each monomial also exists in other monomial
-        #         assert observer in other.post.monomials[i].observers
-        #         j = other.post.monomials[i].observers.index(observer)
-        #         # output of the observers should be the same
-        #         if observer.output != other.post.monomials[i].observers[j].output:
-        #             return False
-        # return True
 
     def __hash__(self):
         return hash(str(self.pre.monomials) + str(self.post.monomials))
@@ -68,7 +55,8 @@ class Contract:
         :return:
         """
         self.pre = self.pre & other.pre
-        self.post = self.post | other.post
+        if self.post != other.post:
+            self.post = self.post | other.post
         inputs = set()
         for monomial in self.pre.monomials:
             for observer in monomial.observers:
@@ -91,11 +79,14 @@ class Contract:
         # if the postconditions are same perform the disjunction of preconditions
         if self.post != other.post:
             self.post = self.pre.implies(self.post) & other.pre.implies(other.post)
+        # gather the paramaters from monomials in precondition
         inputs = set()
         for monomial in self.pre.monomials:
             for observer in monomial.observers:
                 {inputs.add(x) for x in observer.method.inputs}
         inputs = list(inputs)
+        # if all monomials depends on a single parameter set the same a parameter for target
+        # otherwise use the parameter of target from configuration
         if len(inputs) == 1:
             self.target.inputs = inputs
         else:

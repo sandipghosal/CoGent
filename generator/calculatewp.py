@@ -1,6 +1,6 @@
 import copy
 import logging
-from generator.conditions import *
+
 import constraintsolver.solver as S
 
 automaton = None

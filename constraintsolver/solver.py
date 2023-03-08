@@ -49,7 +49,7 @@ def _eq(first, second):
 
 def _implies(antecedent, consequent):
     """ Returns implication where first implies second """
-    return Implies(antecedent, consequent)
+    return simplify(Implies(antecedent, consequent))
 
 
 def _exists(list_, arg):

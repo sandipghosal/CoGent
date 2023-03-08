@@ -6,51 +6,6 @@ import constraintsolver.solver as S
 automaton = None
 
 
-def reformat():
-    """
-    Substitute condition of equalities such as (a==b) to (b==b) or True
-    """
-    for location in automaton.LOCATIONS.values():
-        for contract in location.contracts:
-            # if len(contract.monomial.observers) != 1:
-            #     continue
-            substitute = list()
-            for observer in contract.pre.monomials[0].observers:
-            # for observer in contract.monomial.observers:
-                if observer.method.name.find('__equality__') != -1 and observer.output == automaton.OUTPUTS['TRUE']:
-                    for item in (contract.target.inputs or contract.target.outputs):
-                        for i in range(len(observer.method.inputs)):
-                            if i == 0:
-
-                                other = observer.method.inputs[i + 1]
-                            else:
-                                other = observer.method.inputs[i - 1]
-
-                            if item == observer.method.inputs[i]:
-                                substitute.append((S._int(item), S._int(other)))
-
-                    observer.method.guard = S.do_substitute(observer.method.guard, substitute)
-                    observer.method.inputs = [S.z3reftoStr(substitute[0][1])]
-
-                    # a hard code hack for the time being
-                    # insert an observer with only b0 into dict of LITERALS and map to a0
-                    automaton.LITERALS[observer] = 'a0'
-
-                # if substitute != [] and observer.method.inputs:
-                #     for i in range(len(substitute)):
-                #         for j in range(len(observer.method.inputs)):
-                #             param = S.z3reftoStr(substitute[i][0])
-                #             if observer.method.inputs[j] == param:
-                #                 observer.method.inputs[j] = S.z3reftoStr(substitute[i][1])
-
-            if substitute != [] and contract.target.inputs:
-                for i in range(len(substitute)):
-                    for j in range(len(contract.target.inputs)):
-                        param = S.z3reftoStr(substitute[i][0])
-                        if contract.target.inputs[j] == param:
-                            contract.target.inputs[j] = S.z3reftoStr(substitute[i][1])
-
-
 def check_post(first, second):
     # check if first.post and second.pre => second.post
     vars = list(set(first.variables) | set(second.variables))
@@ -150,9 +105,7 @@ def refine(config):
     global automaton
     automaton = config
     logging.debug('\n====================== Starting Contract Refinement ==========================')
-    # remove_inconsistency()
     remove_duplicates()
     automaton.print_contracts('============= CONTRACTS AFTER REMOVING DUPLICATES ===========')
     check_subsumption()
-    # reformat()
     automaton.print_contracts('============= CONTRACTS AFTER REFINEMENT ===========')

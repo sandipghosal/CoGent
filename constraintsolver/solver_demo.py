@@ -1,5 +1,6 @@
 from z3 import *
-
+from sympy.logic.boolalg import to_dnf
+from sympy.abc import A, B, C
 # x, y = Reals('x y')
 #
 # g = Goal()
@@ -15,7 +16,7 @@ from z3 import *
 # print('qe', t.help(), t.param_descrs())
 
 
-r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
+# r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
 
 # s.add(Exists([p1, b0],ForAll([r1],And(And(r1 == b0, r1 == p1),Not(And(Not(r1 == b0), Not(p1 == b0)))))))
 # g = Goal()
@@ -68,6 +69,7 @@ r1, r2, r3, p1, b0, b1 = Ints('r1 r2 r3 p1 b0 b1')
 
 
 a0, a1, a2, a3, a4 = Bools('a0 a1 a2 a3 a4')
+
 
 
 # simple simplify()
@@ -134,8 +136,8 @@ def implicant(atoms, s, snot):
     is_sat = s.check(lits)
     assert is_sat == unsat
     core = s.unsat_core()
-    # return Or([mk_not(c) for c in core])
     return Or([mk_not(c) for c in core])
+
 
 
 def to_cnf(fml):
@@ -151,11 +153,8 @@ def to_cnf(fml):
         snot.add(clause)
 
 
-a, b, c, = Bools('a b c')
-# fml = And(Or(a2, Not(a0)), Or(Not(a2), Not(And(Not(a0), a1))), Or(Not(a2), Not(And(Not(a0), Not(a2)))))
-fml = Or(And(a, b), And(Not(a), c))
-# fml = Or(a2, And(Not(a1),Not(a3)))
-
+# fml = And(Not(a0), Or(And(Not(a0), a1), And(Not(a0), Not(a2))), Not(a2))
+fml = Or(And(a0, a1), And(Not(a0), a2))
 for clause in to_cnf(fml):
-    print(clause)
+    # print(clause)
     pass

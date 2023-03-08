@@ -73,16 +73,17 @@ class Condition:
         Build the mapping from observer method to literal for the current monomial
         :param literals: global dict of literals from config
         """
-        assert len(self.monomials) == 1
         mapping = dict()
-        for observer in self.monomials[0].observers:
-            mapping[observer] = literals[observer]
+        for monomial in self.monomials:
+            for observer in monomial.observers:
+                mapping[observer] = literals[observer]
         return mapping
 
     def get_text(self, literals):
         expr = S.z3reftoStr(self.expression)
         strexpr = build_str(expr)
-
+        if strexpr in ('True', 'False'):
+            return strexpr
         for key in literals.keys():
             if key.method.name.find('__equality__') != -1:
                 # replace(oldvalue, newvalue): replace oldvalue by newvalue
