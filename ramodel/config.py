@@ -160,7 +160,7 @@ class Config:
             self.OBSERVERS[key] = ra.Observer(observers[key])
 
     def populate_monomials(self):
-        # considering observer methods have only one input parameter 'b0'
+        # assuming observer methods have only one input parameter 'b0'
         # form the list of parameters
         params = set(['b0'])
         for x in self.TARGET.inputs:
@@ -241,6 +241,16 @@ class Config:
                     observers.append(observer)
 
                 self.MONOMIALS.append(Monomial(observers))
+
+        # Add two monomials with only True and False
+        # for value in (True, False):
+        #     method = ra.Method(str(value))
+        #     method.guard = S._boolval(value)
+        #     method.inputs = list()
+        #     method.outputs = list()
+        #     output = self.OUTPUTS['TRUE'] if value == True else self.OUTPUTS['FALSE']
+        #     observer = ra.Observer(method=method, output=output)
+        #     self.MONOMIALS.insert(0, Monomial([observer]))
 
         # sort the monomials as per the number of observers in a monomial
         self.MONOMIALS.sort(key=lambda x: len(x))

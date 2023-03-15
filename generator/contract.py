@@ -1,10 +1,8 @@
 import copy
 import logging
-from pprint import pp
-import constraintbuilder
+
 import constraintsolver.solver as S
 from conditionbuilder.condition import Condition
-from ramodel import Method
 from ramodel.config import Monomial
 
 automaton = None
@@ -105,7 +103,7 @@ class Contract:
             for first in monomial.observers:
                 if first.method.name.find('__equality__') != -1 and first.output == automaton.OUTPUTS['TRUE']:
                     first.method.guard = S.do_substitute(first.method.guard, monomial.substitutes)
-                    first.method.inputs = [S.z3reftoStr(monomial.substitutes[0][1])]
+                    # first.method.inputs = [S.z3reftoStr(monomial.substitutes[0][1])]
                     flag = True
 
                     # hard code hack for the time being
@@ -213,6 +211,8 @@ def create_contract(monomial_):
         elif observers[i].method.name.find('__equality__') != -1 \
                 and observers[i].output == automaton.OUTPUTS['FALSE']:
             pass
+        # elif observers[i].method.name in ('True', 'False'):
+        #     pass
         else:
             # for an observer method obtain the transition due to the method
             transition = location.get_transitions(destination=location, method=observers[i].method,
@@ -270,7 +270,7 @@ def create_contract(monomial_):
         else:
             logging.debug('Precondition is consistent\n')
             if last_contract.apply_equalities():
-                update_method_param(last_contract)
+                # update_method_param(last_contract)
                 last_contract.pre.mapping = last_contract.pre.build_map(automaton.LITERALS)
                 last_contract.pre.expression = last_contract.pre.get_expression(automaton)
                 last_contract.pre.expr_text = last_contract.pre.get_text(last_contract.pre.mapping)

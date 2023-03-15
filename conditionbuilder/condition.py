@@ -1,5 +1,6 @@
 import constraintsolver.solver as S
 from constraintbuilder import build_str
+from constraintsolver.blalgebra import simplify
 
 
 class Condition:
@@ -76,23 +77,25 @@ class Condition:
         mapping = dict()
         for monomial in self.monomials:
             for observer in monomial.observers:
+                if not observer.literal:
+                    return mapping
                 mapping[observer] = literals[observer]
         return mapping
 
-    def get_text(self, literals):
+    def get_text(self, literals, strexpr=None):
         expr = S.z3reftoStr(self.expression)
-        strexpr = build_str(expr)
+        strexpr = build_str(expr) if strexpr is None else strexpr
+        # perform simplification each time a condition object is created
+        # strexpr = str(simplify(strexpr))
         if strexpr in ('True', 'False'):
             return strexpr
         for key in literals.keys():
             if key.method.name.find('__equality__') != -1:
-                # replace(oldvalue, newvalue): replace oldvalue by newvalue
-                # strexpr = strexpr.replace(literals[key], S.z3reftoStr(key.method.guard))
                 string = ''
                 if len(key.method.inputs) == 1:
                     string = key.method.inputs[0]
                 else:
-                    string = key.method.inputs[0] + ' == ' + key.method.inputs[1]
+                    string = '(' + key.method.inputs[0] + ' == ' + key.method.inputs[1] + ')'
 
                 strexpr = strexpr.replace(literals[key], string)
             else:
@@ -115,7 +118,9 @@ class Condition:
     def get_expression(self, automaton, expr=None):
         assert len(self.monomials) == 1
         for observer in self.monomials[0].observers:
-            if expr is None:
+            if observer.method.name in ('True', 'False'):
+                expr = S._boolval(observer.method.guard)
+            elif expr is None:
                 if observer.output == automaton.OUTPUTS['TRUE']:
                     expr = S._bool(observer.literal)
                 else:

@@ -22,7 +22,9 @@ class Method:
         self.guard = None
 
     def __repr__(self):
-        if self.name.find('__equality__') != -1:
+        if self.name in ('True', 'False'):
+            return str(self.name)
+        elif self.name.find('__equality__') != -1:
             string = str()
             for i in range(len(self.inputs)):
                 if string == '':
@@ -52,6 +54,8 @@ class Observer(Method):
         return hash(str(self.method) + str(self.method.inputs))
 
     def __repr__(self):
+        if self.method.name in ('True', 'False'):
+            return str(self.method)
         if self.method.name.find('__equality__') != -1:
             # return str(self.method)
             return '(' + str(self.method) + ')' if self.output.name == 'TRUE' else 'Not(' + str(self.method) + ')'
@@ -90,6 +94,7 @@ class Location:
         self.contracts = list()
 
     def __eq__(self, other):
+        # return self.name == other.name
         return id(self) == id(other)
 
     def __hash__(self):
