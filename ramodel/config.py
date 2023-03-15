@@ -123,6 +123,10 @@ class Config:
                     continue
                 # length should be two for two possible outputs
                 if len(transitions) == 1:
+                    trans = copy.copy(transitions[0])
+                    # Copy create new object for the locations, hence need to reinitialize from old location
+                    trans.fromLocation = transitions[0].fromLocation
+                    trans.toLocation = transitions[0].toLocation
                     trans = copy.deepcopy(transitions[0])
                     trans.method.guard = S._neg(transitions[0].method.guard)
                     if transitions[0].output == self.OUTPUTS['TRUE']:
