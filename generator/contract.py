@@ -4,6 +4,7 @@ import logging
 import constraintsolver.solver as S
 from conditionbuilder.condition import Condition
 from ramodel.config import Monomial
+import ramodel.automaton as ra
 
 automaton = None
 location = None
@@ -38,7 +39,6 @@ class Contract:
             return False
         else:
             return True
-
 
     def __hash__(self):
         return hash(str(self.pre.monomials) + str(self.post.monomials))
@@ -90,7 +90,6 @@ class Contract:
         else:
             self.target.inputs = automaton.TARGET.inputs
 
-
         return self
 
     def apply_equalities(self):
@@ -113,13 +112,12 @@ class Contract:
                         if second.method.name.find('__equality__') != -1 or id(first) == id(second):
                             continue
                         if first.method == second.method and first.method.guard == S.do_substitute(second.method.guard,
-                                                                                               monomial.substitutes):
+                                                                                                   monomial.substitutes):
                             logging.debug('For monomial:' + str(monomial))
                             logging.debug(str(first) + ' == ' + str(second))
                             logging.debug('Removing observer: ' + str(second))
                             monomial.remove(second)
         return flag
-
 
     def check(self):
         # Does it satisfy P->Q ?
@@ -198,6 +196,7 @@ def update_method_param(contract):
             if contract.target.inputs[j] == param:
                 contract.target.inputs[j] = S.z3reftoStr(substitutes[i][1])
 
+
 def create_contract(monomial_):
     observers = copy.deepcopy(monomial_.observers)
     submonomial = list()
@@ -211,8 +210,8 @@ def create_contract(monomial_):
         elif observers[i].method.name.find('__equality__') != -1 \
                 and observers[i].output == automaton.OUTPUTS['FALSE']:
             pass
-        # elif observers[i].method.name in ('True', 'False'):
-        #     pass
+        elif observers[i].method.name in ('True', 'False'):
+            pass
         else:
             # for an observer method obtain the transition due to the method
             transition = location.get_transitions(destination=location, method=observers[i].method,
@@ -277,15 +276,11 @@ def create_contract(monomial_):
 
     return last_contract
 
-
-
-            # for i in range(len(monomial_.substitutes)):
-            #     for j in range(len(target.inputs)):
-            #         param = S.z3reftoStr(monomial_.substitutes[i][0])
-            #         if target.inputs[j] == param:
-            #             target.inputs[j] = S.z3reftoStr(monomial_.substitutes[i][1])
-
-
+    # for i in range(len(monomial_.substitutes)):
+    #     for j in range(len(target.inputs)):
+    #         param = S.z3reftoStr(monomial_.substitutes[i][0])
+    #         if target.inputs[j] == param:
+    #             target.inputs[j] = S.z3reftoStr(monomial_.substitutes[i][1])
 
 
 def get_contracts(config_, location_, wp_):
@@ -296,6 +291,21 @@ def get_contracts(config_, location_, wp_):
 
     # initialize the list of contracts
     contracts = list()
+
+    # if the weakest precondition is just True or False
+    # we can just add a contract like {True} push(p1){wp}
+    # also postcondition should be one of the STATE_SYMBOLS, e.g., isfull()/isempty()
+    if S.z3reftoStr(wp.method.guard) in ('True', 'False'):
+        method = ra.Method(S.z3reftoStr(wp.method.guard))
+        method.guard = wp.method.guard
+        method.inputs = list()
+        method.outputs = list()
+        output = automaton.OUTPUTS['TRUE'] if method.name == 'True' else automaton.OUTPUTS['FALSE']
+        observer = ra.Observer(method=method, output=output)
+        monomial = Monomial([observer])
+        contract = create_contract(monomial)
+        contracts.append(contract)
+        return contracts
 
     for monomial in automaton.MONOMIALS:
         logging.debug('\n')

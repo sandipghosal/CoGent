@@ -101,8 +101,22 @@ def observer_wrt_wp():
     # respective to eah transition originating at current location
     args = get_observer_at_poststate(_args)
 
+    # if there is no such transition corresponding to the observer in any of the post states
+    # create a new observer with guard condition False
     if not args:
-        return None
+        # first check if the observer is one of the STATE_SYMBOLS, like isfull()/isempty() and
+        # check if the observer at all has any transition (that outputs True/False)
+        # at this location, then create a dummy observer for isfull()/isempty() even though
+        # it does not appear in the RA
+        if observer.method in automaton.STATE_SYMBOLS \
+                and (location.get_transitions(method=observer.method, output=automaton.OUTPUTS['TRUE'])
+                     or location.get_transitions(method=observer.method, output=automaton.OUTPUTS['FALSE'])):
+            newobserver = copy.copy(observer)
+            newobserver.method.guard = S._boolval(False)
+            newobserver.literal = automaton.LITERALS[observer]
+            return newobserver
+        else:
+            return None
 
     # obtain the weakest precondition for observer and output
     wp = S.do_simplify(S._and(get_disjunction(args, 0), get_implication(args)))

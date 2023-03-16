@@ -95,7 +95,7 @@ class Location:
 
     def __eq__(self, other):
         # return self.name == other.name
-        return id(self) == id(other)
+        return id(self) == id(other) or self.name == other.name
 
     def __hash__(self):
         return id(self)

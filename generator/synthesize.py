@@ -24,8 +24,9 @@ def simplify_cond(contracts):
         post.expr_text = post.get_text(post.mapping, simplify(postexpr))
         contract.pre = pre
         contract.post = post
-        logging.info(str(contract))
-        print(str(contract))
+        if contract.pre.expr_text != 'False':
+            logging.info(str(contract))
+            print(str(contract))
 
 
 def meet_per_location(location):
