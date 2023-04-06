@@ -3,7 +3,6 @@ import copy
 from errors import *
 
 import constraintsolver.solver as S
-from constraintbuilder import build_str
 import ramodel.config as CONFIG
 from conditionbuilder import condition
 from generator.contract import Contract
@@ -173,10 +172,10 @@ def synthesize(config):
         # add_dummy_contract(locations[i])
         meet_per_location(locations[i])
         if automaton.STATE_SYMBOLS and locations[i].contracts:
-            # padding(locations[i])
+            padding(locations[i])
             # append isfull and isempty only for first and last locations
-            if i == 0 or i == len(locations) - 1:
-                padding(locations[i])
+            # if i == 0 or i == len(locations) - 1:
+            #     padding(locations[i])
 
     automaton.print_contracts('================ CONTRACTS PER LOCATION ====================')
 

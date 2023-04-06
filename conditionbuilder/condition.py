@@ -69,6 +69,7 @@ class Condition:
     def substitute(self, subs):
         """ substitute the condition wrt. subs"""
         self.condition = S.do_substitute(self.condition, subs)
+
     def build_map(self, literals):
         """
         Build the mapping from observer method to literal for the current monomial
@@ -131,3 +132,8 @@ class Condition:
                 else:
                     expr = S._and(expr, S._neg(S._bool(observer.literal)))
         return S.do_simplify(expr)
+
+    def update(self, automaton):
+        self.mapping = self.build_map(automaton.LITERALS)
+        self.expression = self.get_expression(automaton)
+        self.expr_text = self.get_text(self.mapping)

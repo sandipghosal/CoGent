@@ -58,6 +58,8 @@ def pruning(transitions, config):
             current_trans.assignments = current_trans.assignments + next_transition.assignments
             current_trans.toLocation = next_transition.toLocation
 
+
+
         newlist.append(current_trans)
 
     # delete transitions originating from output locations

@@ -34,7 +34,7 @@ class Method:
             return string
             # return str(self.guard)
         else:
-            return self.name + '(' + str(*self.inputs) + ')'
+            return self.name + '(' + ', '.join(self.inputs) + ')'
 
     def __eq__(self, other):
         return self.name == other.name

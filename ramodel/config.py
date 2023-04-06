@@ -264,6 +264,15 @@ class Config:
         logging.debug('\n\nList of monomials:')
         logging.debug(self.MONOMIALS)
 
+    def get_target(self, target):
+        self.TARGET = self.METHODS[target]
+        # if the target has an output paramter we need to draw that from transition
+        # as the XML file do not give output parameter of a method such as pop()
+        for location in self.LOCATIONS.values():
+            for transition in location.transitions:
+                if transition.method == self.TARGET:
+                    self.TARGET.outputs = transition.output.outparams
+
     def print_contracts(self, message):
         logging.debug('\n\n' + message)
         for location in self.LOCATIONS.values():
@@ -273,7 +282,7 @@ class Config:
 
     def config(self, target):
         import_xml.import_ra(self)
-        self.TARGET = self.METHODS[target]
+        self.get_target(target)
         self.populate_observers()
         self.populate_state_symbols()
         # self.add_tranistions()

@@ -55,16 +55,21 @@ class Contract:
         self.pre = self.pre & other.pre
         if self.post != other.post:
             self.post = self.post | other.post
-        inputs = set()
-        for monomial in self.pre.monomials:
-            for observer in monomial.observers:
-                {inputs.add(x) for x in observer.method.inputs}
-        inputs = list(inputs)
-        if len(inputs) == 1:
-            self.target.inputs = inputs
-        else:
-            self.target.inputs = automaton.TARGET.inputs
 
+        # following code was written to check if any other parameter than b0 is involved
+        # if not then change the target input parameter to b0 only
+        # -- not a good implementation: hence commenting
+        # inputs = set()
+        # for monomial in self.pre.monomials:
+        #     for observer in monomial.observers:
+        #         {inputs.add(x) for x in observer.method.inputs}
+        # inputs = list(inputs)
+        # if len(inputs) == 1:
+        #     self.target.inputs = inputs
+        # else:
+        #     self.target.inputs = automaton.TARGET.inputs
+
+        self.target.inputs = automaton.TARGET.inputs
         return self
 
     def __and__(self, other):
@@ -176,25 +181,50 @@ def get_substitutes(observer):
                 other = observer.method.inputs[i - 1]
 
             if item == observer.method.inputs[i]:
-                substitute.append((S._int(item), S._int(other)))
+                # substitute.append((S._int(item), S._int(other)))
+                substitute.append((S._int(other), S._int(item)))
     # observer.method.guard = S.do_substitute(observer.method.guard, substitute)
     # observer.method.inputs = [S.z3reftoStr(substitute[0][1])]
     return substitute
 
 
-def update_method_param(contract):
+def update_post_param(contract):
     """
-    Update target method parameter when equality has been enforced in a monomial
-    Example: push(p1) should become push(b0) when (p1==b0) is enforced
+    Example: Change postcondition from contains(b0) to contains(p1) when (p1==b0) is enforced and
+    no other observer is in the precondition that accepts a parameter
     :param contract:
     :return:
     """
     substitutes = contract.pre.monomials[0].substitutes
+
+    for monomial in contract.pre.monomials:
+        for observer in monomial.observers:
+            # continue with updating postparameter only if
+            # there is no observer having a input paramater in the precondition
+            if observer.method.name.find('__equality__') != -1 \
+                    and observer.output == automaton.OUTPUTS['TRUE']:
+                continue
+            elif observer.method.name.find('__equality__') != -1 \
+                    and observer.output == automaton.OUTPUTS['FALSE']:
+                return contract
+            elif observer.method.inputs:
+                return contract
+            else:
+                continue
+    # there must be only one monomial and one observer
+    assert len(contract.post.monomials) == 1
+    assert len(contract.post.monomials[0].observers) == 1
+
+    observer = contract.post.monomials[0].observers[0]
+    # update the parameter in the postcondition
     for i in range(len(substitutes)):
-        for j in range(len(contract.target.inputs)):
-            param = S.z3reftoStr(substitutes[i][0])
-            if contract.target.inputs[j] == param:
-                contract.target.inputs[j] = S.z3reftoStr(substitutes[i][1])
+        param = S.z3reftoStr(substitutes[i][0])
+        for j in range(len(observer.method.inputs)):
+            if observer.method.inputs[j] == param:
+                observer.method.inputs[j] = S.z3reftoStr(substitutes[i][1])
+    contract.post.monomials[0].observers[0] = observer
+    contract.post.update(automaton)
+    return contract
 
 
 def create_contract(monomial_):
@@ -269,10 +299,10 @@ def create_contract(monomial_):
         else:
             logging.debug('Precondition is consistent\n')
             if last_contract.apply_equalities():
-                # update_method_param(last_contract)
-                last_contract.pre.mapping = last_contract.pre.build_map(automaton.LITERALS)
-                last_contract.pre.expression = last_contract.pre.get_expression(automaton)
-                last_contract.pre.expr_text = last_contract.pre.get_text(last_contract.pre.mapping)
+                # comment the following function call if do not want to substitute parameter in postcondition
+                # last_contract = update_post_param(last_contract)
+                last_contract.pre.update(automaton)
+
 
     return last_contract
 
