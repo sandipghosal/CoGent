@@ -98,7 +98,11 @@ class Config:
     OBSERVERS = dict()
 
     # List of all possible monomials (a list of lists) sorted according to size
-    MONOMIALS = list()
+    # MONOMIALS = list()
+
+    # List of all Symbols as a tuple (symbol truthvalue)
+    # symbol is an object of the method
+    SYMBOLS = dict()
 
     # List of methods that characterizes each location of an automata, e.g., isfull() or isempty()
     STATE_SYMBOLS = list()
@@ -162,107 +166,62 @@ class Config:
         for key in observers.keys():
             self.OBSERVERS[key] = ra.Observer(observers[key])
 
-    def populate_monomials(self):
+
+    def symbols(self):
+        """ get all observer methods and associate truth values with them"""
+        observers = [x.method for x in self.OBSERVERS.values()]
+
         # assuming observer methods have only one input parameter 'b0'
         # form the list of parameters
         params = set(['b0'])
         for x in self.TARGET.inputs:
             params.add(x)
 
-        # add the output parameters of the target method in the list of paramaters
-        for location in self.LOCATIONS.values():
-            transitions = location.get_transitions(method=self.TARGET)
-            for transition in transitions:
-                if transition.output.outparams:
-                    params.add(*transition.output.outparams)
-
         params = list(params)
         product_ = list()
 
-        # obtain all possible combinations of parameters
-        paramcomb = list(itertools.combinations(params, 2))
-        for comb in paramcomb:
-            observer = ra.Observer(ra.Method('__equality__' + str(comb)))
-            # self.OBSERVERS['__equality__' + str(comb)] = observer
-            product_.append((observer, comb))
+        # if the target method has input parameters then compute all possible equalities,
+        # e.g., (p1 == b0), (p1 == p1), etc.
+        if len(self.TARGET.inputs):
+            # obtain all possible combinations of parameters
+            paramcomb = list(itertools.combinations(params, 2))
+            for comb in paramcomb:
+                method = ra.Method('__equality__' + str(comb), list(comb))
+                product_.append((method, comb))
 
-        # for i in range(len(self.OBSERVERS)):
-        for key in self.OBSERVERS.keys():
-            observer = list()
-            observer.append(self.OBSERVERS[key])
-            if self.OBSERVERS[key].method.inputs:
-                # cross product of parameterized observers and parameters
-                product_ = product_ + list(itertools.product(observer, params))
+        for m in observers:
+            if m.inputs:
+                # cross product of parameterized observer and list of parameters
+                product_ = product_ + list(itertools.product([m], params))
             else:
                 # adding non-parameterized observer into the list with blank parameter
-                product_ = product_ + [(self.OBSERVERS[key], '')]
+                product_ = product_ + [(m, '')]
 
-        # Following 8 lines will generate monomials for
-        # all possible combinations of 1 to len(product_) sizes
-        combinations = list()
-        for i in range(1, len(product_) + 1):
-            for comb in itertools.combinations(product_, i):
-                combinations.append(comb)
-        temp = list()
-        for index in range(len(combinations)):
-            comb = [x for x in combinations[index]]
-            temp.append([list(zip(comb, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(comb))])
+        symbols = list()
+        # Prepare symbols with the methods with different
+        for t in product_:
+            if t[0].name.find('__equality__') == -1 and t[1]:
+                t[0].inputs = [t[1]]
+            symbols.append(copy.copy(t[0]))
 
-        # Following statement will generate possible combinations of observer methods
-        # for fixed size, i.e., length of product_
-        # temp = [list(zip(product_, x)) for x in itertools.product(['TRUE', 'FALSE'], repeat=len(product_))]
+        self.SYMBOLS = [(x, y) for x in symbols for y in ['TRUE', 'FALSE']]
 
-        # generate the monomials
-        # massage the final list of monomials
-        # each inner list is a tuple (methodname, output, param)
-        for i in range(len(temp)):
-            for item in temp[i]:
-                observers = list()
-                for x in item:
-                    # create a copy of the Observer object
-                    observer = copy.deepcopy(x[0][0])
-                    # change the input parameter of the Method object
-                    if observer.method.name.find('__equality__') != -1:
-                        # the observer testing parameters' equality
-                        observer.method.inputs = list(x[0][1])
-                        if x[1] == 'TRUE':
-                            observer.method.guard = constraintbuilder.build_expr(x[0][1][0] + ' == ' + x[0][1][1])
-                        else:
-                            observer.method.guard = constraintbuilder.build_expr(x[0][1][0] + ' != ' + x[0][1][1])
-                    else:
-                        # the observer is something else
-                        if x[0][1] != '':
-                            observer.method.inputs = [x[0][1]]
+        logging.debug('\n\nList of symbols:')
+        logging.debug(self.SYMBOLS)
 
-                    observer.output = self.OUTPUTS[x[1]]
 
-                    if observer not in self.LITERALS:
-                        observer.literal = 'a' + str(len(self.LITERALS))
-                        self.LITERALS[observer] = observer.literal
-                    else:
-                        observer.literal = self.LITERALS[observer]
-                    observers.append(observer)
+    def literals(self):
+        """ Obtain the list of literals from symbols """
 
-                self.MONOMIALS.append(Monomial(observers))
+        for t in self.SYMBOLS:
+            literal = 'a' + str(len(self.LITERALS))
+            observer = ra.Observer(method=t[0], literal=literal)
+            if observer not in self.LITERALS.keys():
+                self.LITERALS[observer] = literal
 
-        # Add two monomials with only True and False
-        # for value in (True, False):
-        #     method = ra.Method(str(value))
-        #     method.guard = S._boolval(value)
-        #     method.inputs = list()
-        #     method.outputs = list()
-        #     output = self.OUTPUTS['TRUE'] if value == True else self.OUTPUTS['FALSE']
-        #     observer = ra.Observer(method=method, output=output)
-        #     self.MONOMIALS.insert(0, Monomial([observer]))
+        logging.debug('\n\nList of literals:')
+        logging.debug(self.LITERALS)
 
-        # sort the monomials as per the number of observers in a monomial
-        self.MONOMIALS.sort(key=lambda x: len(x))
-
-        # monomials of observer methods for fixed size i.e., length of product_
-        # monomials = [[(inner[0][0], inner[1], inner[0][1]) for inner in outer] for outer in temp]
-
-        logging.debug('\n\nList of monomials:')
-        logging.debug(self.MONOMIALS)
 
     def get_target(self, target):
         self.TARGET = self.METHODS[target]
@@ -286,4 +245,5 @@ class Config:
         self.populate_observers()
         self.populate_state_symbols()
         # self.add_tranistions()
-        self.populate_monomials()
+        self.symbols()
+        self.literals()

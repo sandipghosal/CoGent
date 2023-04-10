@@ -36,6 +36,9 @@ class Method:
         else:
             return self.name + '(' + ', '.join(self.inputs) + ')'
 
+    def __hash__(self):
+        return hash(str(self.method))
+
     def __eq__(self, other):
         return self.name == other.name
 
@@ -56,9 +59,13 @@ class Observer(Method):
     def __repr__(self):
         if self.method.name in ('True', 'False'):
             return str(self.method)
-        if self.method.name.find('__equality__') != -1:
-            # return str(self.method)
-            return '(' + str(self.method) + ')' if self.output.name == 'TRUE' else 'Not(' + str(self.method) + ')'
+        elif self.method.name.find('__equality__') != -1:
+            if not self.output:
+                return str(self.method)
+            else:
+                return '(' + str(self.method) + ')' if self.output.name == 'TRUE' else 'Not(' + str(self.method) + ')'
+        elif not self.output:
+            return str(self.method)
         elif str(self.output.name) == 'TRUE':
             return str(self.method) + ' == ' + str(True)
         elif str(self.output.name) == 'FALSE':
