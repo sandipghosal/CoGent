@@ -12,7 +12,7 @@ import ramodel.automaton as ra
 class Monomial:
     def __init__(self, observers, condition=None, substitute=None):
         self.observers = observers
-        self.condition = condition
+        self.condition = condition if condition else self.get_condition()
         # list of tuples
         self.substitutes = substitute if substitute is not None else list()
 
@@ -38,6 +38,12 @@ class Monomial:
             else:
                 string = string + ' and ' + str(self.observers[i])
         return string
+
+    def get_condition(self):
+        c = S._boolval(True)
+        for o in self.observers:
+            c = S._and(c, o.method.guard)
+        return c
 
     def subset(self, other):
         """
@@ -166,10 +172,9 @@ class Config:
         for key in observers.keys():
             self.OBSERVERS[key] = ra.Observer(observers[key])
 
-
     def symbols(self):
         """ get all observer methods and associate truth values with them"""
-        observers = [x.method for x in self.OBSERVERS.values()]
+        observers = [copy.deepcopy(x.method) for x in self.OBSERVERS.values()]
 
         # assuming observer methods have only one input parameter 'b0'
         # form the list of parameters
@@ -202,13 +207,20 @@ class Config:
         for t in product_:
             if t[0].name.find('__equality__') == -1 and t[1]:
                 t[0].inputs = [t[1]]
-            symbols.append(copy.copy(t[0]))
+            symbols.append(copy.deepcopy(t[0]))
 
-        self.SYMBOLS = [(x, y) for x in symbols for y in ['TRUE', 'FALSE']]
+        self.SYMBOLS = [(copy.deepcopy(x), y) for x in symbols for y in ['TRUE', 'FALSE']]
+
+        # set the guard of equalities according to values True and False
+        for k, v in self.SYMBOLS:
+            if k.name.find('__equality__') != -1:
+                if v == 'TRUE':
+                    k.guard = constraintbuilder.build_expr(k.inputs[0] + ' == ' + k.inputs[1])
+                else:
+                    k.guard = constraintbuilder.build_expr(k.inputs[0] + ' != ' + k.inputs[1])
 
         logging.debug('\n\nList of symbols:')
         logging.debug(self.SYMBOLS)
-
 
     def literals(self):
         """ Obtain the list of literals from symbols """
@@ -221,7 +233,6 @@ class Config:
 
         logging.debug('\n\nList of literals:')
         logging.debug(self.LITERALS)
-
 
     def get_target(self, target):
         self.TARGET = self.METHODS[target]

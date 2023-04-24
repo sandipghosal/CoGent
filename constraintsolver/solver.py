@@ -109,9 +109,21 @@ def do_simplify(argv):
 
 def do_check(*args):
     s = Solver()
+    print('inside do_check ', s.ctx)
     for argv in args:
         s.add(argv)
+    # print(s.model())
     return s.check()
+
+
+def equivalence(f1, f2):
+    fm1 = f1
+    fm2 = f2
+
+    if do_check(fm1, Not(fm2)) == unsat:
+        return True
+    else:
+        return False
 
 
 def check_sat(vars, antecedent, consequent=None):

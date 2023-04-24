@@ -1,7 +1,10 @@
 import copy
+import itertools
 import logging
 
-import constraintsolver.solver as S
+import constraintsolver.solver as SOLVER
+import constraintsolver.MUS as MUS
+import constraintsolver.blalgebra as SIMPLIFIER
 from conditionbuilder.condition import Condition
 from ramodel.config import Monomial
 import ramodel.automaton as ra
@@ -106,7 +109,7 @@ class Contract:
         for monomial in self.pre.monomials:
             for first in monomial.observers:
                 if first.method.name.find('__equality__') != -1 and first.output == automaton.OUTPUTS['TRUE']:
-                    first.method.guard = S.do_substitute(first.method.guard, monomial.substitutes)
+                    first.method.guard = SOLVER.do_substitute(first.method.guard, monomial.substitutes)
                     # first.method.inputs = [S.z3reftoStr(monomial.substitutes[0][1])]
                     flag = True
 
@@ -116,8 +119,9 @@ class Contract:
                     for second in monomial.observers:
                         if second.method.name.find('__equality__') != -1 or id(first) == id(second):
                             continue
-                        if first.method == second.method and first.method.guard == S.do_substitute(second.method.guard,
-                                                                                                   monomial.substitutes):
+                        if first.method == second.method and first.method.guard == SOLVER.do_substitute(
+                                second.method.guard,
+                                monomial.substitutes):
                             logging.debug('For monomial:' + str(monomial))
                             logging.debug(str(first) + ' == ' + str(second))
                             logging.debug('Removing observer: ' + str(second))
@@ -135,29 +139,29 @@ class Contract:
         constants = list()
         # gather the constants for substitution
         for c, k in automaton.CONSTANTS:
-            constants.append((S._int(c), S._intval(k)))
+            constants.append((SOLVER._int(c), SOLVER._intval(k)))
 
         # gather all the registers and parameters
         for monomial in self.pre.monomials:
             for observer in monomial.observers:
                 for x in observer.method.inputs:
-                    params.add(S._int(x))
+                    params.add(SOLVER._int(x))
 
         for r in (*automaton.REGISTERS, *automaton.TARGET.inputs):
-            params.add(S._int(r))
+            params.add(SOLVER._int(r))
 
         # Substitute constants with respective values
-        pre = S.do_substitute(self.pre.condition, constants)
-        post = S.do_substitute(self.post.condition, constants)
+        pre = SOLVER.do_substitute(self.pre.condition, constants)
+        post = SOLVER.do_substitute(self.post.condition, constants)
 
         logging.debug('Checking SAT for: ' + str(pre) + ' => ' + str(post))
 
         # Check the validity
-        result = S.check_sat(vars=list(params), antecedent=pre, consequent=post)
+        result = SOLVER.check_sat(vars=list(params), antecedent=pre, consequent=post)
 
         logging.debug('result: ' + str(result) + '\n')
 
-        if result == S._sat():
+        if result == SOLVER._sat():
             return False
         else:
             return True
@@ -182,7 +186,7 @@ def get_substitutes(observer):
 
             if item == observer.method.inputs[i]:
                 # substitute.append((S._int(item), S._int(other)))
-                substitute.append((S._int(other), S._int(item)))
+                substitute.append((SOLVER._int(other), SOLVER._int(item)))
     # observer.method.guard = S.do_substitute(observer.method.guard, substitute)
     # observer.method.inputs = [S.z3reftoStr(substitute[0][1])]
     return substitute
@@ -218,99 +222,236 @@ def update_post_param(contract):
     observer = contract.post.monomials[0].observers[0]
     # update the parameter in the postcondition
     for i in range(len(substitutes)):
-        param = S.z3reftoStr(substitutes[i][0])
+        param = SOLVER.z3reftoStr(substitutes[i][0])
         for j in range(len(observer.method.inputs)):
             if observer.method.inputs[j] == param:
-                observer.method.inputs[j] = S.z3reftoStr(substitutes[i][1])
+                observer.method.inputs[j] = SOLVER.z3reftoStr(substitutes[i][1])
     contract.post.monomials[0].observers[0] = observer
     contract.post.update(automaton)
     return contract
 
 
-def create_contract(monomial_):
-    observers = copy.deepcopy(monomial_.observers)
-    submonomial = list()
-    condition = None
-    last_contract = None
+def get_observer(observers, constraint):
+    for x in observers:
+        if MUS.isequal(constraint, x.method.guard):
+            return copy.deepcopy(x)
 
-    for i in range(len(observers)):
-        if observers[i].method.name.find('__equality__') != -1 \
-                and observers[i].output == automaton.OUTPUTS['TRUE']:
-            [monomial_.substitutes.append(x) for x in get_substitutes(observers[i])]
-        elif observers[i].method.name.find('__equality__') != -1 \
-                and observers[i].output == automaton.OUTPUTS['FALSE']:
-            pass
-        elif observers[i].method.name in ('True', 'False'):
-            pass
-        else:
-            # for an observer method obtain the transition due to the method
-            transition = location.get_transitions(destination=location, method=observers[i].method,
-                                                  output=observers[i].output)
-            # if there is no transition found continue the iteration
-            if not transition:
-                continue
 
-            if observers[i].method.inputs:
-                # build the list of tuple to substitute method's parameter with the observer's parameter
-                _args = [(S._int(transition[0].method.inputs[0]), S._int(observers[i].method.inputs[0]))]
-                # get the method condition by substituting
-                observers[i].method.guard = S.do_substitute(transition[0].method.guard, _args)
+def create_monomial(observers, constraint=None):
+    """
+    Create an object of Monomial for a given list of observers and constraints (if given any)
+    :param observers: list of Observer objects
+    :param constraint: containing list of clauses
+    :return: a list of Monomial objects
+    """
+    if constraint:
+        obs = list()
+        for c in constraint:
+            if str(c) == 'True':
+                obs.append(create_observer('True', SOLVER._boolval(True)))
+            elif str(c) == 'False':
+                obs.append(create_observer('False', SOLVER._boolval(False)))
             else:
-                observers[i].method.guard = transition[0].method.guard
-            # observers[i].method.guard = transition[0].method.guard
+                obs.append(get_observer(observers, c))
+        monomial = Monomial(obs)
+    else:
+        monomial = Monomial(observers)
+    return monomial
 
-        submonomial.append(observers[i])
 
-        if condition is not None:
-            # do the conjunction for more than one observers
-            condition = S._and(condition, observers[i].method.guard)
+def prepare_condition(observers, constraint=None):
+    monomial = create_monomial(observers, constraint)
+    condition = Condition([monomial], automaton)
+    return condition
+
+
+def create_observer(name, guard):
+    """
+    Create an observer object for True or False value
+    :return: observer object
+    """
+    method = ra.Method(name)
+    method.guard = guard
+    method.inputs = list()
+    method.outputs = list()
+    output = automaton.OUTPUTS['TRUE'] if method.name == 'True' else automaton.OUTPUTS['FALSE']
+    observer = ra.Observer(method=method, output=output)
+    return observer
+
+
+def crate_contracts(observers, constraints=None):
+    contracts = list()
+
+    # if the set of constraint is blank then
+    # we can just add a contract like {True} push(p1){wp}
+    if not constraints:
+        if str(wp.method.guard) == 'False':
+            observer = create_observer('False', wp.method.guard)
         else:
-            condition = observers[i].method.guard
+            observer = create_observer('True', wp.method.guard)
 
-        # create precondition with the monomial subset
-        premonomial = Monomial(submonomial, condition=condition, substitute=monomial_.substitutes)
-        pre = Condition([premonomial], automaton)
+        pre = prepare_condition([observer])
+        post = prepare_condition([copy.deepcopy(wp)])
+        contract = Contract(pre, copy.deepcopy(automaton.TARGET), post, True)
+        contracts.append(contract)
 
-        # create postcondition with the wp
-        postmonomial = Monomial([wp], condition=wp.method.guard)
-        post = Condition([postmonomial], automaton)
+    else:
+        for c in constraints:
+            pre = prepare_condition(observers, c)
+            post = prepare_condition([copy.deepcopy(wp)])
+            # create a contract
+            contract = Contract(pre, copy.deepcopy(automaton.TARGET), post, True)
+            contracts.append(contract)
 
-        # create a copy of the target method
-        target = copy.deepcopy(automaton.TARGET)
+    return contracts
 
-        logging.debug('Location: ' + str(location))
-        logging.debug('Postcondition: ' + str(post))
-        logging.debug('Weakest Precondition (consequent): ' + str(post.condition))
-        logging.debug('Precondition: ' + str(pre))
-        logging.debug('Precondition (antecedent): ' + str(pre.condition))
 
-        # create a Contract and store into last_contract
-        last_contract = Contract(pre, target, post)
+def remove_redundants(subsets):
+    """
+    Remove redundants elements (lists) from the subsets
+    :param subsets: list of lists: all possible proper subsets
+    :return: list of lists: list must contain all unique lists
+    """
+    indices = list()
+    for i in range(len(subsets) - 1):
+        for j in range(i + 1, len(subsets)):
+            if MUS.equalMUSes(subsets[i], subsets[j]):
+                indices.append(j)
+    if indices:
+        temp = list()
+        for i in range(len(subsets)):
+            if i not in indices:
+                temp.append(subsets[i])
+        # subsets[:] = [subsets.pop(i) for i in indices]
+        subsets = temp
+    return subsets
 
-        if not last_contract.result:
-            # if any part of the result is unsat abort the building process
-            # and return None
-            logging.debug('Precondition is inconsistent\n')
-            for observer in submonomial:
-                if observer.method.name.find('__equality__') == -1:
-                    # make sure at least one non-equality observer is present in the monomial
-                    # then return the last obtained consistent contract
-                    return last_contract
+
+# def findsubsets(muses):
+#     subsets = list()
+#     # find all proper subsets of maximum length n-1
+#     for m in muses:
+#         for i in range(1, len(m) - 1):
+#             subsets.append(itertools.combinations(m, i))
+#     return subsets
+
+
+def refine(muses, condition):
+    """
+    Enforce different constraints on each MUS and filter based on them
+    :param muses: list of lists: all possible MUSes
+    :param condition: weakest precondition
+    :return: list of lists: list of all possible satisfiable subsets where wp is a member of each subset
+    """
+    # remove redundant subsets
+    subsets = remove_redundants(muses)
+
+    # Enforce other restrictions based on the requirements
+    # such as ensure two equalities in the precondition for the modifier accepting two parameters
+    return subsets
+
+
+def get_MUSes(conditions):
+    """
+    Obtain all possible Minimum Unsatisfiable Subsets (MUS) for a list of conditions
+    :param conditions: list of conditions derived from observer methods at pre-state
+    :return: list of lists: list of all possible unsatisfiable subsets where wp is not a member
+    """
+    # obtain the negation of weakest precondition (wp)
+    clause = SOLVER._neg(wp.method.guard)
+    # supply Not(wp) as one of the conditions for obtaining MUS
+    muses = MUS.generate(conditions, clause)
+    if not muses:
+        return []
+    else:
+        # enforce some constraints on the muses as per need
+        return refine(muses, clause)
+
+
+def substitute_inputs(fmethod, tmethod):
+    """
+    Replace inputs of fmethod by the inputs of tmethod, e.g., change contains(p1) to contains(b0)
+    and the method guard as well, e.g., (r1==p1) to (r1==b0)
+    :param fmethod: the initial method which needs to be replaced
+    :param tmethod: the target method
+    :return: the target method object
+    """
+    if str(fmethod.guard) in ['True', 'False']:
+        tmethod.guard = fmethod.guard
+        return tmethod
+    assert len(fmethod.inputs) == len(tmethod.inputs) == 1
+    subs = [(SOLVER._int(fmethod.inputs[0]), SOLVER._int(tmethod.inputs[0]))]
+    tmethod.guard = SOLVER.do_substitute(fmethod.guard, subs)
+    return tmethod
+
+
+def check_subset(muses):
+    for m in muses:
+        result = True
+        for i in range(len(m)):
+            result = SOLVER._and(result, m[i])
+        output = "%s %s" % (str(m), SIMPLIFIER.simplify(str(result)))
+        logging.debug(output)
+
+
+
+def get_conditions(observers):
+    """
+    Collect the conditions respective to the list of given observers
+    :param observers: list of observers
+    :return: list of conditions
+    """
+    conditions = set()
+    for o in observers:
+        conditions.add(o.method.guard)
+    return list(conditions)
+
+
+def observers():
+    """ Prepare the set of observers by filtering the symbols for the current location.
+    Filtering enforces some requirements such as removing redundant observer methods.
+    For example, contains(p1) maybe removed when contains(b0) is present.
+    """
+    observers = list()
+
+    for k, v in automaton.SYMBOLS:
+        # first check if the symbol is relevant
+        # search transitions at current location corresponding to the method k and output v
+        # if transition found then collect the method create an observer and add into the observer list
+        if k.name.find('__equality__') != -1:
+            # if both the modifier and post state query are not parameterized then no need to
+            # add equality
+            if not (automaton.TARGET.inputs and wp.method.inputs):
+                continue
+            # if an equality then no need to search for transition and add into conditions and symbols list directly
+            m = copy.deepcopy(k)
+            o = ra.Observer(method=m, output=automaton.OUTPUTS[v])
+            o.literal = automaton.LITERALS[o]
         else:
-            logging.debug('Precondition is consistent\n')
-            if last_contract.apply_equalities():
-                # comment the following function call if do not want to substitute parameter in postcondition
-                # last_contract = update_post_param(last_contract)
-                last_contract.pre.update(automaton)
+            # do not consider the same query in the pre that is there in post with same parameter
+            # if k == wp.method and k.inputs != wp.method.inputs:
+            #     continue
 
+            trans = location.get_transitions(destination=location,
+                                             method=k,
+                                             output=automaton.OUTPUTS[v])
+            assert len(trans) <= 1
+            # if no transition found then continue
+            if len(trans) == 0:
+                continue
+            # make a separate instance of the symbol method
+            m = copy.deepcopy(k)
+            # if the queried contains(b0)==True but returned transition for contains(p1)==True
+            # then we need to substitute input parameter for the returned method and guard as well
+            if m.inputs != trans[0].method.inputs:
+                m = substitute_inputs(trans[0].method, m)
+            else:
+                m.guard = trans[0].method.guard
+            o = ra.Observer(method=m, output=automaton.OUTPUTS[v])
+            o.literal = automaton.LITERALS[o]
 
-    return last_contract
-
-    # for i in range(len(monomial_.substitutes)):
-    #     for j in range(len(target.inputs)):
-    #         param = S.z3reftoStr(monomial_.substitutes[i][0])
-    #         if target.inputs[j] == param:
-    #             target.inputs[j] = S.z3reftoStr(monomial_.substitutes[i][1])
+        observers.append(o)
+    return observers
 
 
 def get_contracts(config_, location_, wp_):
@@ -319,31 +460,33 @@ def get_contracts(config_, location_, wp_):
     location = location_
     wp = wp_
 
+    logging.debug('\n')
+    logging.debug('Generating contract at location: ' + str(location))
+    logging.debug('Observer method at post-state: ' + str(wp))
+    logging.debug('Derived weakest precondition:' + str(wp.method.guard))
+
     # initialize the list of contracts
     contracts = list()
 
-    # if the weakest precondition is just True or False
-    # we can just add a contract like {True} push(p1){wp}
-    # also postcondition should be one of the STATE_SYMBOLS, e.g., isfull()/isempty()
-    if S.z3reftoStr(wp.method.guard) in ('True', 'False'):
-        method = ra.Method(S.z3reftoStr(wp.method.guard))
-        method.guard = wp.method.guard
-        method.inputs = list()
-        method.outputs = list()
-        output = automaton.OUTPUTS['TRUE'] if method.name == 'True' else automaton.OUTPUTS['FALSE']
-        observer = ra.Observer(method=method, output=output)
-        monomial = Monomial([observer])
-        contract = create_contract(monomial)
-        contracts.append(contract)
-        return contracts
+    # first gather guard conditions for each of the symbols at this location
+    # second ask z3 for minimal unsatisfiable subsets
+    # filter the subsets according to required constraints over subsets
+    # create contracts
+    # return contracts
 
-    for monomial in automaton.MONOMIALS:
+    observ = observers()
+    conditions = get_conditions(observ)
+
+    if str(wp.method.guard) in ['True', 'False']:
+        contracts = crate_contracts(observers=observ)
+    else:
+        logging.debug('Candidate observer methods at pre-state: ' + str(observ))
+        logging.debug('Guards for the candidates: ' + str(conditions))
+        subsets = get_MUSes(conditions)
+        # check_subset(subsets)
         logging.debug('\n')
-        logging.debug('Generate contract for the monomial: ' + str(monomial))
-        contract = create_contract(monomial)
-        if contract is None:
-            continue
-        if contract.result:
-            logging.debug(contract)
-            contracts.append(contract)
+        logging.debug('MUSes after excluding WP:')
+        [logging.debug(str(s)) for s in subsets]
+        contracts = crate_contracts(observ, subsets)
+
     return contracts

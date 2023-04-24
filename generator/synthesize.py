@@ -108,7 +108,7 @@ def append(contract, observers):
 
     monomial = CONFIG.Monomial(observers=observers, condition=conjunct)
     pre = condition.Condition([monomial], automaton)
-    post = copy.copy(contract.post)
+    post = copy.deepcopy(contract.post)
     newcontract = Contract(pre, contract.target, post, True)
     # Do implication: appended observers => contract
     contract.pre = newcontract.pre.implies(contract.pre)
@@ -129,7 +129,7 @@ def create_observer(location, method, output):
     if not transitions:
         return None
     assert len(transitions) == 1
-    observer = copy.copy(automaton.OBSERVERS[transitions[0].method.name])
+    observer = copy.deepcopy(automaton.OBSERVERS[transitions[0].method.name])
     observer.method = transitions[0].method
     observer.output = transitions[0].output
     observer.literal = automaton.LITERALS[observer]

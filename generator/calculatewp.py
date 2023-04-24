@@ -71,7 +71,7 @@ def get_observer_at_poststate(substitutes):
             continue
 
         # obtain the observer method for this transition at destination
-        method = obstrans[0].method
+        method = copy.deepcopy(obstrans[0].method)
         # change the input parameter of the method
         method.inputs = [S.z3reftoStr(x[1]) for x in substitutes]
         # obtain the condition for observer at destination
@@ -81,7 +81,6 @@ def get_observer_at_poststate(substitutes):
         newobserver.method = method
         newobserver.output = observer.output
 
-        logging.debug(newobserver)
         logging.debug('\n')
         # add (transition, observer) tuple into the list
         args.append((transition, newobserver))
@@ -111,7 +110,7 @@ def observer_wrt_wp():
         if observer.method in automaton.STATE_SYMBOLS \
                 and (location.get_transitions(method=observer.method, output=automaton.OUTPUTS['TRUE'])
                      or location.get_transitions(method=observer.method, output=automaton.OUTPUTS['FALSE'])):
-            newobserver = copy.copy(observer)
+            newobserver = copy.deepcopy(observer)
             newobserver.method.guard = S._boolval(False)
             newobserver.literal = automaton.LITERALS[observer]
             return newobserver

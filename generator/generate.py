@@ -27,6 +27,8 @@ def generate(config):
             # Obtain a list of Contract objects
             contracts = get_contracts(config, location, wp)
             [location.contracts.append(contract) for contract in contracts]
+            logging.debug('Derived Contracts:')
+            [logging.debug(c) for c in contracts]
     config.print_contracts('================ LIST OF VALID CONTRACTS ====================')
 
     refine(config)

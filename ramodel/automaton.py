@@ -37,10 +37,12 @@ class Method:
             return self.name + '(' + ', '.join(self.inputs) + ')'
 
     def __hash__(self):
-        return hash(str(self.method))
+        return hash(str(self.name))
 
     def __eq__(self, other):
         return self.name == other.name
+
+
 
 
 class Observer(Method):
