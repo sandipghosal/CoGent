@@ -109,7 +109,6 @@ def do_simplify(argv):
 
 def do_check(*args):
     s = Solver()
-    print('inside do_check ', s.ctx)
     for argv in args:
         s.add(argv)
     # print(s.model())
@@ -151,3 +150,74 @@ def eliminate(argv, args):
 
 def z3reftoStr(argv):
     return obj_to_string(argv)
+
+
+
+def is_atom(t):
+    if not is_bool(t):
+        return False
+    if not is_app(t):
+        return False
+    k = t.decl().kind()
+    if k == Z3_OP_AND or k == Z3_OP_OR or k == Z3_OP_IMPLIES:
+        return False
+    if k == Z3_OP_EQ and t.arg(0).is_bool():
+        return False
+    if k == Z3_OP_TRUE or k == Z3_OP_FALSE or k == Z3_OP_XOR or k == Z3_OP_NOT:
+        return False
+    return True
+
+def atoms(fml):
+    visited = set([])
+    atms = set([])
+    def atoms_rec(t, visited, atms):
+        if t in visited:
+            return
+        visited |= { t }
+        if is_atom(t):
+            atms |= { t }
+        for s in t.children():
+            atoms_rec(s, visited, atms)
+    atoms_rec(fml, visited, atms)
+    return atms
+
+def atom2literal(m, a):
+    if is_true(m.eval(a)):
+        return a
+    return Not(a)
+
+
+def implicant(atoms, s, snot):
+    m = snot.model()
+    lits = [atom2literal(m, a) for a in atoms]
+    is_sat = s.check(lits)
+    assert is_sat == unsat
+    core = s.unsat_core()
+    return Or([mk_not(c) for c in core])
+
+
+def to_cnf(fml):
+    atms = atoms(fml)
+    s = Solver()
+    snot = Solver()
+    snot.add(Not(fml))
+    s.add(fml)
+
+    while sat == snot.check():
+        clause = implicant(atms, s, snot)
+        yield clause
+        snot.add(clause)
+
+
+def to_dnf(fml):
+    clauses = to_cnf(fml)
+    d_clauses = list()
+    for c in clauses:
+        disjunction = Or([literal if literal.decl().name() != 'Not' else Not(literal.arg(0)) for literal in c])
+        d_clauses.append(disjunction)
+    dnf = _boolval(False)
+    for d in d_clauses:
+        dnf = _or(dnf, d)
+    print(str(dnf))
+
+

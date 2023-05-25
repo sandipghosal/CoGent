@@ -100,34 +100,6 @@ class Contract:
 
         return self
 
-    def apply_equalities(self):
-        """
-        apply equalities in a contract: check if the equalities are true then convert (b0 == p1) to (b0) only
-        :return:
-        """
-        flag = False
-        for monomial in self.pre.monomials:
-            for first in monomial.observers:
-                if first.method.name.find('__equality__') != -1 and first.output == automaton.OUTPUTS['TRUE']:
-                    first.method.guard = SOLVER.do_substitute(first.method.guard, monomial.substitutes)
-                    # first.method.inputs = [S.z3reftoStr(monomial.substitutes[0][1])]
-                    flag = True
-
-                    # hard code hack for the time being
-                    automaton.LITERALS[first] = 'a0'
-
-                    for second in monomial.observers:
-                        if second.method.name.find('__equality__') != -1 or id(first) == id(second):
-                            continue
-                        if first.method == second.method and first.method.guard == SOLVER.do_substitute(
-                                second.method.guard,
-                                monomial.substitutes):
-                            logging.debug('For monomial:' + str(monomial))
-                            logging.debug(str(first) + ' == ' + str(second))
-                            logging.debug('Removing observer: ' + str(second))
-                            monomial.remove(second)
-        return flag
-
     def check(self):
         # Does it satisfy P->Q ?
         # IF there is a solution to Not(P->Q) equiv to (P ^ Not Q) THEN
@@ -167,68 +139,186 @@ class Contract:
             return True
 
 
-def remove_invalids(contracts):
-    contracts[:] = [x for x in contracts if x.result]
+# def add_invariants(contracts, invariants):
+#     """
+#     If invariants is I = [a1, a2], then contract generated as {(a1 v a2) -> c} f {b1}
+#     :param contracts:
+#     :param invariants:
+#     :return:
+#     """
+#     pre = None
+#     for i in invariants:
+#         m = Monomial(observers=[i], condition=i.method.guard)
+#         if not pre:
+#             pre = Condition([m], automaton)
+#         else:
+#             cond = Condition([m], automaton)
+#             pre = pre | cond
+#
+#     assert str(pre.condition) == 'True'
+#
+#     for con in contracts:
+#         new = Contract(copy.deepcopy(pre), con.target, con.post, True)
+#         # Do implication: appended observers => contract
+#         con.pre = new.pre.implies(con.pre)
+#     return contracts
+
+
+def add_invariants(contracts, invariants):
+    """
+    If invariants is I = [a1, a2], then contract generated as {a1^a2 -> c} f {b1}
+    (deafult behaviour)
+    :param contracts:
+    :param invariants:
+    :return:
+    """
+    for con in contracts:
+        m = Monomial(observers=invariants, condition=SOLVER._boolval(True))
+        pre = Condition([m], automaton)
+        new = Contract(pre, con.target, con.post, True)
+        # Do implication: appended observers => contract
+        con.pre = new.pre.implies(con.pre)
     return contracts
 
 
-def get_substitutes(observer):
-    substitute = list()
-    # substitute.append((S._int(observer.method.inputs[0]), S._int(observer.method.inputs[1])))
-    if len(observer.method.inputs) <= 1:
-        return substitute
-    for item in (automaton.TARGET.inputs or automaton.TARGET.outputs):
-        for i in range(len(observer.method.inputs)):
-            if i == 0:
-                other = observer.method.inputs[i + 1]
-            else:
-                other = observer.method.inputs[i - 1]
+def join_contracts(contracts):
+    assert len(contracts) > 1
 
-            if item == observer.method.inputs[i]:
-                # substitute.append((S._int(item), S._int(other)))
-                substitute.append((SOLVER._int(other), SOLVER._int(item)))
-    # observer.method.guard = S.do_substitute(observer.method.guard, substitute)
-    # observer.method.inputs = [S.z3reftoStr(substitute[0][1])]
-    return substitute
+    pre = None
+    c = None
+    for c in contracts:
+        if not pre:
+            pre = c.pre
+        else:
+            pre = pre | c.pre
+    new = Contract(pre, c.target, c.post, True)
+    return [new]
 
 
-def update_post_param(contract):
-    """
-    Example: Change postcondition from contains(b0) to contains(p1) when (p1==b0) is enforced and
-    no other observer is in the precondition that accepts a parameter
-    :param contract:
-    :return:
-    """
-    substitutes = contract.pre.monomials[0].substitutes
+def check_pre(first, second):
+    # check if second.pre => first.pre
+    params = set()
+    constants = list()
+    # gather the constants for substitution
+    for c, k in automaton.CONSTANTS:
+        constants.append((SOLVER._int(c), SOLVER._intval(k)))
 
-    for monomial in contract.pre.monomials:
-        for observer in monomial.observers:
-            # continue with updating postparameter only if
-            # there is no observer having a input paramater in the precondition
-            if observer.method.name.find('__equality__') != -1 \
-                    and observer.output == automaton.OUTPUTS['TRUE']:
+    # gather all the registers and parameters
+    for observer in list(set(first.pre.monomials[0].observers) | set(second.pre.monomials[0].observers)):
+        # for observer in list(set(first.monomial.observers) | set(second.monomial.observers)):
+        for x in observer.method.inputs:
+            params.add(SOLVER._int(x))
+
+    for reg in automaton.REGISTERS:
+        params.add(SOLVER._int(reg))
+
+    first_pre = SOLVER.do_substitute(first.pre.condition, constants)
+    second_pre = SOLVER.do_substitute(second.pre.condition, constants)
+    # first_pre = S.do_substitute(first.monomial.condition, constants)
+    # second_pre = S.do_substitute(second.monomial.condition, constants)
+
+    if SOLVER.check_sat(list(params), second_pre, first_pre) == SOLVER._sat():
+        return False
+    else:
+        return True
+
+
+def subsumes(first, second):
+    logging.debug('Checking IF the contract:')
+    logging.debug(first)
+    logging.debug('subsumes the following:')
+    logging.debug(second)
+
+    return True if check_pre(first, second) else False
+
+
+def check_subsumption(contracts):
+    if len(contracts) == 1:
+        return contracts
+    temp = list()
+    contracts.sort(key=lambda x: len(x.pre.monomials[0]))
+    for i in range(len(contracts)):
+        f = contracts[i]
+        # due to transitivity property if a contract is checked
+        # to be subsumed by another (hence in the list temp)
+        # we do not need to investigate that contract further
+        if f in temp:
+            continue
+        for j in range(len(contracts)):
+            s = contracts[j]
+            if id(f) == id(s):
                 continue
-            elif observer.method.name.find('__equality__') != -1 \
-                    and observer.output == automaton.OUTPUTS['FALSE']:
-                return contract
-            elif observer.method.inputs:
-                return contract
+            # do subsumption check only if two contracts are not same but their post-conditions are same
+            assert f.post == s.post
+            if subsumes(f, s):
+                logging.debug('Result: True')
+                logging.debug('Adding the following into the list of abandoned contracts:')
+                temp.append(s)
+                logging.debug(s)
+                logging.debug('\n')
             else:
-                continue
-    # there must be only one monomial and one observer
-    assert len(contract.post.monomials) == 1
-    assert len(contract.post.monomials[0].observers) == 1
+                logging.debug('Result: False\n')
+    contracts[:] = [item for item in contracts if item not in temp]
+    return contracts
 
-    observer = contract.post.monomials[0].observers[0]
-    # update the parameter in the postcondition
-    for i in range(len(substitutes)):
-        param = SOLVER.z3reftoStr(substitutes[i][0])
-        for j in range(len(observer.method.inputs)):
-            if observer.method.inputs[j] == param:
-                observer.method.inputs[j] = SOLVER.z3reftoStr(substitutes[i][1])
-    contract.post.monomials[0].observers[0] = observer
-    contract.post.update(automaton)
-    return contract
+
+def new_literal(monomial):
+    for o in monomial.observers:
+        if o in automaton.LITERALS.keys():
+            o.literal = automaton.LITERALS[o]
+        else:
+            automaton.update_literals(copy.deepcopy(o), o.literal)
+
+
+def update_monomials(monomials, subs):
+    # initially there should be only one monomial in the list
+    assert len(monomials) == 1
+    for m in monomials:
+        m.substitutes = subs
+        m.do_substitute()
+        m.update_params()
+        # might need to assign new literal due to update
+        new_literal(m)
+
+
+def get_substitutes(contract):
+    sub = list()
+    # first check if there is at least one equality and non-parameterized observers
+    # on the way collect input parameters for the equalities that are true
+    oparams = set()
+    for m in contract.pre.monomials:
+        for o in m.observers:
+            if o.method.name.find('__equality__') != -1 and o.output == automaton.OUTPUTS['TRUE']:
+                for p in o.method.inputs:
+                    oparams.add(p)
+            elif o.method.name.find('__equality__') != -1 and o.output == automaton.OUTPUTS['FALSE']:
+                return []
+            elif not o.method.inputs:
+                continue
+            else:
+                return []
+    # collect the input parameters for target method
+    tparams = automaton.TARGET.inputs
+
+    # for each param in tparams if that exists in oparams then create tuples
+    # example: tparams = [p1, p2] and oparams = [b0, p1]
+    # since p1 is in oparams create tuples (b0, p1)
+    # since p2 is not in oparams so no replacement for p2
+    for q in tparams:
+        if q in list(oparams):
+            [sub.append((SOLVER._int(p), SOLVER._int(q))) for p in list(oparams) if p != q]
+    return sub
+
+
+def apply_equality(contracts):
+    for c in contracts:
+        subs = get_substitutes(c)
+        if subs:
+            update_monomials(c.pre.monomials, subs)
+            c.pre.update(automaton)
+            update_monomials(c.post.monomials, subs)
+            c.post.update(automaton)
+    return contracts
 
 
 def get_observer(observers, constraint):
@@ -280,8 +370,8 @@ def create_observer(name, guard):
 
 
 def crate_contracts(observers, constraints=None):
+    logging.debug('Following contracts are generated from MUSes:')
     contracts = list()
-
     # if the set of constraint is blank then
     # we can just add a contract like {True} push(p1){wp}
     if not constraints:
@@ -293,6 +383,7 @@ def crate_contracts(observers, constraints=None):
         pre = prepare_condition([observer])
         post = prepare_condition([copy.deepcopy(wp)])
         contract = Contract(pre, copy.deepcopy(automaton.TARGET), post, True)
+        logging.debug(contract)
         contracts.append(contract)
 
     else:
@@ -301,6 +392,7 @@ def crate_contracts(observers, constraints=None):
             post = prepare_condition([copy.deepcopy(wp)])
             # create a contract
             contract = Contract(pre, copy.deepcopy(automaton.TARGET), post, True)
+            logging.debug(contract)
             contracts.append(contract)
 
     return contracts
@@ -394,7 +486,6 @@ def check_subset(muses):
         logging.debug(output)
 
 
-
 def get_conditions(observers):
     """
     Collect the conditions respective to the list of given observers
@@ -454,7 +545,7 @@ def observers():
     return observers
 
 
-def get_contracts(config_, location_, wp_):
+def get_contracts(config_, location_, wp_, invariants):
     global automaton, location, wp
     automaton = config_
     location = location_
@@ -488,5 +579,16 @@ def get_contracts(config_, location_, wp_):
         logging.debug('MUSes after excluding WP:')
         [logging.debug(str(s)) for s in subsets]
         contracts = crate_contracts(observ, subsets)
+    # check for subsumption
+    contracts = check_subsumption(contracts)
 
+    # do the inline substitution for contracts that
+    # does not have parameterized method in the pre-condition
+    # contracts = apply_equality(contracts)
+    # join multiple contracts
+    if len(contracts) > 1:
+        contracts = join_contracts(contracts)
+    # add location-specific invariants to each contract
+    if invariants:
+        contracts = add_invariants(contracts, invariants)
     return contracts

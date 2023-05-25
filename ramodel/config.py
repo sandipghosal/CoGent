@@ -66,14 +66,24 @@ class Monomial:
                 return False
 
         return True
-        # for observer in self.observers:
-        #     if observer in other.observers and observer.output == other.observers[
-        #         other.observers.index(observer)].output:
-        #         # i = other.observers.index(observer)
-        #         # if observer.output == other.observers[i].output:
-        #         continue
-        #     else:
-        #         return False
+
+    def do_substitute(self):
+        for o in self.observers:
+            m = o.method
+            if str(m.guard) not in ['True', 'False']:
+                g = S.do_substitute(m.guard, self.substitutes)
+                m.set_guard(g)
+
+    def update_params(self):
+        sub = [(str(s[0]), str(s[1])) for s in self.substitutes]
+        for o in self.observers:
+            params = o.method.inputs
+            for i in range(len(params)):
+                for s in sub:
+                    if params[i] == s[0]:
+                        params[i] = s[1]
+                        break
+            o.method.set_inparams(list(set(params)))
 
 
 class Config:
@@ -160,6 +170,103 @@ class Config:
 
         self.STATE_SYMBOLS = methods
 
+    # def _get_true_invariants(self, location):
+    #     """
+    #     gather invariants as non-parameterized observers based on both guard and output
+    #     if there is at least one observer such that guard and output both are True
+    #     then consider that as an invariant
+    #     otherwise
+    #     consider all observers whose guard and output is either of True/False
+    #     Ex. consider only isempty() == true for first location
+    #     but consider not isempty() == true and not isfull() == true for middle locations
+    #     :param location:
+    #     :return:
+    #     """
+    #     t_inv = list()
+    #     tf_inv = list()
+    #     flag = False
+    #     # consider those observers as invariants which are non-parameterized and guard is true
+    #     for t in location.get_transitions(destination=location):
+    #         if not t:
+    #             return []
+    #         # method shall be non-parameterized
+    #         if t.method.inputs == [] and t.method.name in self.OBSERVERS.keys():
+    #             if str(t.method.guard) == 'True' and t.output == self.OUTPUTS['TRUE']:
+    #                 flag = True
+    #                 o = ra.Observer(copy.deepcopy(t.method), output=self.OUTPUTS['TRUE'])
+    #                 o.literal = self.LITERALS[o]
+    #                 t_inv.append(o)
+    #             if not flag and str(t.method.guard) == 'True':
+    #                 o = ra.Observer(copy.deepcopy(t.method), output=t.output)
+    #                 o.literal = self.LITERALS[o]
+    #                 tf_inv.append(o)
+    #
+    #     return t_inv if flag else tf_inv
+
+    # def _get_neg_invariants(self, location):
+    #     """
+    #     create negation of non-parameterized observers with method True
+    #     Ex. For isempty() == True with guard True at first location an observer will be created as
+    #     isempty() == False with guard False at first location
+    #     :param location:
+    #     :return:
+    #     """
+    #     invariants = list()
+    #     # consider those observers as invariants which are non-parameterized and guard is true
+    #     for t in location.get_transitions(destination=location):
+    #         if not t:
+    #             return []
+    #         if t.method.inputs == [] and t.output in [self.OUTPUTS['TRUE'], self.OUTPUTS['FALSE']]:
+    #             if t.output == self.OUTPUTS['TRUE']:
+    #                 o = ra.Observer(copy.deepcopy(t.method), output=self.OUTPUTS['FALSE'])
+    #                 o.method.guard = S._neg(o.method.guard)
+    #             if t.output == self.OUTPUTS['FALSE']:
+    #                 o = ra.Observer(copy.deepcopy(t.method), output=t.output)
+    #             o.literal = self.LITERALS[o]
+    #             invariants.append(o)
+    #     return invariants
+
+
+
+    def get_invariants(self, location):
+        """
+        Default behaviour:
+        Prepare the set of observers that are invariants local to a given location in the automaton
+        :param location: a Location object
+        :return: a set of non-parameterized observer objects that are invariants at this location
+        """
+        invariants = list()
+        # consider those observers as invariants which are non-parameterized and guard is true
+        for t in location.get_transitions(destination=location):
+            # consider those observers as invariants which are non-parameterized and guard and output both True
+            # for t in location.get_transitions(destination=location, output=self.OUTPUTS['TRUE']):
+            if not t:
+                return []
+            # create observers for non-parameterized methods with guard True
+            if str(t.method.guard) == 'True' and t.method.inputs == []:
+                # create observer object only if the method is an observer
+                # otherwise it might return a method such as pop() which is not an observer
+                if t.method.name in self.OBSERVERS.keys():
+                    o = ra.Observer(copy.deepcopy(t.method), output=t.output)
+                    o.literal = self.LITERALS[o]
+                    invariants.append(o)
+        return invariants
+
+
+    def get_global_invariants(self):
+        """ Returns global invariants in two separate lists
+            and_l : consists of the observers which are always true at any location
+            or_l : consists of the observers which are True in some locations otherwise False
+        """
+        and_l = list()
+        or_l = list()
+        for location in self.LOCATIONS.values():
+            for trans in location.get_transitions(destination=location):
+                for t in trans:
+                    if t.method.inputs == [] and str(t.method.guard) == 'True':
+                        pass
+
+
     def populate_observers(self):
         observers = dict(self.METHODS)
         for location in self.LOCATIONS.values():
@@ -233,6 +340,14 @@ class Config:
 
         logging.debug('\n\nList of literals:')
         logging.debug(self.LITERALS)
+
+    def update_literals(self, observer, literal):
+        """
+        Check and update the mapping of literals with a new observer method
+        """
+        if observer not in self.LITERALS.keys():
+            observer.output = None
+            self.LITERALS[observer] = literal
 
     def get_target(self, target):
         self.TARGET = self.METHODS[target]

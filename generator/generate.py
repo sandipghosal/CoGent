@@ -3,8 +3,7 @@ import logging
 
 from generator.calculatewp import get_wp
 from generator.contract import get_contracts
-from generator.refine import refine
-from generator.synthesize import synthesize
+from generator.simplify import synthesize
 
 
 ################# Data Structure ##################
@@ -18,6 +17,7 @@ from generator.synthesize import synthesize
 def generate(config):
     logging.debug('\n\n=========== Starting Contract Generation =================')
     for location in config.LOCATIONS.values():
+        invariants = config.get_invariants(location)
         for key, output in itertools.product(config.OBSERVERS, ['TRUE', 'FALSE']):
             observer = config.OBSERVERS[key]
             observer.output = config.OUTPUTS[output]
@@ -25,11 +25,11 @@ def generate(config):
             wp = get_wp(config, location, observer)
             if not wp: continue
             # Obtain a list of Contract objects
-            contracts = get_contracts(config, location, wp)
+            contracts = get_contracts(config, location, wp, invariants)
             [location.contracts.append(contract) for contract in contracts]
-            logging.debug('Derived Contracts:')
+            logging.debug('\n')
+            logging.debug('Location specific contracts after adding invariants:')
             [logging.debug(c) for c in contracts]
-    config.print_contracts('================ LIST OF VALID CONTRACTS ====================')
-
-    refine(config)
+    config.print_contracts('================ CONTRACTS PER LOCATION ====================')
+    # refine(config)
     synthesize(config)

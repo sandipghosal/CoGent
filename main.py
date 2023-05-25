@@ -1,5 +1,6 @@
 import datetime
 import getopt
+import time
 import inspect
 import logging
 
@@ -107,9 +108,14 @@ def main(argv):
     # automaton = import_ra(xmlfile)
     config = ramodel.Config(xmlfile)
     config.config(target)
+    start = time.time()
     generate(config)
+    end = time.time()
+    logging.debug('\n')
+    logging.debug('Time taken for synthesis:' + str(end- start) + 'sec')
+    print('Time taken for synthesis:' + str(end - start) + 'sec')
 
-    print('Contract Synthesis Completed')
+    print('\nContract Synthesis Completed')
 
 
     # print(automaton.getLocations())

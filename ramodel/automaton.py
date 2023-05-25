@@ -42,6 +42,12 @@ class Method:
     def __eq__(self, other):
         return self.name == other.name
 
+    def set_inparams(self, params):
+        self.inputs = params
+
+    def set_guard(self, condition):
+        self.guard = condition
+
 
 
 

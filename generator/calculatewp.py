@@ -23,15 +23,6 @@ def get_disjunction(args, index, result=None):
     else:
         return S._or(result, get_disjunction(args, index + 1, (args[index][0]).method.guard))
 
-    # for index in range(len(args)):
-    #     if index == 0:
-    #         # for first index get the z3 constraint
-    #         result = (args[index][0]).guard
-    #     else:
-    #         # for next transition do OR with previous results
-    #         result = S._or(result, (args[index][0]).guard)
-    #
-    # return result
 
 
 def get_implication(args):
