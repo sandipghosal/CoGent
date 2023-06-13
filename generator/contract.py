@@ -374,11 +374,13 @@ def crate_contracts(observers, constraints=None):
     contracts = list()
     # if the set of constraint is blank then
     # we can just add a contract like {True} push(p1){wp}
-    if not constraints:
+    if not constraints or constraints == [[]]:
         if str(wp.method.guard) == 'False':
-            observer = create_observer('False', wp.method.guard)
+            # observer = create_observer('False', wp.method.guard)
+            observer = create_observer('False', SOLVER._boolval(False))
         else:
-            observer = create_observer('True', wp.method.guard)
+            # observer = create_observer('True', wp.method.guard)
+            observer = create_observer('False', SOLVER._boolval(True))
 
         pre = prepare_condition([observer])
         post = prepare_condition([copy.deepcopy(wp)])
