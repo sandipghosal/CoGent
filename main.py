@@ -112,8 +112,8 @@ def main(argv):
     generate(config)
     end = time.time()
     logging.debug('\n')
-    logging.debug('Time taken for synthesis:' + str(end- start) + 'sec')
-    print('Time taken for synthesis:' + str(end - start) + 'sec')
+    logging.debug('\nTime taken for synthesis:' + str(end- start) + 'sec')
+    print('\nTime taken for synthesis:' + str(end - start) + 'sec')
 
     print('\nContract Synthesis Completed')
 
