@@ -5,7 +5,7 @@ CoGent is a Python tool for generating contracts from a given register automaton
 ## Installation
 1. Create or select a directory, say *myfolder*
 2. Enter into the directory *myfolder*
-3. Download the CoGent code into *myfolder*
+3. Download the CoGent code into *myfolder* using either of the following approach:
    1. Download the code as a compressed zip or tar file
       1. Unzip or Untar the file 
    2. Clone the repository using *git* command
