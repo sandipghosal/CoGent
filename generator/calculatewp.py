@@ -79,7 +79,7 @@ def get_observer_at_poststate(substitutes):
     return args
 
 
-def observer_wrt_wp():
+def get_observer_for_wp():
     global location, observer
 
     _args = list()
@@ -105,8 +105,10 @@ def observer_wrt_wp():
             newobserver.method.guard = S._boolval(False)
             newobserver.literal = automaton.LITERALS[observer]
             return newobserver
+
         else:
             return None
+
 
     # obtain the weakest precondition for observer and output
     wp = S.do_simplify(S._and(get_disjunction(args, 0), get_implication(args)))
@@ -124,5 +126,5 @@ def get_wp(config, location_, observer_):
     observer = observer_
     # initialize the dictionary for containing all
     # the mappings of location to postconditions
-    wp = observer_wrt_wp()
+    wp = get_observer_for_wp()
     return wp

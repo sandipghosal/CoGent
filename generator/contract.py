@@ -138,6 +138,17 @@ class Contract:
         else:
             return True
 
+    def subsumes(self, other):
+        """
+        Does first contract subsume other contract
+        :param other: Contract Object
+        :return: True or False
+        """
+        if self == other:
+            return True
+        else:
+            return subsumes(self, other)
+
 
 # def add_invariants(contracts, invariants):
 #     """
@@ -222,6 +233,20 @@ def check_pre(first, second):
     else:
         return True
 
+def rank_contract(c):
+    """
+    Give the contract a rank based on no. of equalities,
+    no. of parameters.
+    :param c: a Contract object
+    :return: int rank
+    """
+    rank = len(c.pre.monomials[0].observers)*5
+    for o in c.pre.monomials[0].observers:
+        if o.method.name in automaton.OBSERVERS.keys():
+            for i in o.method.inputs:
+                rank = rank + 1
+    return rank
+
 
 def subsumes(first, second):
     logging.debug('Checking IF the contract:')
@@ -232,11 +257,13 @@ def subsumes(first, second):
     return True if check_pre(first, second) else False
 
 
+
 def check_subsumption(contracts):
     if len(contracts) == 1:
         return contracts
+    # list of contracts that are subsumed by others
     temp = list()
-    contracts.sort(key=lambda x: len(x.pre.monomials[0]))
+    contracts.sort(key=lambda x: rank_contract(x))
     for i in range(len(contracts)):
         f = contracts[i]
         # due to transitivity property if a contract is checked
@@ -246,7 +273,7 @@ def check_subsumption(contracts):
             continue
         for j in range(len(contracts)):
             s = contracts[j]
-            if id(f) == id(s):
+            if f == s:
                 continue
             # do subsumption check only if two contracts are not same but their post-conditions are same
             assert f.post == s.post

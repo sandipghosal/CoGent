@@ -4,6 +4,7 @@ from errors import *
 
 import constraintsolver.solver as SOLVER
 from constraintsolver.blalgebra import simplify
+import generator.contract as CONTRACT
 
 automaton = None
 
@@ -51,6 +52,32 @@ def meet_per_location(location):
         logging.info('\n')
 
 
+def prune(post):
+    """
+    Prune the list of contracts obtained across different locations by checking subsumptions
+    :param posts: set of postconditions (Condition object)
+    """
+
+    logging.debug('\nList of contracts across the locations for postcondition %s', str(post))
+    old = list()
+    new = list()
+    cnts = list()
+    for l in automaton.LOCATIONS.values():
+        for c in l.get_contracts(post=post):
+            logging.debug(c)
+            # collect contracts with precondition other than "True" in a separate list
+            if str(c.pre.condition) != "True":
+                cnts.append(c)
+            else:
+                new.append(c)
+    old = list(cnts)
+    [new.append(c) for c in CONTRACT.check_subsumption(cnts)]
+    return new
+
+
+
+
+
 # the following join function does consider all locations including first and last
 def join_contracts(post):
     result = None
@@ -71,15 +98,19 @@ def synthesize(config):
         logging.debug(str(key.method) + ' : ' + config.LITERALS[key])
     logging.debug('\n')
 
-    logging.debug('\n\n===================== LOCATION INDEPENDENT CONTRACTS =====================')
+
     posts = set()
 
     for location in automaton.LOCATIONS.values():
         for contract in location.contracts:
             posts.add(contract.post)
+    # check subsumption for the contracts obtained in each location wrt. each postcondition
+
+    logging.debug('\n\n===================== LOCATION INDEPENDENT CONTRACTS =====================')
     # store the list of contracts after joining across the locations
     contracts = list()
     for x in posts:
+        # prune(x)
         final = join_contracts(x)
         logging.debug(final)
         contracts.append(final)
