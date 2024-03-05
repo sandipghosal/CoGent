@@ -1,6 +1,6 @@
-# import constraintsolver.MUS as MUS
+# import smtsolvers.MUS as MUS
 # import constraintbuilder.build_expression as BUILDER
-# import constraintsolver.solver as SOLVER
+import smtsolvers.solver as S
 
 #
 #
@@ -23,6 +23,19 @@ from z3 import *
 #
 a0, a1, a2, a3, a4 = Bools('a0 a1 a2 a3 a4')
 
+a, b, c, x = Ints('a b c x')
+
+t0 = Tactic('qe')
+expr = t0(Exists([x], And(a < x, x < b)))
+print(type(expr[0]))
+
+p_o, r1 = Ints('p_o r1')
+t = Tactic('qe')
+expr = t(Exists(p_o, r1 == p_o))
+print(type(expr[0]))
+if expr[0]:
+    print('hello')
+pass
 
 # #
 # # simple simplify()
@@ -120,7 +133,6 @@ def to_cnf(fml):
         snot.add(clause)
     print(atms)
 
-
 # fml = And(Or(a0, Not(And(Not(a3), a4))), Or(a0, a2, Not(And(Not(a3), Not(a4)))), Or(a2, Not(And(a3, Not(a4)))))
 
 ######################  SIMPLIFICATION FOR UNINTERPRETED FUNCTIONS ######################################
@@ -184,12 +196,12 @@ def to_cnf(fml):
 
 
 ############ SIMPLIFICATION USING SYMPY #################
-import sympy
-from sympy.logic.boolalg import And, Or, Not, to_dnf
+# import sympy
+# from sympy.logic.boolalg import And, Or, Not, to_dnf
 
 # (p1==b0) : a0; contains(p1): a1; contains(b0): a2; isfull(): a3; isempty(): a4
 
-a0, a1, a2, a3, a4 = sympy.symbols('a0 a1 a2 a3 a4')
+# a0, a1, a2, a3, a4 = sympy.symbols('a0 a1 a2 a3 a4')
 #
 # precondition for isfull():
 # f = And(Or(Not(a3), Not(And(Not(a3), Not(a4)))), Or(a3, Not(And(a3, Not(a4)))))
@@ -226,9 +238,9 @@ a0, a1, a2, a3, a4 = sympy.symbols('a0 a1 a2 a3 a4')
 # print(f)
 # print(sympy.logic.simplify_logic(f))
 
-f = Or(And(Or(Not(a0), Not(And(Not(a3), a4))), Or(Not(And(Not(a4), Not(a3))), And(Not(a0), Not(a1))), Or(Not(And(Not(a4), Not(a3))), And(Not(a1), Not(a0))), Or(Not(a1), Not(And(Not(a4), a3)))), Not(Or(Not(a3), Not(a4))))
-expr = to_dnf(f, simplify=True)
-print(expr)
+# f = Or(And(Or(Not(a0), Not(And(Not(a3), a4))), Or(Not(And(Not(a4), Not(a3))), And(Not(a0), Not(a1))), Or(Not(And(Not(a4), Not(a3))), And(Not(a1), Not(a0))), Or(Not(a1), Not(And(Not(a4), a3)))), Not(Or(Not(a3), Not(a4))))
+# expr = to_dnf(f, simplify=True)
+# print(expr)
 
 ##################  END  #################################
 

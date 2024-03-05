@@ -4,6 +4,7 @@ import logging
 from generator.calculatewp import get_wp
 from generator.contract import get_contracts
 from generator.simplify import synthesize
+import generator.invariant as INV
 
 
 ################# Data Structure ##################
@@ -16,8 +17,9 @@ from generator.simplify import synthesize
 
 def generate(config):
     logging.debug('\n\n=========== Starting Contract Generation =================')
+    INV.generate_invariants(config)
     for location in config.LOCATIONS.values():
-        invariants = config.get_invariants(location)
+        # invariants = config.get_invariants(location)
         for key, output in itertools.product(config.OBSERVERS, ['TRUE', 'FALSE']):
             observer = config.OBSERVERS[key]
             observer.output = config.OUTPUTS[output]

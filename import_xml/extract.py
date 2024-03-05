@@ -3,7 +3,7 @@ import logging
 from pprint import pp
 
 import constraintbuilder
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 from import_xml.xmltags import *
 from ramodel.automaton import *
 

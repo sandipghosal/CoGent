@@ -2,8 +2,8 @@ import logging
 
 from errors import *
 
-import constraintsolver.solver as SOLVER
-from constraintsolver.blalgebra import simplify
+import smtsolvers.solver as SOLVER
+from smtsolvers.blalgebra import simplify
 import generator.contract as CONTRACT
 
 automaton = None

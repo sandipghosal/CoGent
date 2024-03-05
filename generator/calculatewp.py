@@ -1,7 +1,7 @@
 import copy
 import logging
 
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 
 automaton = None
 location = None
@@ -22,7 +22,6 @@ def get_disjunction(args, index, result=None):
         return result
     else:
         return S._or(result, get_disjunction(args, index + 1, (args[index][0]).method.guard))
-
 
 
 def get_implication(args):
@@ -66,6 +65,7 @@ def get_observer_at_poststate(substitutes):
         # change the input parameter of the method
         method.inputs = [S.z3reftoStr(x[1]) for x in substitutes]
         # obtain the condition for observer at destination
+
         method.guard = S.do_substitute(obstrans[0].method.guard, substitutes)
         # create an observer object
         newobserver = copy.deepcopy(automaton.OBSERVERS[method.name])
@@ -108,7 +108,6 @@ def get_observer_for_wp():
 
         else:
             return None
-
 
     # obtain the weakest precondition for observer and output
     wp = S.do_simplify(S._and(get_disjunction(args, 0), get_implication(args)))

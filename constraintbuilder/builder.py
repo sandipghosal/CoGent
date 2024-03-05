@@ -1,4 +1,4 @@
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 from constraintbuilder.tokens import *
 from errors import *
 

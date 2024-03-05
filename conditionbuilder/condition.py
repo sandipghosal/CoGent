@@ -1,6 +1,6 @@
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 from constraintbuilder import build_str
-from constraintsolver.blalgebra import simplify
+from smtsolvers.blalgebra import simplify
 
 
 class Condition:

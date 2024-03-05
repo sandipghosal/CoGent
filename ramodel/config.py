@@ -4,7 +4,7 @@ import logging
 from pprint import pp
 
 import constraintbuilder
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 import import_xml
 import ramodel.automaton as ra
 
@@ -251,6 +251,8 @@ class Config:
                     o.literal = self.LITERALS[o]
                     invariants.append(o)
         return invariants
+
+
 
 
     def get_global_invariants(self):

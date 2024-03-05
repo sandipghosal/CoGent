@@ -107,6 +107,7 @@ class Location:
         self.name = name
         self.transitions = list()
         self.contracts = list()
+        self.invariant = None
 
     def __eq__(self, other):
         # return self.name == other.name
@@ -146,7 +147,7 @@ class Location:
                         transitions.append(transition)
         return transitions
 
-    def get_destinations(self, method=None):
+    def get_destinations(self, method=None) -> list:
         """
         Returns a list of target locations from
         this location and a method (optional)
@@ -176,3 +177,4 @@ class Location:
                         or contract.post == post:
                     contracts.append(contract)
         return contracts
+

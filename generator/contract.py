@@ -2,9 +2,9 @@ import copy
 import itertools
 import logging
 
-import constraintsolver.solver as SOLVER
-import constraintsolver.MUS as MUS
-import constraintsolver.blalgebra as SIMPLIFIER
+import smtsolvers.solver as SOLVER
+import smtsolvers.MUS as MUS
+import smtsolvers.blalgebra as SIMPLIFIER
 from conditionbuilder.condition import Condition
 from ramodel.config import Monomial
 import ramodel.automaton as ra
