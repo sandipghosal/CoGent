@@ -47,6 +47,22 @@ def _eq(first, second):
     return first == second
 
 
+def _lt(first, second):
+    return first < second
+
+
+def _gt(first, second):
+    return first > second
+
+
+def _leq(first, second):
+    return first <= second
+
+
+def _geq(first, second):
+    return first >= second
+
+
 def _implies(antecedent, consequent):
     """ Returns implication where first implies second """
     return simplify(Implies(antecedent, consequent))

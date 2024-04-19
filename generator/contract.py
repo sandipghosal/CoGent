@@ -233,6 +233,7 @@ def check_pre(first, second):
     else:
         return True
 
+
 def rank_contract(c):
     """
     Give the contract a rank based on no. of equalities,
@@ -240,7 +241,7 @@ def rank_contract(c):
     :param c: a Contract object
     :return: int rank
     """
-    rank = len(c.pre.monomials[0].observers)*5
+    rank = len(c.pre.monomials[0].observers) * 5
     for o in c.pre.monomials[0].observers:
         if o.method.name in automaton.OBSERVERS.keys():
             for i in o.method.inputs:
@@ -255,7 +256,6 @@ def subsumes(first, second):
     logging.debug(second)
 
     return True if check_pre(first, second) else False
-
 
 
 def check_subsumption(contracts):
@@ -472,14 +472,19 @@ def refine(muses, condition):
     return subsets
 
 
-def get_MUSes(conditions):
+def get_MUSes(conditions, invariant):
     """
     Obtain all possible Minimum Unsatisfiable Subsets (MUS) for a list of conditions
     :param conditions: list of conditions derived from observer methods at pre-state
     :return: list of lists: list of all possible unsatisfiable subsets where wp is not a member
     """
-    # obtain the negation of weakest precondition (wp)
-    clause = SOLVER._neg(wp.method.guard)
+    # comment the following
+    # obtain the term ~wp as one of the clause for generating MUSes
+    # clause = SOLVER._neg(wp.method.guard)
+
+    # obtain the term ~(Inv -> wp) as one of the clause for generating MUSes
+    clause = SOLVER._neg(SOLVER._implies(invariant, wp.method.guard))
+
     # supply Not(wp) as one of the conditions for obtaining MUS
     muses = MUS.generate(conditions, clause)
     if not muses:
@@ -580,11 +585,6 @@ def get_contracts(config_, location_, wp_, invariants):
     location = location_
     wp = wp_
 
-    logging.debug('\n')
-    logging.debug('Generating contract at location: ' + str(location))
-    logging.debug('Observer method at post-state: ' + str(wp))
-    logging.debug('Derived weakest precondition:' + str(wp.method.guard))
-
     # initialize the list of contracts
     contracts = list()
 
@@ -595,17 +595,22 @@ def get_contracts(config_, location_, wp_, invariants):
     # return contracts
 
     observ = observers()
-    conditions = get_conditions(observ)
 
     if str(wp.method.guard) in ['True', 'False']:
         contracts = crate_contracts(observers=observ)
     else:
+        conditions = get_conditions(observ)
+
+        # # add the local invariant into the list of conditions
+        # conditions.append(location.invariant)
+
         logging.debug('Candidate observer methods at pre-state: ' + str(observ))
         logging.debug('Guards for the candidates: ' + str(conditions))
-        subsets = get_MUSes(conditions)
+        logging.debug('Invariant at location ' + str(location) + ' : ' + str(location.invariant))
+        subsets = get_MUSes(conditions, location.invariant)
         # check_subset(subsets)
         logging.debug('\n')
-        logging.debug('MUSes after excluding WP:')
+        logging.debug('MUSes after excluding ~(Inv->WP):')
         [logging.debug(str(s)) for s in subsets]
         contracts = crate_contracts(observ, subsets)
     # check for subsumption
@@ -621,3 +626,54 @@ def get_contracts(config_, location_, wp_, invariants):
     if invariants:
         contracts = add_invariants(contracts, invariants)
     return contracts
+
+## Earlier implementation before integrating strongest postcondition as invariants
+## Commented on March 6, 2024
+
+# def get_contracts(config_, location_, wp_, invariants):
+#     global automaton, location, wp
+#     automaton = config_
+#     location = location_
+#     wp = wp_
+#
+#     logging.debug('\n')
+#     logging.debug('Generating contract at location: ' + str(location))
+#     logging.debug('Observer method at post-state: ' + str(wp))
+#     logging.debug('Derived weakest precondition:' + str(wp.method.guard))
+#
+#     # initialize the list of contracts
+#     contracts = list()
+#
+#     # first gather guard conditions for each of the symbols at this location
+#     # second ask z3 for minimal unsatisfiable subsets
+#     # filter the subsets according to required constraints over subsets
+#     # create contracts
+#     # return contracts
+#
+#     observ = observers()
+#     conditions = get_conditions(observ)
+#
+#     if str(wp.method.guard) in ['True', 'False']:
+#         contracts = crate_contracts(observers=observ)
+#     else:
+#         logging.debug('Candidate observer methods at pre-state: ' + str(observ))
+#         logging.debug('Guards for the candidates: ' + str(conditions))
+#         subsets = get_MUSes(conditions)
+#         # check_subset(subsets)
+#         logging.debug('\n')
+#         logging.debug('MUSes after excluding WP:')
+#         [logging.debug(str(s)) for s in subsets]
+#         contracts = crate_contracts(observ, subsets)
+#     # check for subsumption
+#     contracts = check_subsumption(contracts)
+#
+#     # do the inline substitution for contracts that
+#     # does not have parameterized method in the pre-condition
+#     # contracts = apply_equality(contracts)
+#     # join multiple contracts
+#     if len(contracts) > 1:
+#         contracts = join_contracts(contracts)
+#     # add location-specific invariants to each contract
+#     if invariants:
+#         contracts = add_invariants(contracts, invariants)
+#     return contracts

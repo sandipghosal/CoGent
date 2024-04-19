@@ -72,7 +72,7 @@ def get_observer_at_poststate(substitutes):
         newobserver.method = method
         newobserver.output = observer.output
 
-        logging.debug('\n')
+        # logging.debug('\n')
         # add (transition, observer) tuple into the list
         args.append((transition, newobserver))
 
@@ -109,8 +109,14 @@ def get_observer_for_wp():
         else:
             return None
 
+    logging.debug('For WP, consider the following transition(s) and postcondition:')
+    for a in args:
+        logging.debug(str(a[0]) + ' \t ' + str(a[1].method.guard))
+
     # obtain the weakest precondition for observer and output
-    wp = S.do_simplify(S._and(get_disjunction(args, 0), get_implication(args)))
+    # f_comp = get_disjunction(args, index=0)
+    # s_comp = get_implication(args)
+    wp = S.do_simplify(S._and(get_disjunction(args, index=0), get_implication(args)))
 
     newobserver = copy.deepcopy(args[0][1])
     newobserver.method.guard = wp
