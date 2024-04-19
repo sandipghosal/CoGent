@@ -105,8 +105,11 @@ class Location:
     # Instantiate location with name and list of registers
     def __init__(self, name):
         self.name = name
+        self.registers = list()
         self.transitions = list()
         self.contracts = list()
+        self.registers = list()
+        self.invariant = None
 
     def __eq__(self, other):
         # return self.name == other.name
@@ -146,7 +149,7 @@ class Location:
                         transitions.append(transition)
         return transitions
 
-    def get_destinations(self, method=None):
+    def get_destinations(self, method=None) -> list:
         """
         Returns a list of target locations from
         this location and a method (optional)
@@ -176,3 +179,4 @@ class Location:
                         or contract.post == post:
                     contracts.append(contract)
         return contracts
+

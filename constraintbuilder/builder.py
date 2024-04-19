@@ -1,4 +1,4 @@
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 from constraintbuilder.tokens import *
 from errors import *
 
@@ -31,6 +31,14 @@ class Builder(NodeVisitor):
             return S._ne(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == COMPARE:
             return S._eq(self.visit(node.left), self.visit(node.right))
+        elif node.operator.type == GTHAN:
+            return S._gt(self.visit(node.left), self.visit(node.right))
+        elif node.operator.type == LTHAN:
+            return S._lt(self.visit(node.left), self.visit(node.right))
+        elif node.operator.type == GEQ:
+            return S._geq(self.visit(node.left), self.visit(node.right))
+        elif node.operator.type == LEQ:
+            return S._leq(self.visit(node.left), self.visit(node.right))
         else:
             raise ValueNotFound('Node not found: ' + str(node))
 

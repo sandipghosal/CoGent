@@ -29,20 +29,21 @@ def setuplogger(switch, logfile_, loglevel=logging.DEBUG):
             logfile = logfile_
 
         print('log file created:' + logfile)
-        logging.basicConfig(filename=logfile, filemode='w', level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
+        logging.basicConfig(filename=logfile, filemode='w', level=loglevel,
+                            format="%(name)s - %(levelname)s : %(message)s")
         # fhandler = logging.FileHandler(logfile)
         # fhandler.setLevel(loglevel)
         # fhandler.setFormatter(CustomFormatter())
         # logger.addHandler(fhandler)
     else:
-        logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel, format="%(name)s - %(levelname)s : %(message)s")
+        logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel,
+                            format="%(name)s - %(levelname)s : %(message)s")
         # chandler = logging.StreamHandler()
         # chandler.setLevel(logging.DEBUG)
         # chandler.setFormatter(CustomFormatter())
         # logger.addHandler(chandler)
 
     # return logger
-
 
 
 def main(argv):
@@ -112,11 +113,11 @@ def main(argv):
     generate(config)
     end = time.time()
     logging.debug('\n')
-    logging.debug('\nTime taken for synthesis:' + str(end- start) + 'sec')
+    logging.debug('\nTime taken for synthesis:' + str(end - start) + 'sec')
+
     print('\nTime taken for synthesis:' + str(end - start) + 'sec')
 
     print('\nContract Synthesis Completed')
-
 
     # print(automaton.getLocations())
     # for location in automaton.getLocations():

@@ -1,106 +1,19 @@
-import copy
-import logging
-
 from z3 import *
-import constraintsolver.solver as SOLVER
-
-
-def isequal(clause1, clause2):
-    if sorted(list(str(clause1))) == sorted(list(str(clause2))):
-        return True
-    else:
-        return False
-
-
-def equalMUSes(first, second):
-    """
-    Check if two list of constraints are same
-    :param first: list of constraints
-    :param second: list of constraints
-    :return: A Boolean value true or false
-    """
-    if len(first) != len(second):
-        return False
-
-    for i in range(len(first)):
-        flag = False
-        for j in range(len(second)):
-            if isequal(first[i], second[j]):
-                flag = True
-                break
-        if not flag:
-            return False
-
-    return True
-
-
-def contains(mus, condition):
-    """
-    Check if a MUS contains a constraint 'condition'
-    :param mus: a list of constraints
-    :param condition: the condition of interest
-    :return: Boolean value
-    """
-    for i in range(len(mus)):
-        if isequal(mus[i], condition):
-            return True
-    return False
-
-
-def get_unique_constraints(constraints):
-    indices = list()
-    for i in range(len(constraints) - 1):
-        for j in range(i + 1, len(constraints)):
-            if isequal(constraints[i], constraints[j]):
-                indices.append(j)
-
-    if indices:
-        temp = list()
-        for i in range(len(constraints)):
-            if i not in indices:
-                temp.append(constraints[i])
-        # [temp.append(constraints[i]) for i in range(len(constraints)) if i not in indices]
-        constraints = temp
-    return constraints
+import smtsolvers.solver as SOLVER
 
 
 def filter_subsets(subsets, condition):
-    """
-    Perform filtering:
-    (a) Extract constraints other than a given condition 'cond' from a subset, e.g., if (c1^c2^cond) then extract (c1^c2)
-    (b) Consider all those MUS that do not have 'cond' as a constraint
-
-    Modified on 2023.04.24:
-    Perform filtering:
-    (a) First, consider all MUSes those contain the condition
-    (b) Second, extract subsets from the MUSes from first step that contain only constraints other than the given condition
-    :param subsets: list of all minimal unsatisfiable subsets (MUS) (list of lists)
-    :param condition: weakest precondition (one of the possible clause in the MUS)
-    :return: list of lists where each inner list must contain the condition
-    """
+    """ Filter out subset based on the presence of wp condition """
     muses = list()
     for s in subsets:
-        if contains(s, condition):
-            muses.append(s)
-
-    finalset = list()
-    for s in muses:
-        m = list()
+        flag = False
         for i in range(len(s)):
-            # Equivalence check using z3 not working when s[i] and condition
-            # are coming from two different source
-            # if SOLVER.equivalence(s[i], condition):
-            # here is a hack using string comparison for comparing syntactically
-            if not isequal(s[i], condition):
-                m.append(s[i])
-            # else:
-            #     muses.append(s)
-            #     break
-        finalset.append(m)
-    return finalset
+            if SOLVER.equivalence(s[i], condition):
+                flag = True
+                break
+        if flag: muses.append(s)
 
-
-
+    return muses
 
 
 def get_id(x):
@@ -108,18 +21,15 @@ def get_id(x):
 
 
 class SubsetSolver:
-    # constraints = []
-    # n = 0
-    # s = Solver()
-    # varcache = {}
-    # idcache = {}
+    constraints = []
+    n = 0
+    s = Solver()
+    varcache = {}
+    idcache = {}
 
     def __init__(self, constraints):
         self.constraints = constraints
         self.n = len(constraints)
-        self.s = Solver()
-        self.varcache = {}
-        self.idcache = {}
         for i in range(self.n):
             self.s.add(Implies(self.c_var(i), constraints[i]))
 
@@ -224,17 +134,11 @@ def enumerate_sets(csolver, map):
 
 
 def generate(constraints, condition):
-    muses = list()
-    constraints = list(set(constraints + [condition]))
-    constraints = get_unique_constraints(constraints)
-    logging.debug('Final list of guards: ' + str(constraints))
+    mus = list()
+    constraints = constraints + [condition]
     csolver = SubsetSolver(constraints)
     msolver = MapSolver(n=csolver.n)
     for orig, lits in enumerate_sets(csolver, msolver):
-        output = "%s %s" % (orig, lits)
-        logging.debug(output)
         if orig == 'MUS':
-            muses.append(lits)
-            # output = "%s %s" % (orig, lits)
-            # logging.debug(output)
-    return filter_subsets(muses, condition)
+            mus.append(lits)
+    return filter_subsets(mus, condition)

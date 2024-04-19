@@ -47,6 +47,22 @@ def _eq(first, second):
     return first == second
 
 
+def _lt(first, second):
+    return first < second
+
+
+def _gt(first, second):
+    return first > second
+
+
+def _leq(first, second):
+    return first <= second
+
+
+def _geq(first, second):
+    return first >= second
+
+
 def _implies(antecedent, consequent):
     """ Returns implication where first implies second """
     return simplify(Implies(antecedent, consequent))
@@ -142,15 +158,15 @@ def check_sat(vars, antecedent, consequent=None):
 
 
 def eliminate(argv, args):
-    g = Goal()
-    g.add(_exists(argv, args))
-    t = Tactic('qe')
-    return t(g)[0]
+    t = Then(Tactic('qe'), Tactic('simplify'), Tactic('solve-eqs'))
+    expr = _exists(argv, args)
+    logging.debug('Strongest Postcondition: ' + str(expr))
+    expr = t(expr).as_expr()
+    return expr
 
 
 def z3reftoStr(argv):
     return obj_to_string(argv)
-
 
 
 def is_atom(t):
@@ -167,19 +183,23 @@ def is_atom(t):
         return False
     return True
 
+
 def atoms(fml):
     visited = set([])
     atms = set([])
+
     def atoms_rec(t, visited, atms):
         if t in visited:
             return
-        visited |= { t }
+        visited |= {t}
         if is_atom(t):
-            atms |= { t }
+            atms |= {t}
         for s in t.children():
             atoms_rec(s, visited, atms)
+
     atoms_rec(fml, visited, atms)
     return atms
+
 
 def atom2literal(m, a):
     if is_true(m.eval(a)):
@@ -219,5 +239,3 @@ def to_dnf(fml):
     for d in d_clauses:
         dnf = _or(dnf, d)
     print(str(dnf))
-
-

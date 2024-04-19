@@ -1,5 +1,5 @@
 import constraintbuilder.build_expression as BE
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 
 
 def test_build_expr():

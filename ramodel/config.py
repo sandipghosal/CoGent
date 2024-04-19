@@ -4,7 +4,7 @@ import logging
 from pprint import pp
 
 import constraintbuilder
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 import import_xml
 import ramodel.automaton as ra
 
@@ -126,6 +126,9 @@ class Config:
     # Mapping of Observer to Boolean literals
     LITERALS = dict()
 
+    # collect a dictionary of the form {location1 : {set of locations depends on location1}}
+    LOCATION_DEPENDENCIES = dict()
+
     def __init__(self, file):
         self.PATH = file
 
@@ -226,8 +229,6 @@ class Config:
     #             invariants.append(o)
     #     return invariants
 
-
-
     def get_invariants(self, location):
         """
         Default behaviour:
@@ -252,7 +253,6 @@ class Config:
                     invariants.append(o)
         return invariants
 
-
     def get_global_invariants(self):
         """ Returns global invariants in two separate lists
             and_l : consists of the observers which are always true at any location
@@ -265,7 +265,6 @@ class Config:
                 for t in trans:
                     if t.method.inputs == [] and str(t.method.guard) == 'True':
                         pass
-
 
     def populate_observers(self):
         observers = dict(self.METHODS)

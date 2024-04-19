@@ -3,11 +3,55 @@ import logging
 from pprint import pp
 
 import constraintbuilder
-import constraintsolver.solver as S
+import smtsolvers.solver as S
 from import_xml.xmltags import *
 from ramodel.automaton import *
 
 ROOT = None
+
+
+def register_for_dest(source, dest, reg_list) -> list:
+    """
+    Returns a list of registers for a given location and its parent locations
+    :param loc: a Location object
+    :param parents: a list of locations identified as the parents of loc
+    :return: a list of registers for the location loc
+    """
+    regs = list()
+
+    t_list = source.get_transitions(destination=dest)
+    regs.extend(source.registers)
+    for t in t_list:
+        for a in t.assignments:
+            if str(a[0]) in reg_list:
+                regs.append(a[0])
+            if str(a[1]) in reg_list:
+                regs.remove(a[1])
+            if str(a[0]) not in reg_list:
+                regs.append(a[1])
+    return list(set(regs))
+
+
+def registers_per_location(config) -> None:
+    # dependencies = dict()
+
+    # apply BFS algorithm to find all reachable states wrt. the target method
+    visited = []
+    queue = []
+
+    queue.append(config.START_LOCATION)
+
+    while queue:
+        location = queue.pop(0)
+        visited.append(location)
+        # dependencies[location] = set()
+
+        # if the destination location is not visited and the destination is reached by the target method
+        for dest in location.get_destinations():
+            # dependencies[location].add(dest)
+            if dest not in visited:
+                dest.registers = register_for_dest(location, dest, config.REGISTERS)
+                queue.append(dest)
 
 
 def condense(transitions, config):
@@ -21,11 +65,13 @@ def condense(transitions, config):
             # if two transitions are different
             # and their from and to locations are same
             # and both caused by the same method
+            # and assignments are same
             # and produce same output
             if outer != inner \
                     and outer.fromLocation == inner.fromLocation \
                     and outer.toLocation == inner.toLocation \
                     and outer.method == inner.method \
+                    and outer.assignments == inner.assignments \
                     and outer.output == inner.output:
                 outer.method.guard = S._or(outer.method.guard, inner.method.guard)
                 deletedtransition.add(inner)
@@ -57,8 +103,6 @@ def pruning(transitions, config):
             current_trans.output = next_transition.method
             current_trans.assignments = current_trans.assignments + next_transition.assignments
             current_trans.toLocation = next_transition.toLocation
-
-
 
         newlist.append(current_trans)
 
@@ -245,3 +289,6 @@ def extract(tree, config):
     for location in config.LOCATIONS.copy():
         if not config.LOCATIONS[location].transitions:
             config.LOCATIONS.pop(location)
+
+    registers_per_location(config)
+

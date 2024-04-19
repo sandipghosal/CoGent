@@ -15,7 +15,11 @@ operators = [
     r'\|\|',
     r'\|',
     r'or',
-    r'Or'
+    r'Or',
+    r'<',
+    r'>',
+    r'<=',
+    r'>='
 ]
 
 ignore = [
