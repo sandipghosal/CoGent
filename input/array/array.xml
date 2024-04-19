@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<register-automaton>
+    <alphabet>
+        <inputs>
+            <symbol name="I_remove">
+                <param type="int" name="p1"/>
+            </symbol>
+            <symbol name="I_contains">
+                <param type="int" name="p1"/>
+            </symbol>
+            <symbol name="I_isfull"/>
+            <symbol name="I_isempty"/>
+            <symbol name="I_push">
+                <param type="int" name="p1"/>
+            </symbol>
+        </inputs>
+        <outputs>
+            <symbol name="V"/>
+            <symbol name="FALSE"/>
+            <symbol name="TRUE"/>
+        </outputs>
+    </alphabet>
+    <constants/>
+    <sumConstants/>
+    <globals>
+        <variable type="int" name="r1">0</variable>
+        <variable type="int" name="r2">0</variable>
+        <variable type="int" name="r3">0</variable>
+    </globals>
+    <locations>
+        <location name="l0" initial="true"/>
+        <location name="l1"/>
+        <location name="l2"/>
+        <location name="l3"/>
+        <location name="l4"/>
+        <location name="l5"/>
+        <location name="l6"/>
+        <location name="l7"/>
+        <location name="l8"/>
+        <location name="l9"/>
+        <location name="l10"/>
+        <location name="l11"/>
+        <location name="l12"/>
+        <location name="l13"/>
+        <location name="l14"/>
+        <location name="l15"/>
+        <location name="l16"/>
+        <location name="l17"/>
+    </locations>
+    <transitions>
+        <transition from="l0" to="l1" symbol="I_push">
+            <assignments>
+                <assign to="r1">p1</assign>
+            </assignments>
+        </transition>
+        <transition from="l0" to="l4" symbol="I_contains">
+            <assignments/>
+        </transition>
+        <transition from="l0" to="l4" symbol="I_isfull">
+            <assignments/>
+        </transition>
+        <transition from="l0" to="l5" symbol="I_isempty">
+            <assignments/>
+        </transition>
+        <transition from="l0" to="l6" symbol="I_remove">
+            <assignments/>
+        </transition>
+        <transition from="l1" to="l7" symbol="V">
+            <assignments/>
+        </transition>
+        <transition from="l4" to="l0" symbol="FALSE">
+            <assignments/>
+        </transition>
+        <transition from="l5" to="l0" symbol="TRUE">
+            <assignments/>
+        </transition>
+        <transition from="l6" to="l0" symbol="V">
+            <assignments/>
+        </transition>
+        <transition from="l7" to="l1" symbol="I_remove">
+            <guard>r1!=p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l7" to="l6" symbol="I_remove">
+            <guard>r1==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l7" to="l8" symbol="I_push">
+            <assignments>
+                <assign to="r2">p1</assign>
+            </assignments>
+        </transition>
+        <transition from="l7" to="l12" symbol="I_contains">
+            <guard>r1!=p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l7" to="l15" symbol="I_contains">
+            <guard>r1==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l7" to="l12" symbol="I_isempty">
+            <assignments/>
+        </transition>
+        <transition from="l7" to="l12" symbol="I_isfull">
+            <assignments/>
+        </transition>
+        <transition from="l8" to="l9" symbol="V">
+            <assignments/>
+        </transition>
+        <transition from="l9" to="l1" symbol="I_remove">
+            <guard>r1==p1</guard>
+            <assignments>
+                <assign to="r1">r2</assign>
+            </assignments>
+        </transition>
+        <transition from="l9" to="l1" symbol="I_remove">
+            <guard>r2==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l9" to="l8" symbol="I_remove">
+            <guard>r1!=p1 &amp;&amp; r2!=p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l9" to="l10" symbol="I_push">
+            <assignments>
+                <assign to="r3">p1</assign>
+            </assignments>
+        </transition>
+        <transition from="l9" to="l13" symbol="I_contains">
+            <guard>r1!=p1 &amp;&amp; r2!=p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l9" to="l16" symbol="I_contains">
+            <guard>r1==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l9" to="l16" symbol="I_contains">
+            <guard>r2==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l9" to="l13" symbol="I_isempty">
+            <assignments/>
+        </transition>
+        <transition from="l9" to="l13" symbol="I_isfull">
+            <assignments/>
+        </transition>
+        <transition from="l10" to="l11" symbol="V">
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l8" symbol="I_remove">
+            <guard>r1==p1</guard>
+            <assignments>
+                <assign to="r1">r2</assign>
+                <assign to="r2">r3</assign>
+            </assignments>
+        </transition>
+        <transition from="l11" to="l8" symbol="I_remove">
+            <guard>r2==p1</guard>
+            <assignments>
+                <assign to="r2">r3</assign>
+            </assignments>
+        </transition>
+        <transition from="l11" to="l8" symbol="I_remove">
+            <guard>r3==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l10" symbol="I_remove">
+            <guard>r1!=p1 &amp;&amp; r2!=p1 &amp;&amp; r3!=p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l10" symbol="I_push">
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l14" symbol="I_contains">
+            <guard>r1!=p1 &amp;&amp; r2!=p1 &amp;&amp; r3!=p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l17" symbol="I_contains">
+            <guard>r1==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l17" symbol="I_contains">
+            <guard>r2==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l17" symbol="I_contains">
+            <guard>r3==p1</guard>
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l14" symbol="I_isempty">
+            <assignments/>
+        </transition>
+        <transition from="l11" to="l17" symbol="I_isfull">
+            <assignments/>
+        </transition>
+        <transition from="l12" to="l7" symbol="FALSE">
+            <assignments/>
+        </transition>
+        <transition from="l13" to="l9" symbol="FALSE">
+            <assignments/>
+        </transition>
+        <transition from="l14" to="l11" symbol="FALSE">
+            <assignments/>
+        </transition>
+        <transition from="l15" to="l7" symbol="TRUE">
+            <assignments/>
+        </transition>
+        <transition from="l16" to="l9" symbol="TRUE">
+            <assignments/>
+        </transition>
+        <transition from="l17" to="l11" symbol="TRUE">
+            <assignments/>
+        </transition>
+    </transitions>
+</register-automaton>
