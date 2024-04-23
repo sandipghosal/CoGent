@@ -2,6 +2,8 @@ import copy
 import itertools
 import logging
 
+import z3.z3
+
 import smtsolvers.solver as SOLVER
 import smtsolvers.MUS as MUS
 import smtsolvers.blalgebra as SIMPLIFIER
@@ -12,6 +14,10 @@ import ramodel.automaton as ra
 automaton = None
 location = None
 wp = None
+
+# dictionary to map each uninterpreted function to a variable
+# Foe example {'contains': a0}
+mapper = dict()
 
 
 class Contract:
@@ -206,6 +212,71 @@ def join_contracts(contracts):
     return [new]
 
 
+def prepare_inputs(method):
+    inputs = list()
+    for i in range(len(method.inputs)):
+        inputs.append(SOLVER._int(method.inputs[i]))
+    return inputs
+
+def prepare_arguments(method):
+    args = list()
+    for i in range(len(method.inputs)):
+        args.append(z3.z3.IntSort())
+    return args
+
+
+def get_map_entry(method):
+    if method.name not in mapper.keys():
+        params = prepare_arguments(method)
+        globals()[f"a{len(mapper)}"] = SOLVER._function(method.name, *params, z3.z3.BoolSort())
+        mapper[method.name] = globals()[f"a{len(mapper)}"]
+    return mapper[method.name]
+
+
+def condition_to_uf(condition):
+    params = list()
+    expression = SOLVER._boolval(True)
+    for m in condition.monomials:
+        for o in m.observers:
+            if o.method.name.find("__equality__") != -1:
+                expression = SOLVER._and(expression, o.method.guard)
+                params.extend(prepare_inputs(o.method))
+            else:
+                func = get_map_entry(o.method)
+                inputs = prepare_inputs(o.method)
+                params.extend(inputs)
+                if o.output.name == 'TRUE':
+                    expression = SOLVER._and(expression, func(*inputs))
+                else:
+                    expression = SOLVER._and(expression, SOLVER._neg(func(*inputs)))
+    return expression, list(set(params))
+
+
+# def check(first, second) -> bool:
+#     """
+#     Check if second contract subsumes the first contract
+#     The subsumption is checked by treating each function with parameter as a atomic proposition
+#     :param first: first contract
+#     :param second: second contract
+#     :return:
+#     """
+#     # check if second.pre => first.pre
+#     if SOLVER.check_sat([], second.pre.expression, first.pre.expression) == SOLVER._sat():
+#         return False
+#     else:
+#         return True
+
+def check(first, second) -> bool:
+    f_expr, f_params = condition_to_uf(first.pre)
+    s_expr, s_params = condition_to_uf(second.pre)
+    params = list(set(f_params + s_params))
+    # check if s_expr => f_expr
+    if SOLVER.check_sat(params, s_expr, f_expr) == SOLVER._sat():
+        return False
+    else:
+        return True
+
+
 def check_pre(first, second):
     # check if second.pre => first.pre
     params = set()
@@ -255,7 +326,7 @@ def subsumes(first, second):
     logging.debug('subsumes the following:')
     logging.debug(second)
 
-    return True if check_pre(first, second) else False
+    return True if check(first, second) else False
 
 
 def check_subsumption(contracts):
