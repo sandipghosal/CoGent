@@ -38,6 +38,7 @@ NOT         =   'NOT'     # ! operator
 XOR         =   'XOR'     # ^ operator
 SQUOTE      =   'SQUOTE'  # ' single quote
 DQUOTE      =   'DQUOTE'  # '' double quote
+IMPLY       =   'IMPLY'   # => implication
 
 
 
@@ -68,6 +69,7 @@ token_expr = [
     (r'%',          MOD),
     (r'<=',         LEQ),
     (r'>=',         GEQ),
+    (r'=>',         IMPLY),
     (r'<',          LTHAN),
     (r'>',          GTHAN),
     (r'!=',         NEQ),

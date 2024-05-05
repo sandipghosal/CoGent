@@ -39,6 +39,8 @@ class Builder(NodeVisitor):
             return S._geq(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == LEQ:
             return S._leq(self.visit(node.left), self.visit(node.right))
+        elif node.operator.type == IMPLY:
+            return S._implies(self.visit(node.left), self.visit(node.right))
         else:
             raise ValueNotFound('Node not found: ' + str(node))
 

@@ -92,6 +92,9 @@ class Config:
     # Target Method object
     TARGET = None
 
+    # List of axioms
+    AXIOMS = list()
+
     # Start Location
     START_LOCATION = None
 
@@ -356,6 +359,24 @@ class Config:
             for transition in location.transitions:
                 if transition.method == self.TARGET:
                     self.TARGET.outputs = transition.output.outparams
+
+    def substitute_axioms(self, expr):
+        for k,v in self.LITERALS.items():
+            old = str(k)
+            new = v
+            expr = expr.replace(old, new)
+        # following substitution is required to make the
+        # expression as per sympy norms
+        # expr = expr.replace('=>', '>>')
+        return expr
+
+    def get_axioms(self, file):
+        f = open(file, 'r')
+        lines = f.readlines()
+        for line in lines:
+            line = self.substitute_axioms(line)
+            expr = constraintbuilder.build_logical_expr(line)
+            self.AXIOMS.append(expr)
 
     def print_contracts(self, message):
         logging.debug('\n\n' + message)

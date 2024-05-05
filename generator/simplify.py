@@ -5,9 +5,21 @@ from errors import *
 import smtsolvers.solver as SOLVER
 from smtsolvers.blalgebra import simplify
 import generator.contract as CONTRACT
+import constraintbuilder.build_expression as EXP
 
 automaton = None
 
+
+def apply_axioms(expr):
+    global automaton
+    if SOLVER.z3reftoStr(expr) in ['True', 'true', 'False', 'false']:
+        return SOLVER.z3reftoStr(expr)
+    print('Before axioms:' + simplify(SOLVER.z3reftoStr(expr)))
+    for a in automaton.AXIOMS:
+        expr = SOLVER._and(a, expr)
+        sexpr = simplify(SOLVER.z3reftoStr(expr))
+        print('After axioms:' + sexpr)
+    return SOLVER.z3reftoStr(expr)
 
 def simplify_cond(contracts):
     print('\n\n ================ FINAL CONTRACTS AFTER SIMPLIFICATION ====================')
@@ -15,7 +27,8 @@ def simplify_cond(contracts):
     for contract in contracts:
         pre = contract.pre
         post = contract.post
-        preexpr = SOLVER.z3reftoStr(pre.expression)
+        #preexpr = SOLVER.z3reftoStr(pre.expression)
+        preexpr = apply_axioms(pre.expression)
         postexpr = SOLVER.z3reftoStr(post.expression)
         # logging.debug('Simplify the following:')
         # logging.debug('Precondition: ' + preexpr)

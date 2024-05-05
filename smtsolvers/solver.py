@@ -30,6 +30,10 @@ def _function(id, *args):
 
 def _or(first, second):
     """ Returns disjunction of first and second constraints """
+    if not isinstance(first, z3.z3.BoolRef):
+        first = _bool(first)
+    if not isinstance(second, z3.z3.BoolRef):
+        second = _bool(second)
     return simplify(Or(first, second))
 
 

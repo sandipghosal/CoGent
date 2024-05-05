@@ -49,20 +49,21 @@ def main(argv):
             raise ValueError()
 
         options, arguments = getopt.getopt(sys.argv[1:],
-                                           "hi:t:l:g:",
+                                           "hi:t:a:l:g:",
                                            ["help",
                                             "input=",
                                             "target=",
+                                            "axioms=",
                                             "log=",
                                             "log-level="])
 
-        xmlfile = target = logfile = None
+        xmlfile = target = afile = logfile = None
         logswitch = False
         level = logging.DEBUG
 
         for option, argument in options:
             if option in ("-h", "--help"):
-                print('python main.py -i <XML file> -t <Target Method> -l <Log file> -g <DEBUG|ERROR|WARNING>')
+                print('python main.py -i <XML file> -t <Target Method> -a <Axioms file> -l <Log file> -g <DEBUG|ERROR|WARNING>')
                 sys.exit()
 
             elif option in ("-i", "--input"):
@@ -70,6 +71,9 @@ def main(argv):
 
             elif option in ("-t", "--target"):
                 target = argument
+
+            elif option in ("-a", "--axioms"):
+                afile = argument
 
             elif option in ("-l", "--log"):
                 logswitch = True
@@ -106,6 +110,8 @@ def main(argv):
     # automaton = import_ra(xmlfile)
     config = ramodel.Config(xmlfile)
     config.config(target)
+    if afile:
+        config.get_axioms(afile)
     start = time.time()
     generate(config)
     end = time.time()

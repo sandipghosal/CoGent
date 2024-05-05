@@ -123,7 +123,7 @@ class Parser:
 
         node = self.term()
 
-        while self.index < len(self.tokens) and self.tokens[self.index].type in (PLUS, MINUS, AND, OR, NEQ, XOR, COMPARE, LEQ, GEQ, LTHAN, GTHAN):
+        while self.index < len(self.tokens) and self.tokens[self.index].type in (PLUS, MINUS, AND, OR, NEQ, XOR, COMPARE, LEQ, GEQ, LTHAN, GTHAN, IMPLY):
             token = self.tokens[self.index]
             self.match()
             # if token.type == PLUS:
@@ -154,12 +154,12 @@ class Parser:
         return node
 
     def condition(self):
-        # condition :: expr (COMPARE | LEQ | GEQ | GTHAN | LTHAN | NEQ ) expr :
+        # condition :: expr (COMPARE | LEQ | GEQ | GTHAN | LTHAN | NEQ | IMPLY) expr :
         node = self.expr()
 
         token = self.tokens[self.index]
 
-        if token.type in (COMPARE, LEQ, GEQ, GTHAN, LTHAN, NEQ):
+        if token.type in (COMPARE, LEQ, GEQ, GTHAN, LTHAN, NEQ, IMPLY):
             self.match()
             return BinaryOp(node, token, self.expr())
         else:

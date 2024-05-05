@@ -1,4 +1,5 @@
 from constraintbuilder.builder import Builder
+from constraintbuilder.expr_builder import LExprBuilder
 from constraintbuilder.lexer import Lexer
 from constraintbuilder.parser import Parser
 from constraintbuilder.stringparser import StringBuilder
@@ -19,7 +20,8 @@ operators = [
     r'<',
     r'>',
     r'<=',
-    r'>='
+    r'>=',
+    r'=>'
 ]
 
 ignore = [
@@ -106,3 +108,21 @@ def build_str(expression):
     tokens = lexer.create_tokens()
     expr = StringBuilder(tokens, expression).build()
     return expr
+
+
+def build_logical_expr(expression):
+    """
+    Convert a string expression to a logical expression of Boolean variables
+    :param expression: string expression
+    :return: BoolRef object
+
+    >>> print(build_logical_expr('(a0 and a1) => false'))
+    Implies(And(a0,a1), False)
+    """
+    expr = put_brackets(expression, 0)
+    lexer = Lexer(expr)
+    tokens = lexer.create_tokens()
+    tree = Parser(tokens, expr).parse()
+    builder = LExprBuilder()
+    exp = builder.build(tree)
+    return exp
