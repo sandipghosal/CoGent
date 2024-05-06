@@ -261,8 +261,8 @@ def bfs(startloc):
         visited.append(location)
         dependent[location] = set()
 
-        # if the destination location is not visited and the destination is reached by the target method
-        for dest in location.get_destinations(method=automaton.TARGET):
+        # if the destination location is not visited
+        for dest in location.get_destinations():
             dependent[location].add(dest)
             if dest not in visited:
                 queue.append(dest)
