@@ -12,6 +12,8 @@ automaton = None
 
 def apply_axioms(expr):
     global automaton
+    if automaton.AXIOMS == []:
+        return SOLVER.z3reftoStr(expr)
     if SOLVER.z3reftoStr(expr) in ['True', 'true', 'False', 'false']:
         return SOLVER.z3reftoStr(expr)
     print('Before axioms:' + simplify(SOLVER.z3reftoStr(expr)))
