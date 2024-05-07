@@ -82,6 +82,7 @@ token_expr = [
     (r'or',         OR),
     (r'Or',         OR),
     (r'!',          NOT),
+    (r'~',          NOT),
     (r'not',        NOT),
     (r'Not',        NOT),
     # (r'if',         IF),

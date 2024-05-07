@@ -87,3 +87,11 @@ def simplify(args):
     # expr1 = sympy_to_z3(expr)
     # expr = SYMPYL.simplify_logic(args)
     return str(expr)
+
+
+def count_vars(expr):
+    vars = [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9]
+    n = 0
+    for v in vars:
+        n = n + expr.count(str(v))
+    return n

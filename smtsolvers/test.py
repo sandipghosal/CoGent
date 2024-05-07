@@ -142,3 +142,8 @@ def generate(constraints, condition):
         if orig == 'MUS':
             mus.append(lits)
     return filter_subsets(mus, condition)
+
+
+import smtsolvers.blalgebra as SYM
+
+SYM.count_vars('(a0 or a1) and a2 and a1 and (a3 or a5)')
