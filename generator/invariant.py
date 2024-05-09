@@ -78,13 +78,16 @@ def replace_in_assignment(expr, registers) -> (set, z3.z3.BoolRef):
     # prepare a list of registers in the lhs of all the assignments
     lhs = list()
     for item in expr:
-        lhs.append(item[0])
+        if re.match(r'r[0-9]+', str(item[0])):
+            lhs.append(item[0])
 
     # add the missing assignments explicitly
     for r in list(set(registers) - set(lhs)):
         expr.append((r, r))
 
     for item in expr:
+        if re.match(r'r[0-9]+', str(item[0])) is None:
+            continue
         if re.search('[r]', str(item[1])):
             var = S._int(str(item[1]) + '\'')
             oldvars.add(var)
@@ -192,12 +195,13 @@ def get_transition(source, dest) -> RA.Transition:
     """
     global automaton
     logging.debug('\nSource: ' + str(source) + ', Destination: ' + str(dest))
-    transitions = source.get_transitions(destination=dest, method=automaton.TARGET)
+    transitions = source.get_transitions(destination=dest)
     logging.debug(str(transitions))
     return transitions
 
 
 def derive_sp(source, dest, registers, transitions) -> bool:
+
     sp = S._boolval(False)
 
     for tran in transitions:
@@ -235,6 +239,8 @@ def generate(x):
     if x in dependent.keys():
         # foreach child location derive the strongest postcondition
         for y in dependent[x]:
+            if x == y:
+                continue
             transitions = get_transition(x, y)
             logging.debug('Derive postcondition for ' + str(y))
             logging.debug('Registers in location ' + str(y) + ': ' + str(y.registers))
@@ -261,8 +267,8 @@ def bfs(startloc):
         visited.append(location)
         dependent[location] = set()
 
-        # if the destination location is not visited and the destination is reached by the target method
-        for dest in location.get_destinations(method=automaton.TARGET):
+        # if the destination location is not visited
+        for dest in location.get_destinations():
             dependent[location].add(dest)
             if dest not in visited:
                 queue.append(dest)
