@@ -21,7 +21,7 @@ def apply_axioms(expr):
     expr = SOLVER.z3reftoStr(expr)
 
     if automaton.AXIOMS == []:
-        return expr
+        return BALGEBRA.simplify(expr)
 
     if SOLVER.z3reftoStr(expr) in ['True', 'true', 'False', 'false']:
         return expr
