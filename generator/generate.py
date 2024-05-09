@@ -38,6 +38,7 @@ def generate(config):
             logging.debug('\n')
             logging.debug('Location specific contracts after adding invariants:')
             [logging.debug(c) for c in contracts]
+
     config.print_contracts('================ CONTRACTS PER LOCATION ====================')
     # refine(config)
     synthesize(config)

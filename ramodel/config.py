@@ -385,7 +385,7 @@ class Config:
                 logging.debug('Location: ' + str(location) + ': ' + str(contract))
         logging.debug('\n')
 
-    def config(self, target):
+    def config(self, target, afile=None):
         import_xml.import_ra(self)
         self.get_target(target)
         self.populate_observers()
@@ -393,3 +393,6 @@ class Config:
         # self.add_tranistions()
         self.symbols()
         self.literals()
+        if afile:
+            self.get_axioms(afile)
+

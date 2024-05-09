@@ -3,7 +3,6 @@ import itertools
 import logging
 
 import z3.z3
-
 import smtsolvers.solver as SOLVER
 import smtsolvers.MUS as MUS
 import smtsolvers.blalgebra as SIMPLIFIER
@@ -179,6 +178,8 @@ class Contract:
 #         # Do implication: appended observers => contract
 #         con.pre = new.pre.implies(con.pre)
 #     return contracts
+
+
 
 
 def add_invariants(contracts, invariants):

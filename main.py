@@ -109,9 +109,7 @@ def main(argv):
     # import the automaton from the XML file
     # automaton = import_ra(xmlfile)
     config = ramodel.Config(xmlfile)
-    config.config(target)
-    if afile:
-        config.get_axioms(afile)
+    config.config(target, afile)
     start = time.time()
     generate(config)
     end = time.time()
