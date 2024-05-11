@@ -83,7 +83,7 @@ def simplify(args):
     if args in ('True', 'False'):
         return args
     # expr = SYMPYL.simplify_logic(SYMPYB.to_dnf(args))
-    expr = SYMPYB.to_dnf(args, simplify=True)
+    expr = SYMPYB.to_dnf(args, simplify=True, force=True)
     # expr1 = sympy_to_z3(expr)
     # expr = SYMPYL.simplify_logic(args)
     return str(expr)
