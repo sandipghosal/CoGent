@@ -99,6 +99,24 @@ class Condition:
                     string = '(' + key.method.inputs[0] + ' == ' + key.method.inputs[1] + ')'
 
                 strexpr = strexpr.replace(literals[key], string)
+
+            elif key.method.name.find('__ltequality__') != -1:
+                string = ''
+                if len(key.method.inputs) == 1:
+                    string = key.method.inputs[0]
+                else:
+                    string = '(' + key.method.inputs[0] + ' < ' + key.method.inputs[1] + ')'
+
+                strexpr = strexpr.replace(literals[key], string)
+            elif key.method.name.find('__gtequality__') != -1:
+                string = ''
+                if len(key.method.inputs) == 1:
+                    string = key.method.inputs[0]
+                else:
+                    string = '(' + key.method.inputs[0] + ' > ' + key.method.inputs[1] + ')'
+
+                strexpr = strexpr.replace(literals[key], string)
+
             else:
                 # creating old value such as Not(a1)
                 old_false = 'Not(' + literals[key] + ')'
