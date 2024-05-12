@@ -23,6 +23,11 @@ def _intval(arg):
     return IntVal(arg)
 
 
+def _function(id, *args):
+    __id = Function(id, *args)
+    return __id
+
+
 def _or(first, second):
     """ Returns disjunction of first and second constraints """
     return simplify(Or(first, second))

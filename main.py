@@ -1,15 +1,12 @@
 import datetime
 import getopt
 import time
-import inspect
-import logging
 
-from customlogger.logging import CustomFormatter
+
 import os
 import ramodel.config
 from errors import *
 from generator import generate
-from import_xml import import_ra
 
 
 def setuplogger(switch, logfile_, loglevel=logging.DEBUG):
