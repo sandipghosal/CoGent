@@ -302,6 +302,10 @@ class Config:
             for comb in paramcomb:
                 method = ra.Method('__equality__' + str(comb), list(comb))
                 product_.append((method, comb))
+                method = ra.Method('__ltequality__' + str(comb), list(comb))
+                product_.append((method, comb))
+                method = ra.Method('__gtequality__' + str(comb), list(comb))
+                product_.append((method, comb))
 
         for m in observers:
             if m.inputs:
@@ -314,7 +318,9 @@ class Config:
         symbols = list()
         # Prepare symbols with the methods with different
         for t in product_:
-            if t[0].name.find('__equality__') == -1 and t[1]:
+            if (t[0].name.find('__equality__') == -1 and \
+                    t[0].name.find('__ltequality__') == -1 and \
+                    t[0].name.find('__gtequality__') == -1 and t[1]):
                 t[0].inputs = [t[1]]
             symbols.append(copy.deepcopy(t[0]))
 
@@ -327,6 +333,16 @@ class Config:
                     k.guard = constraintbuilder.build_expr(k.inputs[0] + ' == ' + k.inputs[1])
                 else:
                     k.guard = constraintbuilder.build_expr(k.inputs[0] + ' != ' + k.inputs[1])
+            if k.name.find('__ltequality__') != -1:
+                if v == 'TRUE':
+                    k.guard = constraintbuilder.build_expr(k.inputs[0] + ' < ' + k.inputs[1])
+                else:
+                    k.guard = constraintbuilder.build_expr(k.inputs[0] + ' >= ' + k.inputs[1])
+            if k.name.find('__gtequality__') != -1:
+                if v == 'TRUE':
+                    k.guard = constraintbuilder.build_expr(k.inputs[0] + ' > ' + k.inputs[1])
+                else:
+                    k.guard = constraintbuilder.build_expr(k.inputs[0] + ' <= ' + k.inputs[1])
 
         logging.debug('\n\nList of symbols:')
         logging.debug(self.SYMBOLS)

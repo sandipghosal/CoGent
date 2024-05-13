@@ -238,7 +238,9 @@ def condition_to_uf(condition):
     expression = SOLVER._boolval(True)
     for m in condition.monomials:
         for o in m.observers:
-            if o.method.name.find("__equality__") != -1:
+            if o.method.name.find("__equality__") != -1 \
+                    or o.method.name.find("__ltequality__") != -1 \
+                    or o.method.name.find("__gtequality__") != -1:
                 expression = SOLVER._and(expression, o.method.guard)
                 params.extend(prepare_inputs(o.method))
             else:
@@ -609,7 +611,9 @@ def observers():
         # first check if the symbol is relevant
         # search transitions at current location corresponding to the method k and output v
         # if transition found then collect the method create an observer and add into the observer list
-        if k.name.find('__equality__') != -1:
+        if k.name.find('__equality__') != -1 \
+                or k.name.find('__ltequality__') != -1 \
+                or k.name.find('__gtequality__') != -1 :
             # if both the modifier and post state query are not parameterized then no need to
             # add equality
             if not (automaton.TARGET.inputs and wp.method.inputs):

@@ -123,34 +123,43 @@ class Parser:
 
         node = self.term()
 
-        while self.index < len(self.tokens) and self.tokens[self.index].type in (PLUS, MINUS, AND, OR, NEQ, XOR, COMPARE):
+        while self.index < len(self.tokens) and self.tokens[self.index].type in (PLUS, MINUS, AND, OR, NEQ, XOR, COMPARE, LEQ, GEQ, LTHAN, GTHAN, IMPLY):
             token = self.tokens[self.index]
-            if token.type == PLUS:
-                self.match()
-            elif token.type == MINUS:
-                self.match()
-            elif token.type == AND:
-                self.match()
-            elif token.type == OR:
-                self.match()
-            elif token.type == NEQ:
-                self.match()
-            elif token.type == XOR:
-                self.match()
-            elif token.type == COMPARE:
-                self.match()
+            self.match()
+            # if token.type == PLUS:
+            #     self.match()
+            # elif token.type == MINUS:
+            #     self.match()
+            # elif token.type == AND:
+            #     self.match()
+            # elif token.type == OR:
+            #     self.match()
+            # elif token.type == NEQ:
+            #     self.match()
+            # elif token.type == XOR:
+            #     self.match()
+            # elif token.type == COMPARE:
+            #     self.match()
+            # elif token.type() == LEQ:
+            #     self.match()
+            # elif token.type() == GEQ:
+            #     self.match()
+            # elif token.type() == LTHAN:
+            #     self.match()
+            # elif token.type() == GTHAN:
+            #     self.match()
 
             node = BinaryOp(node, token, self.term())
 
         return node
 
     def condition(self):
-        # condition :: expr (COMPARE | LEQ | GEQ | GTHAN | LTHAN | NEQ ) expr :
+        # condition :: expr (COMPARE | LEQ | GEQ | GTHAN | LTHAN | NEQ | IMPLY) expr :
         node = self.expr()
 
         token = self.tokens[self.index]
 
-        if token.type in (COMPARE, LEQ, GEQ, GTHAN, LTHAN, NEQ):
+        if token.type in (COMPARE, LEQ, GEQ, GTHAN, LTHAN, NEQ, IMPLY):
             self.match()
             return BinaryOp(node, token, self.expr())
         else:

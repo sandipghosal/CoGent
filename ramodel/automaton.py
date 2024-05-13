@@ -21,11 +21,12 @@ class Method:
         self.outputs = outparams
         self.guard = None
 
+
     def __repr__(self):
         if self.name in ('True', 'False'):
             return str(self.name)
         elif self.name.find('__equality__') != -1:
-            string = str()
+            string = ''
             for i in range(len(self.inputs)):
                 if string == '':
                     string = str(self.inputs[i])
@@ -33,6 +34,22 @@ class Method:
                     string = string + ' == ' + self.inputs[i]
             return string
             # return str(self.guard)
+        elif self.name.find('__ltequality__') != -1:
+            string = ''
+            for j in range(len(self.inputs)):
+                if string == '':
+                    string = str(self.inputs[j])
+                else:
+                    string = string + '<' + self.inputs[j]
+            return string
+        elif self.name.find('__gtequality__') != -1:
+            string = ''
+            for k in range(len(self.inputs)):
+                if string == '':
+                    string = str(self.inputs[k])
+                else:
+                    string = string + '>' + self.inputs[k]
+            return string
         else:
             return self.name + '(' + ', '.join(self.inputs) + ')'
 
@@ -68,6 +85,16 @@ class Observer(Method):
         if self.method.name in ('True', 'False'):
             return str(self.method)
         elif self.method.name.find('__equality__') != -1:
+            if not self.output:
+                return str(self.method)
+            else:
+                return '(' + str(self.method) + ')' if self.output.name == 'TRUE' else 'Not(' + str(self.method) + ')'
+        elif self.method.name.find('__ltequality__') != -1:
+            if not self.output:
+                return str(self.method)
+            else:
+                return '(' + str(self.method) + ')' if self.output.name == 'TRUE' else 'Not(' + str(self.method) + ')'
+        elif self.method.name.find('__gtequality__') != -1:
             if not self.output:
                 return str(self.method)
             else:

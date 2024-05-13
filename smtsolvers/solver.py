@@ -30,6 +30,10 @@ def _function(id, *args):
 
 def _or(first, second):
     """ Returns disjunction of first and second constraints """
+    if not isinstance(first, z3.z3.BoolRef):
+        first = _bool(first)
+    if not isinstance(second, z3.z3.BoolRef):
+        second = _bool(second)
     return simplify(Or(first, second))
 
 
@@ -50,6 +54,22 @@ def _ne(first, second):
 
 def _eq(first, second):
     return first == second
+
+
+def _lt(first, second):
+    return first < second
+
+
+def _gt(first, second):
+    return first > second
+
+
+def _leq(first, second):
+    return first <= second
+
+
+def _geq(first, second):
+    return first >= second
 
 
 def _implies(antecedent, consequent):
@@ -136,7 +156,7 @@ def check_sat(vars, antecedent, consequent=None):
         expr = _and(antecedent, _neg(consequent))
     else:
         expr = _neg(antecedent)
-    logging.debug('Negation of implication: ' + str(expr))
+    # logging.debug('Negation of implication: ' + str(expr))
     # Add exists parameters and registers
     if vars != []:
         expr = _exists(vars, expr)
