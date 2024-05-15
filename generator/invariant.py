@@ -27,6 +27,15 @@ def parents_of_location(loc) -> list:
     return parents
 
 
+def replace_constants(expr):
+    if automaton.CONSTANTS:
+        const = set()
+        for k, v in automaton.CONSTANTS.items():
+            const.add((S._int(k), S._intval(v)))
+        return S.do_substitute(expr, const)
+    else:
+        return expr
+
 def replace_in_expr(expr) -> (set, z3.z3.BoolRef):
     """
     Replace each register variable in the expression with a new variable
@@ -49,7 +58,9 @@ def replace_in_expr(expr) -> (set, z3.z3.BoolRef):
         if v.find('p') != -1:
             v_old = S._int(v)
         oldvars.add(v_old)
-    return oldvars, S.do_substitute(expr, list_subs)
+    expr = S.do_substitute(expr, list_subs)
+    expr = replace_constants(expr)
+    return oldvars, expr
 
 
 def replace_in_assignment(expr, registers) -> (set, z3.z3.BoolRef):
