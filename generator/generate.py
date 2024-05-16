@@ -1,6 +1,7 @@
 import itertools
 import logging
 
+
 from generator.calculatewp import get_wp
 from generator.contract import get_contracts
 from generator.simplify import synthesize

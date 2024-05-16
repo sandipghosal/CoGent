@@ -617,9 +617,8 @@ def observers():
         # first check if the symbol is relevant
         # search transitions at current location corresponding to the method k and output v
         # if transition found then collect the method create an observer and add into the observer list
-        if k.name.find('__equality__') != -1 \
-                or k.name.find('__ltequality__') != -1 \
-                or k.name.find('__gtequality__') != -1 :
+        o = None
+        if k.name.find('__equality__') != -1:
             # if both the modifier and post state query are not parameterized then no need to
             # add equality
             if not (automaton.TARGET.inputs and wp.method.inputs):
@@ -628,6 +627,8 @@ def observers():
             m = copy.deepcopy(k)
             o = ra.Observer(method=m, output=automaton.OUTPUTS[v])
             o.literal = automaton.LITERALS[o]
+        elif k.name.find('__ltequality__') != -1 or k.name.find('__gtequality__') != -1 :
+            pass
         else:
             # do not consider the same query in the pre that is there in post with same parameter
             # if k == wp.method and k.inputs != wp.method.inputs:
@@ -651,7 +652,8 @@ def observers():
             o = ra.Observer(method=m, output=automaton.OUTPUTS[v])
             o.literal = automaton.LITERALS[o]
 
-        observers.append(o)
+        if o: observers.append(o)
+        
     return observers
 
 
