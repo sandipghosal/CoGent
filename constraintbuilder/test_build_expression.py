@@ -26,3 +26,9 @@ def test_build_expr():
     expr = BE.build_expr(constraint)
     recvd_expr = S.z3reftoStr(expr)
     assert recvd_expr == desired_expr
+
+    constraint = '(a0 and a1) => false'
+    desired_expr = 'Implies(And(a0,a1), False)'
+    expr = BE.build_expr(constraint)
+    recvd_expr = S.z3reftoStr(expr)
+    assert recvd_expr == desired_expr
