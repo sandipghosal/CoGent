@@ -255,7 +255,28 @@ def get_constants():
     return constants
 
 
-def get_methods():
+def get_methods_with_const_params(current_methods, constants):
+    methods = dict()
+    for transitions in ROOT.iter(TRANSITIONS):
+        for t in transitions.iter(TRANSITION):
+            symbol = t.attrib[SYMBOL]
+            if symbol not in list(current_methods.keys()):
+                continue
+            params = current_methods[symbol].inputs
+            if len(params):
+                guard = ''
+                for g in t.iter(GUARD):
+                    guard = g.text
+                # temporary solution: consider there is only one input param which needs to be replaced by c1/c2/c3/c4
+                # better solution: use solver
+                for c in list(constants.keys()):
+                    if c in guard:
+                        methods[symbol] = Method(name=symbol, inparams=[c])
+    return methods
+
+
+
+def get_methods(constants):
     # methods = {name : Method Object}
     methods = dict()
     for inputs in ROOT.iter(INPUTS):
@@ -264,7 +285,9 @@ def get_methods():
             params = list()
             for param in symbol.iter(PARAM):
                 params.append(param.attrib[NAME])
-            methods[name] = Method(name, params)
+            methods[name] = Method(name=name, inparams=params)
+
+    #methods = get_methods_with_const_params(methods, constants)
 
     logging.debug('Map of input symbols imported from the file:')
     logging.debug(methods)
@@ -274,8 +297,8 @@ def get_methods():
 def extract(tree, config):
     global ROOT
     ROOT = tree.getroot()
-    config.METHODS = get_methods()
     config.CONSTANTS = get_constants()
+    config.METHODS = get_methods(config.CONSTANTS)
     config.REGISTERS = get_registers()
     config.LOCATIONS = get_locations()
     config.START_LOCATION = config.LOCATIONS[get_start_location()]

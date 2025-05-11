@@ -287,30 +287,40 @@ class Config:
 
         # assuming observer methods have only one input parameter 'b0'
         # form the list of parameters
-        params = set(['b0'])
+        params = list(['b0'])
         for x in self.TARGET.inputs:
-            params.add(x)
+            params.append(x)
 
-        params = list(params)
+        # add constants into a list of constants
+        consts = list()
+        for c in self.CONSTANTS:
+            consts.append(c)
+
+        #params = list(params)
+        # perform cross-product for two lists: params X consts
+        param_comb = list(itertools.product(params, consts))
+
+        # also add all possible combinations of two parameters b0, p1, ...
+        param_comb = param_comb + list(itertools.combinations(params, 2))
+
         product_ = list()
-
         # if the target method has input parameters then compute all possible equalities,
         # e.g., (p1 == b0), (p1 == p1), etc.
         if len(self.TARGET.inputs):
             # obtain all possible combinations of parameters
-            paramcomb = list(itertools.combinations(params, 2))
-            for comb in paramcomb:
-                method = ra.Method('__equality__' + str(comb), list(comb))
+            #paramcomb = list(itertools.combinations(params, 2))
+            for comb in param_comb:
+                method = ra.Method('__equality__' + str(comb), list(comb), constants=self.CONSTANTS)
                 product_.append((method, comb))
-                method = ra.Method('__ltequality__' + str(comb), list(comb))
+                method = ra.Method('__ltequality__' + str(comb), list(comb), constants=self.CONSTANTS)
                 product_.append((method, comb))
-                method = ra.Method('__gtequality__' + str(comb), list(comb))
+                method = ra.Method('__gtequality__' + str(comb), list(comb), constants=self.CONSTANTS)
                 product_.append((method, comb))
 
         for m in observers:
             if m.inputs:
                 # cross product of parameterized observer and list of parameters
-                product_ = product_ + list(itertools.product([m], params))
+                product_ = product_ + list(itertools.product([m], params + consts))
             else:
                 # adding non-parameterized observer into the list with blank parameter
                 product_ = product_ + [(m, '')]

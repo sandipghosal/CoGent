@@ -15,9 +15,15 @@ class Output:
 
 class Method:
     # Instantiate a method with its name and list of input parameters
-    def __init__(self, name, inparams=None, outparams=None) -> None:
+    def __init__(self, name, inparams=None, outparams=None, constants=None) -> None:
         self.name = name
-        self.inputs = inparams
+        self.inputs = list()
+        # tuple to convert constant.keys() into a hashable type
+        if constants!=None and (set(constants.keys()).intersection(set(inparams))):
+            for x in inparams:
+                self.inputs.append(str(constants[x]) if x in tuple(constants.keys()) else x)
+        else:
+            self.inputs = inparams
         self.outputs = outparams
         self.guard = None
 

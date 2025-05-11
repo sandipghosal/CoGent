@@ -60,6 +60,9 @@ class Builder(NodeVisitor):
 
     def visit_Variable(self, node):
         return S._int(node.value)
+    
+    def visit_IntConstant(self, node):
+        return S._intval(node.value)
 
 
     def build(self, tree):

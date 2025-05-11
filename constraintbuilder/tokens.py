@@ -6,6 +6,7 @@
 # List of delimiters
 BOOL        =   'BOOL'        # boolean variable
 ID          =   'ID'        # variable identifier
+CONST       =   'CONSTNAT'  # a int constant
 SPACE       =   'SPACE'       # ' '
 NEWLINE     =   'NEWLINE'     # \n
 TAB         =   'TAB'         # \t
@@ -107,6 +108,6 @@ token_expr = [
     # (r'[0-9]+[.][0-9]+',         FLOAT),
     # (r'[0-9]+',                  INT),
     # (r'downgrade',               DOWNGRADE),
-    (r'[A-Za-z_][A-Za-z0-9_]*',  ID)
-
+    (r'[A-Za-z_][A-Za-z0-9_]*',  ID),
+    (r'[0-9]*', CONST)
 ]

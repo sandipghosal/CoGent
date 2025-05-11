@@ -30,6 +30,8 @@ class Lexer:
 
     def __init__(self, expression_):
         self.expression = expression_
+
+
     def create_tokens(self):
         """ Create a list of token objects for a given expression """
         # create an empty token list
