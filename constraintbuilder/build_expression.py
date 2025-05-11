@@ -1,5 +1,5 @@
 from constraintbuilder.builder import Builder
-from constraintbuilder.expr_builder import LExprBuilder
+#from constraintbuilder.expr_builder import LExprBuilder
 from constraintbuilder.lexer import Lexer
 from constraintbuilder.parser import Parser
 from constraintbuilder.stringparser import StringBuilder
@@ -123,6 +123,7 @@ def build_logical_expr(expression):
     lexer = Lexer(expr)
     tokens = lexer.create_tokens()
     tree = Parser(tokens, expr).parse()
-    builder = LExprBuilder()
+    #builder = LExprBuilder()
+    builder = Builder()
     exp = builder.build(tree)
     return exp
