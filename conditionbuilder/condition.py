@@ -1,3 +1,4 @@
+import re
 import smtsolvers.solver as S
 from constraintbuilder import build_str
 from smtsolvers.blalgebra import simplify
@@ -90,43 +91,48 @@ class Condition:
         # strexpr = str(simplify(strexpr))
         if strexpr in ('True', 'False'):
             return strexpr
-        for key in literals.keys():
-            if key.method.name.find('__equality__') != -1:
+        pattern = r'a\d+'
+        matches = re.findall(pattern, strexpr)
+        for v in sorted(matches, key=len, reverse=True):
+            for key in literals.keys():
+                if literals[key] != v:
+                    continue
+                
                 string = ''
-                if len(key.method.inputs) == 1:
-                    string = key.method.inputs[0]
+                if key.method.name.find('__equality__') != -1:
+                    if len(key.method.inputs) == 1:
+                        string = key.method.inputs[0]
+                    else:
+                        string = '(' + key.method.inputs[0] + ' == ' + key.method.inputs[1] + ')'
+
+                    strexpr = strexpr.replace(literals[key], string)
+
+                elif key.method.name.find('__ltequality__') != -1:
+                    if len(key.method.inputs) == 1:
+                        string = key.method.inputs[0]
+                    else:
+                        string = '(' + key.method.inputs[0] + ' < ' + key.method.inputs[1] + ')'
+
+                    strexpr = strexpr.replace(literals[key], string)
+
+                elif key.method.name.find('__gtequality__') != -1:
+                    if len(key.method.inputs) == 1:
+                        string = key.method.inputs[0]
+                    else:
+                        string = '(' + key.method.inputs[0] + ' > ' + key.method.inputs[1] + ')'
+
+                    strexpr = strexpr.replace(literals[key], string)
+
                 else:
-                    string = '(' + key.method.inputs[0] + ' == ' + key.method.inputs[1] + ')'
-
-                strexpr = strexpr.replace(literals[key], string)
-
-            elif key.method.name.find('__ltequality__') != -1:
-                string = ''
-                if len(key.method.inputs) == 1:
-                    string = key.method.inputs[0]
-                else:
-                    string = '(' + key.method.inputs[0] + ' < ' + key.method.inputs[1] + ')'
-
-                strexpr = strexpr.replace(literals[key], string)
-            elif key.method.name.find('__gtequality__') != -1:
-                string = ''
-                if len(key.method.inputs) == 1:
-                    string = key.method.inputs[0]
-                else:
-                    string = '(' + key.method.inputs[0] + ' > ' + key.method.inputs[1] + ')'
-
-                strexpr = strexpr.replace(literals[key], string)
-
-            else:
-                # creating old value such as Not(a1)
-                old_false = 'Not(' + literals[key] + ')'
-                new_false = 'Not(' + str(key.method) + ')'
-                # new_false = '(' + str(key.method) + ' == FALSE)'
-                old_true = literals[key]
-                new_true = '(' + str(key.method) + ')'
-                # new_true = '(' + str(key.method) + ' == TRUE)'
-                strexpr = strexpr.replace(old_false, new_false)
-                strexpr = strexpr.replace(old_true, new_true)
+                    # creating old value such as Not(a1)
+                    old_false = 'Not(' + literals[key] + ')'
+                    new_false = 'Not(' + str(key.method) + ')'
+                    # new_false = '(' + str(key.method) + ' == FALSE)'
+                    old_true = literals[key]
+                    new_true = '(' + str(key.method) + ')'
+                    # new_true = '(' + str(key.method) + ' == TRUE)'
+                    strexpr = strexpr.replace(old_false, new_false)
+                    strexpr = strexpr.replace(old_true, new_true)
 
         return strexpr
 

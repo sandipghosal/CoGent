@@ -1,5 +1,5 @@
 import logging
-
+import smtsolvers.solver as S
 
 class Output:
     def __init__(self, name, params=None):
@@ -15,22 +15,29 @@ class Output:
 
 class Method:
     # Instantiate a method with its name and list of input parameters
-    def __init__(self, name, inparams=None, outparams=None) -> None:
+    def __init__(self, name, inparams=None, outparams=None, constants=None) -> None:
         self.name = name
         self.inputs = inparams
         self.outputs = outparams
         self.guard = None
+        self.constant = constants 
 
 
     def __repr__(self):
         if self.name in ('True', 'False'):
             return str(self.name)
+        elif self.name.find('__constant__') != -1:
+            string = self.inputs[0] + '==' + self.inputs[1]
+            return string
         elif self.name.find('__equality__') != -1:
             string = ''
             for i in range(len(self.inputs)):
                 if string == '':
                     string = str(self.inputs[i])
                 else:
+                    # if self.constant and self.inputs[i] in self.constant:
+                    #     string = string + ' == ' + str(self.constant[self.inputs[i]])
+                    # else:
                     string = string + ' == ' + self.inputs[i]
             return string
             # return str(self.guard)
@@ -50,7 +57,16 @@ class Method:
                 else:
                     string = string + '>' + self.inputs[k]
             return string
+        elif self.name.find('__expression__') != -1:
+            return S.z3reftoStr(self.guard)
         else:
+            # if self.inputs in list(self.constant.keys()):
+            #     string = self.name + '('
+            #     for i in range(len(self.inputs)):
+            #         if self.inputs[i] in self.constant and self.constant:
+            #             string = string + (str(self.constant[self.inputs[i]]) if i==0 else ',' + str(self.constant[self.inputs[i]]))
+            #     return string + ')'
+            # else:
             return self.name + '(' + ', '.join(self.inputs) + ')'
 
     def __hash__(self):

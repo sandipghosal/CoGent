@@ -255,7 +255,7 @@ def get_constants():
     return constants
 
 
-def get_methods():
+def get_methods(config):
     # methods = {name : Method Object}
     methods = dict()
     for inputs in ROOT.iter(INPUTS):
@@ -264,7 +264,7 @@ def get_methods():
             params = list()
             for param in symbol.iter(PARAM):
                 params.append(param.attrib[NAME])
-            methods[name] = Method(name, params)
+            methods[name] = Method(name, params, constants=config.CONSTANTS)
 
     logging.debug('Map of input symbols imported from the file:')
     logging.debug(methods)
@@ -274,8 +274,8 @@ def get_methods():
 def extract(tree, config):
     global ROOT
     ROOT = tree.getroot()
-    config.METHODS = get_methods()
     config.CONSTANTS = get_constants()
+    config.METHODS = get_methods(config)
     config.REGISTERS = get_registers()
     config.LOCATIONS = get_locations()
     config.START_LOCATION = config.LOCATIONS[get_start_location()]

@@ -41,6 +41,10 @@ class Builder(NodeVisitor):
             return S._leq(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == IMPLY:
             return S._implies(self.visit(node.left), self.visit(node.right))
+        elif node.operator.type == PLUS:
+            return S._add(self.visit(node.left), self.visit(node.right))
+        elif node.operator.type == MINUS:
+            return S._sub(self.visit(node.left), self.visit(node.right))
         else:
             raise ValueNotFound('Node not found: ' + str(node))
 
@@ -60,6 +64,9 @@ class Builder(NodeVisitor):
 
     def visit_Variable(self, node):
         return S._int(node.value)
+
+    def visit_IntConstant(self, node):
+        return S._intval(node.value)
 
 
     def build(self, tree):

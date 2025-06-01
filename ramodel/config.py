@@ -121,7 +121,7 @@ class Config:
 
     # List of all Symbols as a tuple (symbol truthvalue)
     # symbol is an object of the method
-    SYMBOLS = dict()
+    SYMBOLS = list()
 
     # List of methods that characterizes each location of an automata, e.g., isfull() or isempty()
     STATE_SYMBOLS = list()
@@ -281,18 +281,46 @@ class Config:
         for key in observers.keys():
             self.OBSERVERS[key] = ra.Observer(observers[key])
 
+    def create_guards():
+        pass
+
     def symbols(self):
         """ get all observer methods and associate truth values with them"""
         observers = [copy.deepcopy(x.method) for x in self.OBSERVERS.values()]
 
+        product_ = list()
+
         # assuming observer methods have only one input parameter 'b0'
         # form the list of parameters
         params = set(['b0'])
+
+        # add all possible equalities with b0 and constants
+        # E.g., (b0 == c0), (b0==c1), etc.
+        # for c in self.CONSTANTS:
+        #     consts.append(c)
+        #     comb = ('b0', c)
+        #     method = ra.Method('__equality__' + str(comb), list(comb), constants=self.CONSTANTS)
+        #     product_.append((method, comb)),
+        
+        # add constants and corresponding values, e.g., (c1==0), (c2==1), etc.
+        # for c in self.CONSTANTS:
+        #     comb = (c, str(self.CONSTANTS[c]))
+        #     method = ra.Method('__constant__' + str(comb), list(comb))
+        #     product_.append((method, comb))
+        
+        # for k1 in self.CONSTANTS.keys():
+        #     for k2 in self.CONSTANTS.keys():
+        #         if self.CONSTANTS[k2] == self.CONSTANTS[k1] + 1:
+        #             comb = (k1, k2)
+        #             method = ra.Method('__expression__' + str(comb), list(comb))
+        #             method.guard = constraintbuilder.build_expr(k1 + ' == (' + k2 + '- 1)')
+        #             product_.append((method, comb)) 
+
+
         for x in self.TARGET.inputs:
             params.add(x)
 
         params = list(params)
-        product_ = list()
 
         # if the target method has input parameters then compute all possible equalities,
         # e.g., (p1 == b0), (p1 == p1), etc.
@@ -307,7 +335,8 @@ class Config:
                 method = ra.Method('__gtequality__' + str(comb), list(comb))
                 product_.append((method, comb))
 
-        for m in observers:
+
+        for m in observers: 
             if m.inputs:
                 # cross product of parameterized observer and list of parameters
                 product_ = product_ + list(itertools.product([m], params))
@@ -315,16 +344,54 @@ class Config:
                 # adding non-parameterized observer into the list with blank parameter
                 product_ = product_ + [(m, '')]
 
+        # # find the maximum number of parameters an observer accepts
+        # n = 0
+        # for o in observers:
+        #     if len(o.inputs) > n:
+        #         n = len(o.inputs)
+
+        # # take additional parameters as b1, b2, number is equal to maximum number of parameters
+        # # E.g., if n=2 then we shall add b1, and b2
+        # extra_var = list()
+        # for i in range(1, n+1):
+        #     extra_var.append('b' + str(i))
+        
+        # create a pair of observer and additional variable assuming
+        # each observer can take maximum one parameter
+        for o in observers:
+                if o.inputs:
+                    product_ = product_ + [(o, 'b1')]
+
+        comb = ('b0', 'b1')
+        method = ra.Method('__expression__' + str(comb), list(comb))
+        method.guard = constraintbuilder.build_expr('b1 == (b0 - 1)')
+        product_.append((method, comb))
+        method = ra.Method('__equality__' + str(comb), list(comb))
+        product_.append((method, comb))
+        # method = ra.Method('__expression__' + str(comb), list(comb))
+        # method.guard = constraintbuilder.build_expr('b0 == (b1 - 1)')
+        # product_.append((method, comb))
+
         symbols = list()
         # Prepare symbols with the methods with different
         for t in product_:
             if (t[0].name.find('__equality__') == -1 and \
                     t[0].name.find('__ltequality__') == -1 and \
-                    t[0].name.find('__gtequality__') == -1 and t[1]):
+                    t[0].name.find('__gtequality__') == -1 and \
+                    t[0].name.find('__expression__') == -1 and t[1]):
                 t[0].inputs = [t[1]]
             symbols.append(copy.deepcopy(t[0]))
 
-        self.SYMBOLS = [(copy.deepcopy(x), y) for x in symbols for y in ['TRUE', 'FALSE']]
+        for x in symbols:
+            # if x.name.find('__expression__') != -1:
+            #         self.SYMBOLS.append((copy.deepcopy(x), 'TRUE'))
+            # elif x.name.find('__constant__') != -1:
+            #         self.SYMBOLS.append((copy.deepcopy(x), 'TRUE'))
+            # else:
+            for y in ['TRUE', 'FALSE']:
+                self.SYMBOLS.append((copy.deepcopy(x),  y))
+
+        # self.SYMBOLS = [(copy.deepcopy(x), y) for x in symbols for y in ['TRUE', 'FALSE']]
 
         # set the guard of equalities according to values True and False
         for k, v in self.SYMBOLS:
@@ -333,12 +400,12 @@ class Config:
                     k.guard = constraintbuilder.build_expr(k.inputs[0] + ' == ' + k.inputs[1])
                 else:
                     k.guard = constraintbuilder.build_expr(k.inputs[0] + ' != ' + k.inputs[1])
-            if k.name.find('__ltequality__') != -1:
+            elif k.name.find('__ltequality__') != -1:
                 if v == 'TRUE':
                     k.guard = constraintbuilder.build_expr(k.inputs[0] + ' < ' + k.inputs[1])
                 else:
                     k.guard = constraintbuilder.build_expr(k.inputs[0] + ' >= ' + k.inputs[1])
-            if k.name.find('__gtequality__') != -1:
+            elif k.name.find('__gtequality__') != -1:
                 if v == 'TRUE':
                     k.guard = constraintbuilder.build_expr(k.inputs[0] + ' > ' + k.inputs[1])
                 else:

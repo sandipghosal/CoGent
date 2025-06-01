@@ -30,7 +30,7 @@ ignore = [
     r'\n'
 ]
 
-operand = [r'[A-Za-z_][A-Za-z0-9_]*']
+operand = [r'[A-Za-z_][A-Za-z0-9_]*|[0-9]*']
 
 brackets = r'[\(\)]'
 

@@ -423,8 +423,12 @@ def apply_equality(contracts):
 
 
 def get_observer(observers, constraint):
+    args = list()
+    for c in automaton.CONSTANTS:
+        args.append((SOLVER._int(c), SOLVER._intval(automaton.CONSTANTS[c])))
     for x in observers:
-        if MUS.isequal(constraint, x.method.guard):
+        guard = SOLVER.do_substitute(x.method.guard, args)
+        if MUS.isequal(constraint, guard):
             return copy.deepcopy(x)
 
 
@@ -601,9 +605,46 @@ def get_conditions(observers):
     :return: list of conditions
     """
     conditions = set()
+    args = list()
+    for c in automaton.CONSTANTS:
+        args.append((SOLVER._int(c), SOLVER._intval(automaton.CONSTANTS[c])))
+
     for o in observers:
-        conditions.add(o.method.guard)
+        guard = SOLVER.do_substitute(o.method.guard, args)
+        conditions.add(guard)
     return list(conditions)
+
+def prune_symbols():
+    """ Remove some symbols such as issize(p1) and issize(b0) when
+    the corresponding guard has a comparison with constant e.g, c1, c2, etc.
+    In that case, there could be only two cases: issize(c1) and !issize(c1)
+    """
+    # get all the transitions in current location
+    # if the method for a transition has constant in guard
+    # then keep that symbol with b1 and remove same symbols with different parameters
+    # if issize(p1) has a guard p1 == c1 then keep issize(b1) and remove issize(p1)
+    trans = location.get_transitions(destination=location)
+    symbols = list(automaton.SYMBOLS)
+    for t in trans:
+        # gather all symbols that has name as the tranistion method's name
+        sym_list = [(k, v) for k, v in symbols if t.method.name in k.name]
+        guard = SOLVER.z3reftoStr(t.method.guard)
+        # find the constant parameter present in the guard of the tranistion method
+        const_param = None
+        for c in automaton.CONSTANTS:
+            if guard.find(c) != -1:
+                const_param = c
+                break
+        # if no constant param is present in the guard, remove all symbols with constant parameters
+        # and keep only symbols with parameters b0, p1, p2...
+        # otherwise keep only the symbol with const_param and remove other symbols with different parameters
+        if const_param is None:
+            symbols = [x for x in symbols if not (x in sym_list and x[0].inputs and x[0].inputs[0] in ['b1'])]
+            # [symbols.remove(x) for x in sym_list for c in automaton.CONSTANTS if x[0].inputs == [c]]
+        else:
+            # [symbols.remove(x) for x in sym_list if x[0].inputs != [const_param]]
+            symbols = [x for x in symbols if not (x in sym_list and x[0].inputs != ['b1'])]
+    return symbols
 
 
 def observers():
@@ -612,14 +653,17 @@ def observers():
     For example, contains(p1) maybe removed when contains(b0) is present.
     """
     observers = list()
+    symbols = prune_symbols()
 
-    for k, v in automaton.SYMBOLS:
+    for k, v in symbols:
         # first check if the symbol is relevant
         # search transitions at current location corresponding to the method k and output v
         # if transition found then collect the method create an observer and add into the observer list
         if k.name.find('__equality__') != -1 \
                 or k.name.find('__ltequality__') != -1 \
-                or k.name.find('__gtequality__') != -1 :
+                or k.name.find('__gtequality__') != -1 \
+                or k.name.find('__expression__') != -1 \
+                or k.name.find('__constant__') != -1:
             # if both the modifier and post state query are not parameterized then no need to
             # add equality
             if not (automaton.TARGET.inputs and wp.method.inputs):

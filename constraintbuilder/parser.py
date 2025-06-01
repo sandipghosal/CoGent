@@ -34,6 +34,12 @@ class Variable(AST):
         self.token = token
         self.value = token.value
 
+class IntConstant(AST):
+    def __init__(self, token):
+        self.token = token
+        self.value = int(token.value)
+
+
 
 ############################
 # PARSER
@@ -97,6 +103,11 @@ class Parser:
             node = self.variable()
             self.match()  # for ID
             return node
+        elif token.type == CONST:
+            node = self.constant()
+            self.match()
+            return node
+
 
     def term(self):
         # term: factor ((MUL|DIV) factor)*
@@ -169,6 +180,12 @@ class Parser:
         # variable :: ID
         node = Variable(self.tokens[self.index])
         return node
+    
+    def constant(self):
+        # constant :: [0-9]*
+        node = IntConstant(self.tokens[self.index])
+        return node
+
 
     def parse(self):
         return self.condition()

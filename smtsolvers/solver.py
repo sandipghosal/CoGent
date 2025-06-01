@@ -76,6 +76,12 @@ def _implies(antecedent, consequent):
     """ Returns implication where first implies second """
     return simplify(Implies(antecedent, consequent))
 
+def _add(first, second):
+    return first + second
+
+def _sub(first, second):
+    return first - second
+
 
 def _exists(list_, arg):
     return Exists(list_, arg)
@@ -140,14 +146,67 @@ def do_check(*args):
     return s.check()
 
 
-def equivalence(f1, f2):
-    fm1 = f1
-    fm2 = f2
 
-    if do_check(fm1, Not(fm2)) == unsat:
+# def unify_variables(expr, var_map):
+#     subs = [(v, var_map[str(v)]) for v in get_vars(expr)]
+#     return substitute(expr, subs)
+
+
+# def get_vars(expr):
+#     vars = set()
+#     def collect(e):
+#         if e is vars:
+#             return
+#         if is_const(e) and e.decl().kind() == Z3_OP_UNINTERPRETED:
+#             vars.add(e)
+#         for ch in e.children():
+#             collect(ch)
+#     collect(expr)
+#     return vars
+
+
+# def check_equivalence(f1, f2):
+#     # Collect all variable names
+#     # vars1 = get_vars(f1)
+#     # vars2 = get_vars(f2)
+#     # all_var_names = set(str(v) for v in vars1.union(vars2))
+
+#     # # Create a shared variable map
+#     # shared_vars = {name: Int(name) for name in all_var_names}
+
+#     # # Substitute variables in both formulas
+#     # f1_shared = unify_variables(f1, shared_vars)
+#     # f2_shared = unify_variables(f2, shared_vars)
+
+#     # Check logical equivalence
+#     s = Solver()
+#     s.add(Xor(f1_shared, f2_shared))
+#     if s.check() == unsat:
+#         return True
+#     else:
+#         return False
+
+
+
+
+def check_equivalence(f1, f2):
+    # mapping = list()
+    # mapping.append((_int('b0'), _int('b0')))
+    # mapping.append((_int('b1'), _int('b1')))
+    # mapping.append((_int('p1'), _int('p1')))
+
+    # fm = Not(And(Implies(f1, f2), Implies(f2, f1)))
+    fm = (f1 != f2)
+
+    # expr = substitute(fm, [(k[0], k[1]) for k in mapping])
+
+    if do_check(fm) == unsat:
         return True
     else:
         return False
+    
+
+
 
 
 def check_sat(vars, antecedent, consequent=None):

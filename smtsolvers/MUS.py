@@ -6,10 +6,17 @@ import smtsolvers.solver as SOLVER
 
 
 def isequal(clause1, clause2):
-    if sorted(list(str(clause1))) == sorted(list(str(clause2))):
+    # if sorted(list(str(clause1))) == sorted(list(str(clause2))):
+    #     return True
+    # else:
+    #     return False
+    if str(clause1) == str(clause2):
         return True
     else:
         return False
+    
+    # return SOLVER.check_equivalence(clause1, clause2)
+    
 
 
 def equalMUSes(first, second):
@@ -226,7 +233,7 @@ def enumerate_sets(csolver, map):
 def generate(constraints, condition):
     muses = list()
     constraints = list(set(constraints + [condition]))
-    constraints = get_unique_constraints(constraints)
+    # constraints = get_unique_constraints(constraints)
     logging.debug('Final list of guards: ' + str(constraints))
     csolver = SubsetSolver(constraints)
     msolver = MapSolver(n=csolver.n)

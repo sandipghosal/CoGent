@@ -34,7 +34,12 @@ def get_implication(args):
     result = None
     # for each of the tuple in the list
     for index in range(len(args)):
-        wp = S.weakest_pre(args[index][1].method.guard, args[index][0].assignments)
+        condition = args[index][1].method.guard
+        subs = list(args[index][0].assignments)
+        for c in automaton.CONSTANTS:
+            subs.append((S._int(c), S._intval(automaton.CONSTANTS[c])))
+        # wp = S.weakest_pre(args[index][1].method.guard, args[index][0].assignments)
+        wp = S.weakest_pre(condition, subs)
         if index == 0:
             result = S._implies(args[index][0].method.guard, wp)
         else:
