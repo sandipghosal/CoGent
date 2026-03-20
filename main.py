@@ -4,7 +4,7 @@ import time
 
 
 import os
-import ramodel.config
+from ramodel.automaton_new import Automaton
 from errors import *
 from generator import generate
 
@@ -107,13 +107,16 @@ def main(argv):
 
     logging.debug('target method:' + target)
     # import the automaton from the XML file
+    A = Automaton.from_file(xmlfile)
     # automaton = import_ra(xmlfile)
-    config = ramodel.Config(xmlfile)
-    config.config(target, afile)
+    # config = ramodel.Config(xmlfile)
+    # config.config(target, afile)
     start = time.time()
-    generate(config)
-    end = time.time()
-    logging.debug('\n')
+    exit
+    # generate(config)
+    # end = time.time()
+    # logging.debug('\n')
+
     logging.debug('\nTime taken for synthesis:' + str(end - start) + 'sec')
 
     print('\nTime taken for synthesis:' + str(end - start) + 'sec')
