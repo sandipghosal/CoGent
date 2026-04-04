@@ -7,9 +7,13 @@ import os
 from ramodel.automaton_new import Automaton
 from errors import *
 from generator import generate
+from customlogger import setuplogger
+
+# Main logging handler
+log = None
 
 
-def setuplogger(switch, logfile_, loglevel=logging.DEBUG):
+def configure_logger(switch, logfile_, loglevel=logging.DEBUG) -> logging.Logger:
     # logger_name = inspect.stack()[1][3]
     # logger = logging.getLogger(logger_name)
     if switch:
@@ -26,6 +30,7 @@ def setuplogger(switch, logfile_, loglevel=logging.DEBUG):
             logfile = logfile_
 
         print('log file created:' + logfile)
+        log = setuplogger("cogent", loglevel)
         logging.basicConfig(filename=logfile, filemode='w', level=loglevel,
                             format="%(name)s - %(levelname)s : %(message)s")
         # fhandler = logging.FileHandler(logfile)
@@ -35,12 +40,14 @@ def setuplogger(switch, logfile_, loglevel=logging.DEBUG):
     else:
         logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel,
                             format="%(name)s - %(levelname)s : %(message)s")
+        log = setuplogger("cogent", logging.NOTSET)
+
         # chandler = logging.StreamHandler()
         # chandler.setLevel(logging.DEBUG)
         # chandler.setFormatter(CustomFormatter())
         # logger.addHandler(chandler)
 
-    # return logger
+    return log
 
 
 def main(argv):
@@ -91,21 +98,25 @@ def main(argv):
         sys.exit(2)
 
     # set up the logging environment
-    setuplogger(switch=logswitch, logfile_=logfile, loglevel=level)
+    log = configure_logger(switch=logswitch, logfile_=logfile, loglevel=level)
+
+    log.debug("Hello")
 
     # check if user has provided the XML file
     try:
         if not xmlfile:
+            log.critical('XML file not found')
             raise InputsNotFound('XML file not found')
         elif not target:
+            log.critical('Target method not found')
             raise InputsNotFound('Target method not found')
         else:
-            logging.debug('input XML file path:' + xmlfile)
+            log.debug('input XML file path:' + xmlfile)
     except (InputsNotFound, getopt.GetoptError):
         print('python main.py -h [--help]')
         sys.exit(2)
 
-    logging.debug('target method:' + target)
+    log.debug('target method:' + target)
     # import the automaton from the XML file
     A = Automaton.from_file(xmlfile)
     # automaton = import_ra(xmlfile)
@@ -114,10 +125,10 @@ def main(argv):
     start = time.time()
     exit
     # generate(config)
-    # end = time.time()
+    end = time.time()
     # logging.debug('\n')
 
-    logging.debug('\nTime taken for synthesis:' + str(end - start) + 'sec')
+    log.debug('\nTime taken for synthesis:' + str(end - start) + 'sec')
 
     print('\nTime taken for synthesis:' + str(end - start) + 'sec')
 
