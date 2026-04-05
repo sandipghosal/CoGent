@@ -1,10 +1,16 @@
-import logging
+
+from customlogger import getlogger
 
 from pathlib import Path
 from enum import Enum, auto
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from typing import List, Callable, Dict, Optional, Tuple, Union    
+
+
+log = getlogger(__name__)
+
+
 
 ######################################
 # Classes and Function for Data Types
@@ -320,6 +326,7 @@ class Automaton:
     
     @staticmethod
     def from_file(path: Union[str, Path]) -> "Automaton":   # The quotes are a forward reference (used when the class may not yet be fully defined)
+        log.debug('Extracting automaton from file ' + path)
         return Automaton.from_string(Path(path).read_text(encoding="utf-8"))
     
     @staticmethod
@@ -332,6 +339,7 @@ class Automaton:
 
         alphabet = root.find("alphabet")
         if alphabet is None:
+            log.critical('Missing tag <alphabet>')
             raise ValueError("Missing tag <alphabet>")
         
         in_node = alphabet.find("inputs")
@@ -339,6 +347,7 @@ class Automaton:
             for sym in in_node.findall("symbol"):
                 name = sym.get("name")
                 if not name:
+                    log.critical('Missing <name> tag for symbol '+ sym)
                     raise ValueError("Missing <name> for <symbol> under <inputs>")
                 params: List[Param] = []
                 for p in sym.findall("param"):
@@ -346,12 +355,15 @@ class Automaton:
                     ptyp = parse_datatype(p.get("type"))
                     params.append(Param(name=pname, typ=ptyp))
                 inputs[name] = Method(name=name, params=params)
+        log.debug('List of Input symbols: ')
+        log.debug(inputs)
 
         out_node = alphabet.find("outputs")
         if out_node is not None:
             for sym in out_node.findall("symbol"):
                 name = sym.get("name")
                 if not name:
+                    log.critical('Missing <name> tag for symbol '+ sym)
                     raise ValueError("Missing <name> for <symbol> under <outputs>")
                 params: List[Param] = []
                 for p in sym.findall("param"):
@@ -361,7 +373,8 @@ class Automaton:
 
                 kind = parse_output(name=name, params=params)
                 outputs[name] = Output(name=name, params=params, kind=kind)
-
+        log.debug('List of Output symbols: ')
+        log.debug(outputs)
 
         # (B) Get constants
         constants = ConstantPool()
@@ -372,6 +385,7 @@ class Automaton:
                 ctyp = parse_datatype(c.get("type"))
                 cval = cast_value((c.text or "").strip(), ctyp)
                 constants.add(Constant(name=cname, typ=ctyp, value=cval))
+            log.debug('List of Constants: ' + str(constants))
 
 
         # (C) Get registers
@@ -383,22 +397,27 @@ class Automaton:
                 rtyp = parse_datatype(v.get("type"))
                 rval = cast_value((v.text or "").strip(), rtyp)
                 registers.append(Register(name=rname, typ=rtyp, value=rval))
+        log.debug('List of Registers: ' + str(registers))
 
         # (D) Get Locations
         locations: Dict[str, Location] = {}
         loc_node = root.find("locations")
         if loc_node is None:
+            log.critical('<locations> tag is missing')
             raise ValueError("Missing <locations> in XML")
         init_seen = False
         for l in loc_node.findall("location"):
             lname = l.get("name")
             if not lname:
+                log.critical('Missing <name> for location' + l)
                 raise ValueError("Missing <name> for <location>")
             initial = (l.get("initial") == "true")
             locations[lname] = Location(name=lname, start_loc=initial)
             init_seen = init_seen or initial
         if not init_seen:
+            log.critical('Start location not specified')
             raise ValueError("No start location specified")
+        log.debug('List of locations: ' + str(locations))
         
         # (E) Get Transitions
         transitions : List[Transition] = []
@@ -409,10 +428,12 @@ class Automaton:
                 dest_name = t.get("to")
                 sym_name = t.get("symbol")
                 if src_name is None or dest_name is None or sym_name is None:
+                    log.critical('Either <from> or <to> or <symbol> is missing for ' + str(t))
                     raise ValueError("<transition> must have <from>" \
                     "/<to>/<symbol> attributes")
                 
                 if src_name not in locations or dest_name not in locations:
+                    log.critical('Either ' + src_name + ' or ' + dest_name+ ' is not specified earlier in XML file')
                     raise KeyError(f"Transition references to unknown location:{src_name}->{dest_name}")
                 
                 guard_text: Optional[str] = None
@@ -429,6 +450,7 @@ class Automaton:
                         to = asn.get("to")
                         expr = (asn.text or "").strip()
                         if not to:
+                            log.critical('<assign> tag is missing for transition from'+ src_name)
                             raise ValueError("<assign> missing 'to' attribute")
                         assigns.append(Assignment(target_reg=to, expr=expr))
                 
@@ -444,6 +466,7 @@ class Automaton:
                 elif sym_name in outputs:
                     resolved_output = outputs[sym_name]
                 else:
+                    log.critical('Transition uses unknown symbol ' + sym_name)
                     raise KeyError("Transition uses unknown symbol '{sym_name}'")
                 
                 # create the Transition object
@@ -457,6 +480,9 @@ class Automaton:
                     output_params_binding=out_params_binding
                 )
                 transitions.append(tr)
+        log.debug('List of Transitions: ')
+        log.debug('\n'.join(str(tr) for tr in transitions))
+        log.debug('\n')
 
         A = Automaton(
             inputs=inputs,
@@ -559,6 +585,9 @@ class Automaton:
                 new_transitions.append(tr)
 
         self.transitions = new_transitions
+        log.debug('List of transitions after merging in and out transitions: ')
+        log.debug('\n'.join(str(t) for t in self.transitions))
+        log.debug('\n')
 
     
     def _merge_same_io_transition_by_or(self, 
@@ -677,6 +706,10 @@ class Automaton:
                 new_transitions.append(tr)
 
         self.transitions = new_transitions
+        log.debug("List of Transitions after ORing guards of same IO transitions with same output: ")
+        log.debug('\n'.join(str(t) for t in self.transitions))
+        log.debug('\n')
+
 
     def _build_indices(self) -> None:
         '''

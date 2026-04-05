@@ -44,7 +44,7 @@ class CustomFormatter(logging.Formatter):
         return f"{color}{message}{self.RESET}"
     
 
-def setuplogger(name: str, level: int = logging.DEBUG) -> logging.Logger:
+def getlogger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     '''
     Configure and return a colorized logger
     '''
@@ -57,8 +57,13 @@ def setuplogger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     if logger.handlers:
         return logger
     
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(level)
+    # console handler
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(level)
+
+    # file handler
+    fh = logging.FileHandler('cogent')
+    fh.setLevel(level)
 
     formatter = CustomFormatter(
         "%(filename)s %(lineno)d - %(levelname)-8s :: %(message)s"
@@ -69,7 +74,10 @@ def setuplogger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     #     datefmt="%H:%M:%S",
     # )
 
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    ch.setFormatter(formatter)
+    fh.setFormatter(formatter)
+
+    logger.addHandler(ch)
+    logger.addHandler(fh)
 
     return logger

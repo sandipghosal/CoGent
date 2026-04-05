@@ -7,7 +7,7 @@ import os
 from ramodel.automaton_new import Automaton
 from errors import *
 from generator import generate
-from customlogger import setuplogger
+from customlogger import getlogger
 
 # Main logging handler
 log = None
@@ -30,22 +30,12 @@ def configure_logger(switch, logfile_, loglevel=logging.DEBUG) -> logging.Logger
             logfile = logfile_
 
         print('log file created:' + logfile)
-        log = setuplogger("cogent", loglevel)
-        logging.basicConfig(filename=logfile, filemode='w', level=loglevel,
-                            format="%(name)s - %(levelname)s : %(message)s")
-        # fhandler = logging.FileHandler(logfile)
-        # fhandler.setLevel(loglevel)
-        # fhandler.setFormatter(CustomFormatter())
-        # logger.addHandler(fhandler)
+        log = getlogger("cogent", loglevel)
+        
     else:
-        logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel,
-                            format="%(name)s - %(levelname)s : %(message)s")
-        log = setuplogger("cogent", logging.NOTSET)
-
-        # chandler = logging.StreamHandler()
-        # chandler.setLevel(logging.DEBUG)
-        # chandler.setFormatter(CustomFormatter())
-        # logger.addHandler(chandler)
+        # logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel,
+        #                     format="%(name)s - %(levelname)s : %(message)s")
+        log = getlogger("cogent", logging.DEBUG)
 
     return log
 
@@ -100,8 +90,6 @@ def main(argv):
     # set up the logging environment
     log = configure_logger(switch=logswitch, logfile_=logfile, loglevel=level)
 
-    log.debug("Hello")
-
     # check if user has provided the XML file
     try:
         if not xmlfile:
@@ -123,7 +111,6 @@ def main(argv):
     # config = ramodel.Config(xmlfile)
     # config.config(target, afile)
     start = time.time()
-    exit
     # generate(config)
     end = time.time()
     # logging.debug('\n')
