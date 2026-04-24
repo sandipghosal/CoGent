@@ -4,7 +4,8 @@ import time
 
 
 import os
-from ramodel.automaton_new import Automaton
+import ramodel.config
+# from ramodel.automaton_new import Automaton
 from errors import *
 from generator import generate
 from customlogger import getlogger
@@ -105,13 +106,20 @@ def main(argv):
         sys.exit(2)
 
     log.debug('target method:' + target)
+
+    # ++++++++++++ NEW CODE START +++++++++++++
     # import the automaton from the XML file
-    A = Automaton.from_file(xmlfile)
+    # A = Automaton.from_file(xmlfile)
+
+    # ++++++++++++ NEW CODE END +++++++++++++
+
+    # ++++++++++++ OLD CODE START ++++++++++++++
+    # import the automaton from the XML file
     # automaton = import_ra(xmlfile)
-    # config = ramodel.Config(xmlfile)
-    # config.config(target, afile)
+    config = ramodel.Config(xmlfile)
+    config.config(target, afile)
     start = time.time()
-    # generate(config)
+    generate(config)
     end = time.time()
     # logging.debug('\n')
 

@@ -206,7 +206,7 @@ def check_equivalence(f1, f2):
         return False
     
 
-
+    
 
 
 def check_sat(vars, antecedent, consequent=None):

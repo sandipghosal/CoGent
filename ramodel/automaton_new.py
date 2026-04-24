@@ -706,7 +706,7 @@ class Automaton:
                 new_transitions.append(tr)
 
         self.transitions = new_transitions
-        log.debug("List of Transitions after ORing guards of same IO transitions with same output: ")
+        log.debug("List of Transitions after AND-ing guards of same IO transitions with same output: ")
         log.debug('\n'.join(str(t) for t in self.transitions))
         log.debug('\n')
 
