@@ -186,7 +186,7 @@ class Z3Solver(Solver):
     def _str(self, argv):
         return obj_to_string(argv)
     
-    def to_cnf(fml):
+    def to_cnf(self, fml):
         atms = atoms(fml)
         s = z3.Solver()
         snot = z3.Solver()
@@ -199,7 +199,7 @@ class Z3Solver(Solver):
             snot.add(clause)
 
 
-    def to_dnf(fml):
+    def to_dnf(self, fml):
         clauses = self.to_cnf(fml)
         d_clauses = list()
         for c in clauses:
