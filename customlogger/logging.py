@@ -66,7 +66,7 @@ def getlogger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     fh.setLevel(level)
 
     formatter = CustomFormatter(
-        "%(filename)s %(lineno)d - %(levelname)-8s :: %(message)s"
+        "%(filename)-20s %(lineno)4d - %(levelname)-8s :: %(message)s"
     )
 
     # formatter = ColorFormatter(
