@@ -8,8 +8,10 @@ import ramodel.config
 # from ramodel.automaton_new import Automaton
 from errors import *
 from generator import generate
-from customlogger import getlogger
+from solvers.factory import get_solver
 
+
+from customlogger import getlogger
 # Main logging handler
 log = None
 
@@ -47,16 +49,18 @@ def main(argv):
             raise ValueError()
 
         options, arguments = getopt.getopt(sys.argv[1:],
-                                           "hi:t:a:l:g:",
+                                           "hi:t:a:s:l:g:",
                                            ["help",
                                             "input=",
                                             "target=",
                                             "axioms=",
+                                            "solver=",
                                             "log=",
                                             "log-level="])
 
         xmlfile = target = afile = logfile = None
         logswitch = False
+        solver = None
         level = logging.DEBUG
 
         for option, argument in options:
@@ -72,6 +76,9 @@ def main(argv):
 
             elif option in ("-a", "--axioms"):
                 afile = argument
+
+            elif option in ("-s", "--solver"):
+                solver = get_solver(argument)
 
             elif option in ("-l", "--log"):
                 logswitch = True
@@ -106,6 +113,9 @@ def main(argv):
         sys.exit(2)
 
     log.debug('target method:' + target)
+
+    
+
 
     # ++++++++++++ NEW CODE START +++++++++++++
     # import the automaton from the XML file
