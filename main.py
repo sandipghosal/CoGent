@@ -78,7 +78,7 @@ def main(argv):
                 afile = argument
 
             elif option in ("-s", "--solver"):
-                solver = get_solver(argument)
+                solver = argument
 
             elif option in ("-l", "--log"):
                 logswitch = True
@@ -114,7 +114,10 @@ def main(argv):
 
     log.debug('target method:' + target)
 
-    
+    if solver is None:
+        SOLVER = get_solver('z3')
+    else:
+        SOLVER = get_solver(solver)
 
 
     # ++++++++++++ NEW CODE START +++++++++++++
