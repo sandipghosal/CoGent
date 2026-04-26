@@ -1,0 +1,464 @@
+root - DEBUG : input XML file path:input/array/paul.xml
+root - DEBUG : target method:I_push
+root - DEBUG : Map of input symbols imported from the file:
+root - DEBUG : {'I_remove': I_remove(p1), 'I_isempty': I_isempty(), 'I_isfull': I_isfull(), 'I_push': I_push(p1), 'I_add': I_add(p1, p2)}
+root - DEBUG : Map of constants imported from the file:
+root - DEBUG : {'c1': 0, 'c2': 1, 'c3': 2}
+root - DEBUG : List of registers imported from the file:
+root - DEBUG : ['r1', 'r2', 'r3', 'r4']
+root - DEBUG : Map of locations imported from the file:
+root - DEBUG : {'l0': l0, 'l1': l1, 'l2': l2, 'l3': l3, 'l4': l4, 'l5': l5, 'l6': l6, 'l7': l7, 'l8': l8, 'l9': l9, 'l10': l10, 'l11': l11, 'l12': l12, 'l13': l13, 'l14': l14, 'l15': l15, 'l16': l16, 'l17': l17, 'l18': l18, 'l19': l19, 'l20': l20}
+root - DEBUG : Map of output symbols imported from the file:
+root - DEBUG : {'V': V, 'FALSE': FALSE, 'TRUE': TRUE, '__ERR': __ERR}
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_push(p1):True:[(r1, p1)]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_add(p1, p2):c1 == p1:[(r1, p2)]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_add(p1, p2):And(Not(c2 == p1), Not(c3 == p1), Not(c1 == p1)):[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_add(p1, p2):c2 == p1:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_add(p1, p2):c3 == p1:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_isempty():True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_isfull():True:[]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_remove(p1):True:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l1:V:True:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l4:TRUE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l5:FALSE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_add(p1, p2):c3 == p1:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_add(p1, p2):c1 == p1:[(r2, p2)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_add(p1, p2):c2 == p1:[(r2, p2)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_remove(p1):Not(r1 == p1):[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_remove(p1):r1 == p1:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_push(p1):True:[(r2, p1)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_isempty():True:[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l6:I_isfull():True:[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l7:V:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l8:__ERR:True:[]:None:l9
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_push(p1):True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_add(p1, p2):True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_remove(p1):True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_isempty():True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_isfull():True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l10:V:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_remove(p1):r1 == p1:[(r1, r2)]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_remove(p1):r2 == p1:[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_remove(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1, p2):c1 == p1:[(r3, p2)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1, p2):c2 == p1:[(r3, p2)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1, p2):c3 == p1:[(r3, p2)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_push(p1):True:[(r3, p1)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_isempty():True:[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_isfull():True:[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l12:V:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_remove(p1):r1 == p1:[(r1, r2), (r2, r3)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_remove(p1):r2 == p1:[(r2, r3)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_remove(p1):r3 == p1:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_remove(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_push(p1):True:[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_add(p1, p2):c1 == p1:[(r4, p2)]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_add(p1, p2):c2 == p1:[(r4, p2)]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_add(p1, p2):c3 == p1:[(r4, p2)]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_isfull():True:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_isempty():True:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l14:FALSE:True:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l15:FALSE:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l16:TRUE:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l17:FALSE:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l18:V:True:[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_remove(p1):r1 == p1:[(r1, r2), (r2, r3), (r3, r4)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_remove(p1):r2 == p1:[(r2, r3), (r3, r4)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_remove(p1):r3 == p1:[(r3, r4)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_remove(p1):r4 == p1:[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_remove(p1):And(Not(r1 == p1),
+    Not(r2 == p1),
+    Not(r3 == p1),
+    Not(r4 == p1)):[]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_push(p1):True:[]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_add(p1, p2):True:[]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_isempty():True:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l19:I_isfull():True:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l20:FALSE:True:[]:None:l19
+root - DEBUG : 
+
+New list of transitions after pruning:
+root - DEBUG : [l0:I_push(p1):True:[(r1, p1)]:V:l6, l0:I_add(p1, p2):c1 == p1:[(r1, p2)]:V:l6, l0:I_add(p1, p2):And(Not(c2 == p1), Not(c3 == p1), Not(c1 == p1)):[]:V:l0, l0:I_add(p1, p2):c2 == p1:[]:__ERR:l9, l0:I_add(p1, p2):c3 == p1:[]:__ERR:l9, l0:I_isempty():True:[]:TRUE:l0, l0:I_isfull():True:[]:FALSE:l0, l0:I_remove(p1):True:[]:V:l0, l6:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:V:l6, l6:I_add(p1, p2):c3 == p1:[]:__ERR:l9, l6:I_add(p1, p2):c1 == p1:[(r2, p2)]:V:l11, l6:I_add(p1, p2):c2 == p1:[(r2, p2)]:V:l11, l6:I_remove(p1):Not(r1 == p1):[]:V:l6, l6:I_remove(p1):r1 == p1:[]:V:l0, l6:I_push(p1):True:[(r2, p1)]:V:l11, l6:I_isempty():True:[]:FALSE:l6, l6:I_isfull():True:[]:FALSE:l6, l9:I_push(p1):True:[]:__ERR:l9, l9:I_add(p1, p2):True:[]:__ERR:l9, l9:I_remove(p1):True:[]:__ERR:l9, l9:I_isempty():True:[]:__ERR:l9, l9:I_isfull():True:[]:__ERR:l9, l11:I_remove(p1):r1 == p1:[(r1, r2)]:V:l6, l11:I_remove(p1):r2 == p1:[]:V:l6, l11:I_remove(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:V:l11, l11:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:V:l11, l11:I_add(p1, p2):c1 == p1:[(r3, p2)]:V:l13, l11:I_add(p1, p2):c2 == p1:[(r3, p2)]:V:l13, l11:I_add(p1, p2):c3 == p1:[(r3, p2)]:V:l13, l11:I_push(p1):True:[(r3, p1)]:V:l13, l11:I_isempty():True:[]:FALSE:l11, l11:I_isfull():True:[]:FALSE:l11, l13:I_remove(p1):r1 == p1:[(r1, r2), (r2, r3)]:V:l11, l13:I_remove(p1):r2 == p1:[(r2, r3)]:V:l11, l13:I_remove(p1):r3 == p1:[]:V:l11, l13:I_remove(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:V:l13, l13:I_push(p1):True:[]:V:l13, l13:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:V:l13, l13:I_add(p1, p2):c1 == p1:[(r4, p2)]:V:l19, l13:I_add(p1, p2):c2 == p1:[(r4, p2)]:V:l19, l13:I_add(p1, p2):c3 == p1:[(r4, p2)]:V:l19, l13:I_isfull():True:[]:TRUE:l13, l13:I_isempty():True:[]:FALSE:l13, l19:I_remove(p1):r1 == p1:[(r1, r2), (r2, r3), (r3, r4)]:V:l13, l19:I_remove(p1):r2 == p1:[(r2, r3), (r3, r4)]:V:l13, l19:I_remove(p1):r3 == p1:[(r3, r4)]:V:l13, l19:I_remove(p1):r4 == p1:[]:V:l13, l19:I_remove(p1):And(Not(r1 == p1),
+    Not(r2 == p1),
+    Not(r3 == p1),
+    Not(r4 == p1)):[]:V:l19, l19:I_push(p1):True:[]:V:l19, l19:I_add(p1, p2):True:[]:V:l19, l19:I_isempty():True:[]:FALSE:l19, l19:I_isfull():True:[]:FALSE:l19]
+root - DEBUG : 
+
+New list of locations after pruning:
+root - DEBUG : {'l0': l0, 'l2': l2, 'l3': l3, 'l6': l6, 'l9': l9, 'l11': l11, 'l13': l13, 'l19': l19}
+root - DEBUG : 
+
+New list of transitions after condensing:
+root - DEBUG : [l0:I_push(p1):True:[(r1, p1)]:V:l6, l0:I_add(p1, p2):c1 == p1:[(r1, p2)]:V:l6, l0:I_add(p1, p2):And(Not(c2 == p1), Not(c3 == p1), Not(c1 == p1)):[]:V:l0, l0:I_add(p1, p2):Or(c2 == p1, c3 == p1):[]:__ERR:l9, l0:I_add(p1, p2):c3 == p1:[]:__ERR:l9, l0:I_isempty():True:[]:TRUE:l0, l0:I_isfull():True:[]:FALSE:l0, l0:I_remove(p1):True:[]:V:l0, l6:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:V:l6, l6:I_add(p1, p2):c3 == p1:[]:__ERR:l9, l6:I_add(p1, p2):Or(c1 == p1, c2 == p1):[(r2, p2)]:V:l11, l6:I_add(p1, p2):c2 == p1:[(r2, p2)]:V:l11, l6:I_remove(p1):Not(r1 == p1):[]:V:l6, l6:I_remove(p1):r1 == p1:[]:V:l0, l6:I_push(p1):True:[(r2, p1)]:V:l11, l6:I_isempty():True:[]:FALSE:l6, l6:I_isfull():True:[]:FALSE:l6, l9:I_push(p1):True:[]:__ERR:l9, l9:I_add(p1, p2):True:[]:__ERR:l9, l9:I_remove(p1):True:[]:__ERR:l9, l9:I_isempty():True:[]:__ERR:l9, l9:I_isfull():True:[]:__ERR:l9, l11:I_remove(p1):Or(r1 == p1, r2 == p1):[(r1, r2)]:V:l6, l11:I_remove(p1):r2 == p1:[]:V:l6, l11:I_remove(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:V:l11, l11:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:V:l11, l11:I_add(p1, p2):Or(c1 == p1, c2 == p1, c3 == p1):[(r3, p2)]:V:l13, l11:I_add(p1, p2):c2 == p1:[(r3, p2)]:V:l13, l11:I_add(p1, p2):c3 == p1:[(r3, p2)]:V:l13, l11:I_push(p1):True:[(r3, p1)]:V:l13, l11:I_isempty():True:[]:FALSE:l11, l11:I_isfull():True:[]:FALSE:l11, l13:I_remove(p1):Or(r1 == p1, r2 == p1, r3 == p1):[(r1, r2), (r2, r3)]:V:l11, l13:I_remove(p1):r2 == p1:[(r2, r3)]:V:l11, l13:I_remove(p1):r3 == p1:[]:V:l11, l13:I_remove(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:V:l13, l13:I_push(p1):True:[]:V:l13, l13:I_add(p1, p2):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[]:V:l13, l13:I_add(p1, p2):Or(c1 == p1, c2 == p1, c3 == p1):[(r4, p2)]:V:l19, l13:I_add(p1, p2):c2 == p1:[(r4, p2)]:V:l19, l13:I_add(p1, p2):c3 == p1:[(r4, p2)]:V:l19, l13:I_isfull():True:[]:TRUE:l13, l13:I_isempty():True:[]:FALSE:l13, l19:I_remove(p1):Or(r1 == p1, r2 == p1, r3 == p1, r4 == p1):[(r1, r2), (r2, r3), (r3, r4)]:V:l13, l19:I_remove(p1):r2 == p1:[(r2, r3), (r3, r4)]:V:l13, l19:I_remove(p1):r3 == p1:[(r3, r4)]:V:l13, l19:I_remove(p1):r4 == p1:[]:V:l13, l19:I_remove(p1):And(Not(r1 == p1),
+    Not(r2 == p1),
+    Not(r3 == p1),
+    Not(r4 == p1)):[]:V:l19, l19:I_push(p1):True:[]:V:l19, l19:I_add(p1, p2):True:[]:V:l19, l19:I_isempty():True:[]:FALSE:l19, l19:I_isfull():True:[]:FALSE:l19]
+root - DEBUG : 
+
+List of symbols:
+root - DEBUG : [(p1 == b0, 'TRUE'), (p1 == b0, 'FALSE'), (I_isempty(), 'TRUE'), (I_isempty(), 'FALSE'), (I_isfull(), 'TRUE'), (I_isfull(), 'FALSE')]
+root - DEBUG : 
+
+List of literals:
+root - DEBUG : {p1 == b0: 'a0', I_isempty(): 'a1', I_isfull(): 'a2'}
+root - DEBUG : 
+
+=========== Starting Contract Generation =================
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l6
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l6
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l6
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l6
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((I_isfull()) and Not(I_isempty())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((I_isfull()) and Not(I_isempty())))} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l19
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l19
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l19
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l19
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+================ CONTRACTS PER LOCATION ====================
+root - DEBUG : Location: l0: {Not(((I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : Location: l0: {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : Location: l0: {Not(((I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : Location: l0: {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : Location: l6: {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : Location: l6: {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : Location: l6: {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : Location: l6: {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : Location: l11: {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : Location: l11: {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : Location: l11: {True} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : Location: l11: {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : Location: l13: {Not(((I_isfull()) and Not(I_isempty())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : Location: l13: {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : Location: l13: {True} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : Location: l13: {Not(((I_isfull()) and Not(I_isempty())))} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : Location: l19: {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : Location: l19: {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : Location: l19: {Not((Not(I_isempty()) and Not(I_isfull())))} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : Location: l19: {True} I_push(p1) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+Observer to Boolean literal mapping:
+root - DEBUG : p1 == b0 : a0
+root - DEBUG : I_isempty() : a1
+root - DEBUG : I_isfull() : a2
+root - DEBUG : 
+
+root - DEBUG : 
+
+===================== LOCATION INDEPENDENT CONTRACTS =====================
+root - DEBUG : {(Not(((I_isempty()) and Not(I_isfull()))) and Not((Not(I_isempty()) and Not(I_isfull()))) and Not(((I_isfull()) and Not(I_isempty()))))} I_push(p1) {(I_isempty())} :: True
+root - DEBUG : {True} I_push(p1) {Not(I_isempty())} :: True
+root - DEBUG : {(Not(((I_isempty()) and Not(I_isfull()))) and Not((Not(I_isempty()) and Not(I_isfull()))))} I_push(p1) {(I_isfull())} :: True
+root - DEBUG : {(Not((Not(I_isempty()) and Not(I_isfull()))) and Not(((I_isfull()) and Not(I_isempty()))))} I_push(p1) {Not(I_isfull())} :: True
+root - INFO : 
+
+ ================ FINAL CONTRACTS AFTER SIMPLIFICATION ====================
+root - INFO : {(I_isempty()) & (I_isfull())} I_push(p1) {(I_isempty())} :: True
+root - INFO : {True} I_push(p1) {~(I_isempty())} :: True
+root - INFO : {(I_isfull())} I_push(p1) {(I_isfull())} :: True
+root - INFO : {(I_isempty())} I_push(p1) {~(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Time taken for synthesis:0.07484197616577148sec

@@ -1,0 +1,1702 @@
+root - DEBUG : input XML file path:input/list.xml
+root - DEBUG : target method:I_insert
+root - DEBUG : Map of input symbols imported from the file:
+root - DEBUG : {'I_pop': I_pop(), 'I_contains': I_contains(p1), 'I_isfull': I_isfull(), 'I_isempty': I_isempty(), 'I_insert': I_insert(p1, p2), 'I_push': I_push(p1)}
+root - DEBUG : Map of constants imported from the file:
+root - DEBUG : {}
+root - DEBUG : List of registers imported from the file:
+root - DEBUG : ['r1', 'r2', 'r3']
+root - DEBUG : Map of locations imported from the file:
+root - DEBUG : {'l0': l0, 'l1': l1, 'l2': l2, 'l3': l3, 'l4': l4, 'l5': l5, 'l6': l6, 'l7': l7, 'l8': l8, 'l9': l9, 'l10': l10, 'l11': l11, 'l12': l12, 'l13': l13, 'l14': l14, 'l15': l15, 'l16': l16, 'l17': l17, 'l18': l18, 'l19': l19, 'l20': l20, 'l21': l21}
+root - DEBUG : Map of output symbols imported from the file:
+root - DEBUG : {'V': V, 'O_pop': O_pop, 'FALSE': FALSE, '__ERR': __ERR, 'TRUE': TRUE}
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_insert(p1, p2):True:[(r1, p2)]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_push(p1):True:[(r1, p1)]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_pop():True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_contains(p1):True:[]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_isfull():True:[]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_isempty():True:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l1:V:True:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l4:__ERR:True:[]:None:l9
+root - DEBUG : Transition created:
+root - DEBUG : l5:FALSE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l6:TRUE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_pop():True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_insert(p1, p2):Not(r1 == p1):[(r2, p2)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_insert(p1, p2):r1 == p1:[(r1, p2), (r2, r1)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_push(p1):True:[(r1, p1), (r2, r1)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_contains(p1):Not(r1 == p1):[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_contains(p1):r1 == p1:[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_isempty():True:[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_isfull():True:[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l8:O_pop:True:[(p1, r1)]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_insert(p1, p2):True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_push(p1):True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_pop():True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_contains(p1):True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_isempty():True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l9:I_isfull():True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l10:V:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_insert(p1, p2):Not(r1 == p1):[(r3, p2)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_insert(p1, p2):r1 == p1:[(r1, p2), (r2, r1), (r3, r2)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_push(p1):True:[(r1, p1), (r2, r1), (r3, r2)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_contains(p1):r1 == p1:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_contains(p1):r2 == p1:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_pop():True:[]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_isempty():True:[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_isfull():True:[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l12:V:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_insert(p1, p2):True:[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_push(p1):True:[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):r1 == p1:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):r2 == p1:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):r3 == p1:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_isfull():True:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_isempty():True:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_pop():True:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l14:FALSE:True:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l15:TRUE:True:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l16:TRUE:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l17:TRUE:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l18:O_pop:True:[(r1, r2), (p1, r1)]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l19:FALSE:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l20:FALSE:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l21:O_pop:True:[(r1, r2), (r2, r3), (p1, r1)]:None:l11
+root - DEBUG : 
+
+New list of transitions after pruning:
+root - DEBUG : [l0:I_insert(p1, p2):True:[(r1, p2)]:V:l7, l0:I_push(p1):True:[(r1, p1)]:V:l7, l0:I_pop():True:[]:__ERR:l9, l0:I_contains(p1):True:[]:FALSE:l0, l0:I_isfull():True:[]:FALSE:l0, l0:I_isempty():True:[]:TRUE:l0, l7:I_pop():True:[(p1, r1)]:O_pop:l0, l7:I_insert(p1, p2):Not(r1 == p1):[(r2, p2)]:V:l11, l7:I_insert(p1, p2):r1 == p1:[(r1, p2), (r2, r1)]:V:l11, l7:I_push(p1):True:[(r1, p1), (r2, r1)]:V:l11, l7:I_contains(p1):Not(r1 == p1):[]:FALSE:l7, l7:I_contains(p1):r1 == p1:[]:TRUE:l7, l7:I_isempty():True:[]:FALSE:l7, l7:I_isfull():True:[]:FALSE:l7, l9:I_insert(p1, p2):True:[]:__ERR:l9, l9:I_push(p1):True:[]:__ERR:l9, l9:I_pop():True:[]:__ERR:l9, l9:I_contains(p1):True:[]:__ERR:l9, l9:I_isempty():True:[]:__ERR:l9, l9:I_isfull():True:[]:__ERR:l9, l11:I_insert(p1, p2):Not(r1 == p1):[(r3, p2)]:V:l13, l11:I_insert(p1, p2):r1 == p1:[(r1, p2), (r2, r1), (r3, r2)]:V:l13, l11:I_push(p1):True:[(r1, p1), (r2, r1), (r3, r2)]:V:l13, l11:I_contains(p1):r1 == p1:[]:TRUE:l11, l11:I_contains(p1):r2 == p1:[]:TRUE:l11, l11:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l11, l11:I_pop():True:[(r1, r2), (p1, r1)]:O_pop:l7, l11:I_isempty():True:[]:FALSE:l11, l11:I_isfull():True:[]:FALSE:l11, l13:I_insert(p1, p2):True:[]:V:l13, l13:I_push(p1):True:[]:V:l13, l13:I_contains(p1):r1 == p1:[]:TRUE:l13, l13:I_contains(p1):r2 == p1:[]:TRUE:l13, l13:I_contains(p1):r3 == p1:[]:TRUE:l13, l13:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:FALSE:l13, l13:I_isfull():True:[]:TRUE:l13, l13:I_isempty():True:[]:FALSE:l13, l13:I_pop():True:[(r1, r2), (r2, r3), (p1, r1)]:O_pop:l11]
+root - DEBUG : 
+
+New list of locations after pruning:
+root - DEBUG : {'l0': l0, 'l2': l2, 'l3': l3, 'l7': l7, 'l9': l9, 'l11': l11, 'l13': l13}
+root - DEBUG : 
+
+New list of transitions after condensing:
+root - DEBUG : [l0:I_insert(p1, p2):True:[(r1, p2)]:V:l7, l0:I_push(p1):True:[(r1, p1)]:V:l7, l0:I_pop():True:[]:__ERR:l9, l0:I_contains(p1):True:[]:FALSE:l0, l0:I_isfull():True:[]:FALSE:l0, l0:I_isempty():True:[]:TRUE:l0, l7:I_pop():True:[(p1, r1)]:O_pop:l0, l7:I_insert(p1, p2):True:[(r2, p2)]:V:l11, l7:I_insert(p1, p2):r1 == p1:[(r1, p2), (r2, r1)]:V:l11, l7:I_push(p1):True:[(r1, p1), (r2, r1)]:V:l11, l7:I_contains(p1):Not(r1 == p1):[]:FALSE:l7, l7:I_contains(p1):r1 == p1:[]:TRUE:l7, l7:I_isempty():True:[]:FALSE:l7, l7:I_isfull():True:[]:FALSE:l7, l9:I_insert(p1, p2):True:[]:__ERR:l9, l9:I_push(p1):True:[]:__ERR:l9, l9:I_pop():True:[]:__ERR:l9, l9:I_contains(p1):True:[]:__ERR:l9, l9:I_isempty():True:[]:__ERR:l9, l9:I_isfull():True:[]:__ERR:l9, l11:I_insert(p1, p2):True:[(r3, p2)]:V:l13, l11:I_insert(p1, p2):r1 == p1:[(r1, p2), (r2, r1), (r3, r2)]:V:l13, l11:I_push(p1):True:[(r1, p1), (r2, r1), (r3, r2)]:V:l13, l11:I_contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l11, l11:I_contains(p1):r2 == p1:[]:TRUE:l11, l11:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l11, l11:I_pop():True:[(r1, r2), (p1, r1)]:O_pop:l7, l11:I_isempty():True:[]:FALSE:l11, l11:I_isfull():True:[]:FALSE:l11, l13:I_insert(p1, p2):True:[]:V:l13, l13:I_push(p1):True:[]:V:l13, l13:I_contains(p1):Or(r1 == p1, r2 == p1, r3 == p1):[]:TRUE:l13, l13:I_contains(p1):r2 == p1:[]:TRUE:l13, l13:I_contains(p1):r3 == p1:[]:TRUE:l13, l13:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:FALSE:l13, l13:I_isfull():True:[]:TRUE:l13, l13:I_isempty():True:[]:FALSE:l13, l13:I_pop():True:[(r1, r2), (r2, r3), (p1, r1)]:O_pop:l11]
+root - DEBUG : 
+
+List of symbols:
+root - DEBUG : [(p2 == b0, 'TRUE'), (p2 == b0, 'FALSE'), (p2 == p1, 'TRUE'), (p2 == p1, 'FALSE'), (b0 == p1, 'TRUE'), (b0 == p1, 'FALSE'), (I_contains(p2), 'TRUE'), (I_contains(p2), 'FALSE'), (I_contains(b0), 'TRUE'), (I_contains(b0), 'FALSE'), (I_contains(p1), 'TRUE'), (I_contains(p1), 'FALSE'), (I_isfull(), 'TRUE'), (I_isfull(), 'FALSE'), (I_isempty(), 'TRUE'), (I_isempty(), 'FALSE')]
+root - DEBUG : 
+
+List of literals:
+root - DEBUG : {p2 == b0: 'a0', p2 == p1: 'a1', b0 == p1: 'a2', I_contains(p2): 'a3', I_contains(b0): 'a4', I_contains(p1): 'a5', I_isfull(): 'a6', I_isempty(): 'a7'}
+root - DEBUG : 
+
+=========== Starting Contract Generation =================
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_contains(b0) == True
+root - DEBUG : Derived weakest precondition:p2 == b0
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == False, I_contains(b0) == False, I_contains(p1) == False, I_isfull() == False, I_isempty() == True]
+root - DEBUG : Guards for the candidates: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, p2 == b0, p2 == p1]
+root - DEBUG : Final list of guards: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), True, p2 == b0]
+root - DEBUG : MSS [b0 == p1, True, p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(p2 == p1), b0 == p1, p2 == b0]
+root - DEBUG : MUS [Not(p2 == b0), b0 == p1, p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), b0 == p1, True]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), True, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), p2 == b0, p2 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [p2 == b0]
+root - DEBUG : [b0 == p1, p2 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((b0 == p1) and (p2 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((b0 == p1) and (p2 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1, p2 == p1, Not(p2 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(b0 == p1, p2 == p1, Not(p2 == b0)))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((b0 == p1) and (p2 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(I_isfull()) and (I_isempty()))) or (p2 == b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_contains(b0) == False
+root - DEBUG : Derived weakest precondition:Not(p2 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == False, I_contains(b0) == False, I_contains(p1) == False, I_isfull() == False, I_isempty() == True]
+root - DEBUG : Guards for the candidates: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, p2 == b0, p2 == p1]
+root - DEBUG : Final list of guards: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), True, p2 == b0]
+root - DEBUG : MSS [b0 == p1, True, p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(p2 == p1), b0 == p1, p2 == b0]
+root - DEBUG : MUS [Not(p2 == b0), b0 == p1, p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), b0 == p1, True]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), True, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), p2 == b0, p2 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [Not(p2 == b0)]
+root - DEBUG : [Not(p2 == p1), b0 == p1]
+root - DEBUG : [Not(b0 == p1), p2 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {Not((p2 == b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not((p2 == b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(p2 == p1), b0 == p1, p2 == b0)
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(p2 == p1), b0 == p1, p2 == b0))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not((p2 == b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(b0 == p1), p2 == p1, p2 == b0)
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(b0 == p1), p2 == p1, p2 == b0))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(I_isfull()) and (I_isempty()))) or Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isfull()) and (I_isempty())))} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isfull()) and (I_isempty())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l7
+root - DEBUG : Observer method at post-state: I_contains(b0) == True
+root - DEBUG : Derived weakest precondition:Or(p2 == b0, r1 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == True, I_contains(p2) == False, I_contains(b0) == True, I_contains(b0) == False, I_contains(p1) == True, I_contains(p1) == False, I_isfull() == False, I_isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), r1 == p1, Not(r1 == p2), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p2, p2 == b0, Not(r1 == b0), p2 == p1]
+root - DEBUG : Final list of guards: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(Or(p2 == b0, r1 == b0)), Not(r1 == p2), r1 == p2, b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, p2 == b0, Not(r1 == b0), p2 == p1]
+root - DEBUG : MUS [Not(r1 == p2), r1 == p2]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == b0, Not(Or(p2 == b0, r1 == b0))]
+root - DEBUG : MUS [Not(r1 == p1), r1 == p1]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(Or(p2 == b0, r1 == b0)), r1 == p2, True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(p2 == p1), r1 == p1, r1 == p2]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(r1 == p2), True, r1 == p1, Not(r1 == b0), Not(Or(p2 == b0, r1 == b0))]
+root - DEBUG : MUS [Not(p2 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MUS [p2 == b0, Not(Or(p2 == b0, r1 == b0))]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), Not(r1 == p2), True, Not(r1 == p1), p2 == b0, Not(r1 == b0)]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), Not(r1 == p2), True, r1 == p1, p2 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [p2 == b0, Not(b0 == p1), r1 == p1, r1 == p2]
+root - DEBUG : MUS [p2 == b0, Not(r1 == b0), r1 == p2]
+root - DEBUG : MSS [r1 == p2, True, r1 == p1, p2 == b0, b0 == p1, r1 == b0, p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), r1 == p2, True, p2 == b0, Not(r1 == p1), r1 == b0]
+root - DEBUG : MUS [r1 == b0, Not(b0 == p1), p2 == p1, r1 == p2]
+root - DEBUG : MUS [Not(b0 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(r1 == p1), r1 == b0, b0 == p1]
+root - DEBUG : MUS [Not(r1 == p1), p2 == b0, r1 == p2, b0 == p1]
+root - DEBUG : MSS [b0 == p1, True, Not(r1 == p1), p2 == b0, p2 == p1, Not(r1 == p2), Not(r1 == b0)]
+root - DEBUG : MUS [Not(r1 == p1), p2 == p1, r1 == p2]
+root - DEBUG : MUS [Not(r1 == p1), r1 == b0, p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(p2 == p1), r1 == b0, r1 == p1, p2 == b0]
+root - DEBUG : MUS [r1 == p1, p2 == b0, Not(r1 == b0), p2 == p1]
+root - DEBUG : MUS [r1 == b0, Not(b0 == p1), r1 == p1]
+root - DEBUG : MUS [r1 == p1, p2 == b0, Not(r1 == p2), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == b0), b0 == p1]
+root - DEBUG : MUS [r1 == b0, p2 == b0, Not(r1 == p2)]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p2), p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(r1 == p2), b0 == p1, True, r1 == b0, r1 == p1, Not(p2 == b0)]
+root - DEBUG : MSS [r1 == p2, True, r1 == p1, Not(r1 == b0), Not(p2 == b0), Not(b0 == p1), Not(Or(p2 == b0, r1 == b0)), p2 == p1]
+root - DEBUG : MUS [Not(p2 == b0), r1 == p2, r1 == b0]
+root - DEBUG : MUS [Not(p2 == b0), r1 == p1, p2 == p1, r1 == b0]
+root - DEBUG : MUS [Not(p2 == b0), r1 == p1, r1 == p2, b0 == p1]
+root - DEBUG : MUS [Not(p2 == b0), p2 == p1, b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(Or(p2 == b0, r1 == b0)), b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, r1 == b0, Not(r1 == p2), Not(r1 == p1)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(Or(p2 == b0, r1 == b0)), r1 == p2, b0 == p1, True, Not(r1 == b0), Not(r1 == p1)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(Or(p2 == b0, r1 == b0)), Not(r1 == p2), b0 == p1, True, Not(r1 == b0), Not(r1 == p1)]
+root - DEBUG : MUS [Not(p2 == p1), r1 == b0, r1 == p2, b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(Or(p2 == b0, r1 == b0)), Not(r1 == p2), True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), Not(Or(p2 == b0, r1 == b0)), Not(r1 == p2), True, Not(r1 == p1), Not(r1 == b0), p2 == p1]
+root - DEBUG : MUS [Not(Or(p2 == b0, r1 == b0)), p2 == p1, b0 == p1]
+root - DEBUG : MUS [p2 == p1, Not(r1 == b0), r1 == p2, b0 == p1]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), True, r1 == b0, p2 == p1, Not(r1 == p2), Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == p2), p2 == p1, b0 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [r1 == b0]
+root - DEBUG : [p2 == b0]
+root - DEBUG : [r1 == p1, b0 == p1]
+root - DEBUG : [p2 == p1, b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(p2 == b0, Not(r1 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3], And(p2 == b0, Not(r1 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1, b0 == p1, Not(r1 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(r1 == p1, b0 == p1, Not(r1 == b0)))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(p2 == p1, b0 == p1, Not(r1 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(p2 == p1, b0 == p1, Not(r1 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == b0, Not(p2 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3], And(r1 == b0, Not(p2 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1, b0 == p1, Not(p2 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(r1 == p1, b0 == p1, Not(p2 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(p2 == p1, b0 == p1, Not(p2 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(p2 == p1, b0 == p1, Not(p2 == b0)))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(I_isempty()) and Not(I_isfull()))) or (I_contains(b0)) or (p2 == b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l7
+root - DEBUG : Observer method at post-state: I_contains(b0) == False
+root - DEBUG : Derived weakest precondition:And(Not(r1 == b0), Not(p2 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == True, I_contains(p2) == False, I_contains(b0) == True, I_contains(b0) == False, I_contains(p1) == True, I_contains(p1) == False, I_isfull() == False, I_isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), r1 == p1, Not(r1 == p2), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p2, p2 == b0, Not(r1 == b0), p2 == p1]
+root - DEBUG : Final list of guards: [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(r1 == p2), r1 == p2, b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0))), p2 == b0, Not(r1 == b0), p2 == p1]
+root - DEBUG : MUS [Not(r1 == p2), r1 == p2]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MUS [Not(p2 == b0), Not(And(Not(r1 == b0), Not(p2 == b0))), Not(r1 == b0)]
+root - DEBUG : MUS [Not(p2 == p1), r1 == p1, r1 == p2]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), r1 == p2, True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), Not(r1 == p2), True, Not(r1 == p1), p2 == b0, Not(r1 == b0), Not(And(Not(r1 == b0), Not(p2 == b0)))]
+root - DEBUG : MUS [Not(p2 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), r1 == p2, True, Not(r1 == p1), r1 == b0, Not(And(Not(r1 == b0), Not(p2 == b0))), p2 == b0]
+root - DEBUG : MUS [r1 == b0, b0 == p1, Not(r1 == p1)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(r1 == p2), b0 == p1, True, r1 == b0, r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0)))]
+root - DEBUG : MUS [Not(p2 == p1), r1 == b0, r1 == p2, b0 == p1]
+root - DEBUG : MSS [r1 == p2, b0 == p1, True, r1 == b0, Not(And(Not(r1 == b0), Not(p2 == b0))), p2 == b0, p2 == p1, r1 == p1]
+root - DEBUG : MUS [r1 == b0, Not(b0 == p1), r1 == p2, p2 == p1]
+root - DEBUG : MUS [r1 == p2, p2 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), p2 == b0, r1 == p2]
+root - DEBUG : MUS [r1 == b0, r1 == p1, Not(b0 == p1)]
+root - DEBUG : MUS [r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0))), Not(b0 == p1), r1 == p2]
+root - DEBUG : MSS [Not(b0 == p1), r1 == p2, True, r1 == p1, Not(p2 == b0), Not(r1 == b0), p2 == p1]
+root - DEBUG : MUS [Not(p2 == p1), Not(And(Not(r1 == b0), Not(p2 == b0))), r1 == p2, b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), r1 == p2, b0 == p1, True, Not(p2 == b0), Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(And(Not(r1 == b0), Not(p2 == b0))), Not(b0 == p1), r1 == p2, p2 == p1]
+root - DEBUG : MUS [p2 == b0, r1 == p2, b0 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [Not(And(Not(r1 == b0), Not(p2 == b0))), r1 == p2, b0 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [Not(And(Not(r1 == b0), Not(p2 == b0))), r1 == p2, Not(r1 == b0)]
+root - DEBUG : MUS [p2 == b0, r1 == p2, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, Not(r1 == b0), b0 == p1]
+root - DEBUG : MUS [r1 == p1, r1 == p2, b0 == p1, Not(p2 == b0)]
+root - DEBUG : MUS [Not(p2 == b0), Not(And(Not(r1 == b0), Not(p2 == b0))), r1 == p2]
+root - DEBUG : MUS [r1 == b0, Not(p2 == b0), r1 == p2]
+root - DEBUG : MUS [Not(p2 == b0), p2 == p1, b0 == p1]
+root - DEBUG : MUS [p2 == p1, Not(r1 == b0), r1 == p2, b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), Not(r1 == p2), True, r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0))), p2 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p2), p2 == p1]
+root - DEBUG : MUS [Not(And(Not(r1 == b0), Not(p2 == b0))), Not(b0 == p1), Not(r1 == b0), p2 == p1]
+root - DEBUG : MUS [r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0))), Not(b0 == p1), p2 == p1]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(And(Not(r1 == b0), Not(p2 == b0))), p2 == p1, Not(p2 == b0), Not(r1 == p2), Not(r1 == p1), r1 == b0]
+root - DEBUG : MSS [True, Not(r1 == p1), Not(And(Not(r1 == b0), Not(p2 == b0))), p2 == b0, p2 == p1, Not(r1 == p2), b0 == p1, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, p2 == b0, Not(r1 == b0), p2 == p1]
+root - DEBUG : MUS [r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0))), Not(r1 == b0), p2 == p1]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(r1 == p1), Not(r1 == b0), p2 == p1, Not(p2 == b0), Not(r1 == p2)]
+root - DEBUG : MUS [Not(p2 == p1), Not(And(Not(r1 == b0), Not(p2 == b0))), Not(r1 == b0), b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(r1 == p2), b0 == p1, True, Not(r1 == p1), Not(r1 == b0), Not(p2 == b0)]
+root - DEBUG : MUS [Not(p2 == p1), Not(And(Not(r1 == b0), Not(p2 == b0))), b0 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [p2 == b0, r1 == p1, Not(r1 == p2), b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(r1 == p2), True, Not(r1 == p1), Not(And(Not(r1 == b0), Not(p2 == b0))), r1 == b0]
+root - DEBUG : MUS [r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0))), Not(b0 == p1), Not(p2 == b0)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(r1 == p2), True, r1 == p1, Not(r1 == b0)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Not(r1 == p2), True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(p2 == b0), Not(And(Not(r1 == b0), Not(p2 == b0))), b0 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == p1, Not(And(Not(r1 == b0), Not(p2 == b0))), p2 == p1, Not(p2 == b0)]
+root - DEBUG : MUS [r1 == b0, p2 == b0, Not(r1 == p2)]
+root - DEBUG : MUS [Not(p2 == p1), r1 == b0, p2 == b0, r1 == p1]
+root - DEBUG : MUS [r1 == b0, p2 == b0, p2 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, r1 == p1, p2 == p1, Not(p2 == b0)]
+root - DEBUG : MUS [r1 == b0, p2 == p1, Not(r1 == p2), b0 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [Not(p2 == b0), Not(r1 == b0)]
+root - DEBUG : [r1 == p1, Not(b0 == p1), r1 == p2]
+root - DEBUG : [Not(p2 == p1), r1 == p2, b0 == p1]
+root - DEBUG : [Not(b0 == p1), r1 == p2, p2 == p1]
+root - DEBUG : [r1 == p2, b0 == p1, Not(r1 == p1)]
+root - DEBUG : [r1 == p2, Not(r1 == b0)]
+root - DEBUG : [Not(p2 == b0), r1 == p2]
+root - DEBUG : [Not(b0 == p1), Not(r1 == b0), p2 == p1]
+root - DEBUG : [r1 == p1, Not(b0 == p1), p2 == p1]
+root - DEBUG : [r1 == p1, Not(r1 == b0), p2 == p1]
+root - DEBUG : [Not(p2 == p1), Not(r1 == b0), b0 == p1]
+root - DEBUG : [Not(p2 == p1), b0 == p1, Not(r1 == p1)]
+root - DEBUG : [r1 == p1, Not(b0 == p1), Not(p2 == b0)]
+root - DEBUG : [Not(p2 == b0), b0 == p1, Not(r1 == p1)]
+root - DEBUG : [r1 == p1, p2 == p1, Not(p2 == b0)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((p2 == p1)) and (I_contains(p2)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((b0 == p1)) and (I_contains(p2)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p2)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p2)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((p2 == b0)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((b0 == p1)) and Not(I_contains(b0)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and Not(I_contains(b0)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((p2 == p1)) and Not(I_contains(b0)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((p2 == p1)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((p2 == b0)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and (p2 == p1) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p2)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p2,
+    Not(r1 == b0),
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3],
+       And(r1 == p2,
+           Not(r1 == b0),
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p2)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((p2 == b0)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(p2 == b0),
+    r1 == p2,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3],
+       And(Not(p2 == b0),
+           r1 == p2,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((p2 == b0)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(b0 == p1),
+    r1 == p2,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(r1 == p1,
+           Not(b0 == p1),
+           r1 == p2,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((p2 == p1)) and (I_contains(p2)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(p2 == p1),
+    r1 == p2,
+    b0 == p1,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(p2 == p1),
+           r1 == p2,
+           b0 == p1,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((p2 == p1)) and (I_contains(p2)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((b0 == p1)) and (I_contains(p2)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(b0 == p1),
+    r1 == p2,
+    p2 == p1,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(b0 == p1),
+           r1 == p2,
+           p2 == p1,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((b0 == p1)) and (I_contains(p2)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p2)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p2,
+    b0 == p1,
+    Not(r1 == p1),
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(r1 == p2,
+           b0 == p1,
+           Not(r1 == p1),
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p2)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((b0 == p1)) and Not(I_contains(b0)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(b0 == p1),
+    Not(r1 == b0),
+    p2 == p1,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(b0 == p1),
+           Not(r1 == b0),
+           p2 == p1,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((b0 == p1)) and Not(I_contains(b0)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(b0 == p1),
+    p2 == p1,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(r1 == p1,
+           Not(b0 == p1),
+           p2 == p1,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and Not(I_contains(b0)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(r1 == b0),
+    p2 == p1,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(r1 == p1,
+           Not(r1 == b0),
+           p2 == p1,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and Not(I_contains(b0)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((p2 == p1)) and Not(I_contains(b0)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(p2 == p1),
+    Not(r1 == b0),
+    b0 == p1,
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(p2 == p1),
+           Not(r1 == b0),
+           b0 == p1,
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((p2 == p1)) and Not(I_contains(b0)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((p2 == p1)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(p2 == p1),
+    b0 == p1,
+    Not(r1 == p1),
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(p2 == p1),
+           b0 == p1,
+           Not(r1 == p1),
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((p2 == p1)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(b0 == p1),
+    Not(p2 == b0),
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(r1 == p1,
+           Not(b0 == p1),
+           Not(p2 == b0),
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and Not((b0 == p1)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((p2 == b0)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(p2 == b0),
+    b0 == p1,
+    Not(r1 == p1),
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(p2 == b0),
+           b0 == p1,
+           Not(r1 == p1),
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((p2 == b0)) and (b0 == p1) and Not(I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((p2 == b0)) and Not(I_contains(b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and (p2 == p1) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    p2 == p1,
+    Not(p2 == b0),
+    Not(And(Not(p2 == b0), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(r1 == p1,
+           p2 == p1,
+           Not(p2 == b0),
+           Not(And(Not(p2 == b0), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and (p2 == p1) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(I_isempty()) and Not(I_isfull()))) or (Not((p2 == b0)) and Not(I_contains(b0))))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l7
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l7
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l7
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l7
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_contains(b0) == True
+root - DEBUG : Derived weakest precondition:Or(p2 == b0, r1 == b0, r2 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == True, I_contains(p2) == False, I_contains(b0) == True, I_contains(b0) == False, I_contains(p1) == True, I_contains(p1) == False, I_isfull() == False, I_isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Or(r1 == p1, r2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p2, r2 == p2), p2 == b0, p2 == p1]
+root - DEBUG : Final list of guards: [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == p2, r2 == p2)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), Not(Or(p2 == b0, r1 == b0, r2 == b0))]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(Or(p2 == b0, r1 == b0, r2 == b0)), p2 == b0]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MUS [Not(Or(p2 == b0, r1 == b0, r2 == b0)), p2 == p1, b0 == p1]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True, p2 == b0, p2 == p1]
+root - DEBUG : MUS [p2 == p1, p2 == b0, Not(b0 == p1)]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), p2 == b0, Or(r1 == p2, r2 == p2)]
+root - DEBUG : MSS [Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), p2 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), p2 == p1]
+root - DEBUG : MUS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Or(r1 == b0, r2 == b0), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), And(Not(r1 == p2), Not(r2 == p2))]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Or(r1 == p2, r2 == p2), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), Or(r1 == p2, r2 == p2), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), p2 == b0]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Or(r1 == b0, r2 == b0), True, And(Not(r1 == p1), Not(r2 == p1))]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0)), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1), b0 == p1]
+root - DEBUG : MSS [Not(p2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), Or(r1 == p2, r2 == p2), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True, And(Not(r1 == p1), Not(r2 == p1))]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == p1), Not(r2 == p1)), b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), p2 == p1, Or(r1 == p2, r2 == p2)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True, p2 == p1, And(Not(r1 == p2), Not(r2 == p2))]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == b0), Not(b0 == p1), Or(r1 == b0, r2 == b0), True, p2 == p1, And(Not(r1 == p2), Not(r2 == p2))]
+root - DEBUG : MUS [Not(p2 == b0), p2 == p1, b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), p2 == p1, Or(r1 == p2, r2 == p2), b0 == p1]
+root - DEBUG : MSS [Or(r1 == p2, r2 == p2), b0 == p1, True, p2 == p1, Or(r1 == b0, r2 == b0), Or(r1 == p1, r2 == p1), p2 == b0]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(p2 == b0), b0 == p1, True, Or(r1 == p1, r2 == p1), Or(r1 == b0, r2 == b0)]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True, And(Not(r1 == p1), Not(r2 == p1))]
+root - DEBUG : MUS [Not(p2 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == p1, r2 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == b0, r2 == b0), p2 == b0]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), p2 == b0, Or(r1 == p2, r2 == p2), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == p1, r2 == p1), p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == b0, r2 == b0), p2 == p1, b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(Or(p2 == b0, r1 == b0, r2 == b0)), Not(p2 == b0), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True, p2 == b0]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(b0 == p1), Or(r1 == p2, r2 == p2), True, p2 == b0, Or(r1 == b0, r2 == b0)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == p1), Not(r2 == p1)), p2 == b0, p2 == p1]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), p2 == b0]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1), p2 == b0, p2 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [Or(r1 == b0, r2 == b0)]
+root - DEBUG : [p2 == b0]
+root - DEBUG : [p2 == p1, b0 == p1]
+root - DEBUG : [Or(r1 == p1, r2 == p1), b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(p2 == b0, Not(Or(r1 == b0, r2 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3],
+       And(p2 == b0, Not(Or(r1 == b0, r2 == b0))))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(p2 == p1, b0 == p1, Not(Or(r1 == b0, r2 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(p2 == p1, b0 == p1, Not(Or(r1 == b0, r2 == b0))))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Or(r1 == p1, r2 == p1),
+    b0 == p1,
+    Not(Or(r1 == b0, r2 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(Or(r1 == p1, r2 == p1),
+           b0 == p1,
+           Not(Or(r1 == b0, r2 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Or(r1 == b0, r2 == b0), Not(p2 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3],
+       And(Or(r1 == b0, r2 == b0), Not(p2 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(p2 == p1, b0 == p1, Not(p2 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(p2 == p1, b0 == p1, Not(p2 == b0)))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((p2 == p1) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(p2 == b0)} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Or(r1 == p1, r2 == p1), b0 == p1, Not(p2 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Or(r1 == p1, r2 == p1), b0 == p1, Not(p2 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(I_isempty()) and Not(I_isfull()))) or (I_contains(b0)) or (p2 == b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_contains(b0) == False
+root - DEBUG : Derived weakest precondition:And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == True, I_contains(p2) == False, I_contains(b0) == True, I_contains(b0) == False, I_contains(p1) == True, I_contains(p1) == False, I_isfull() == False, I_isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Or(r1 == p1, r2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p2, r2 == p2), p2 == b0, p2 == p1]
+root - DEBUG : Final list of guards: [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == p2, r2 == p2)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == p1), Not(r2 == p1)), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == p1, r2 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == p2), Not(r2 == p2)), p2 == b0]
+root - DEBUG : MUS [p2 == b0, Not(b0 == p1), p2 == p1]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == b0), Not(b0 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == b0, r2 == b0), True, p2 == p1]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == b0, r2 == b0), True, Not(p2 == b0), Not(b0 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == b0, r2 == b0), True, p2 == b0, Not(b0 == p1)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), p2 == p1, Or(r1 == p2, r2 == p2)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Not(p2 == b0), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0)))]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), And(Not(r1 == b0), Not(r2 == b0)), True, p2 == p1, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Not(b0 == p1), p2 == p1, Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0)))]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1), p2 == p1, Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0)))]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0)))]
+root - DEBUG : MUS [Not(p2 == b0), p2 == p1, b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), p2 == p1, Or(r1 == p2, r2 == p2), b0 == p1]
+root - DEBUG : MSS [Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1, Or(r1 == b0, r2 == b0), True, p2 == b0, p2 == p1, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2)), Or(r1 == p1, r2 == p1), p2 == p1]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == p1), Not(r2 == p1)), p2 == b0, p2 == p1]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), True, p2 == b0, p2 == p1, b0 == p1, And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == b0), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True, p2 == p1, And(Not(r1 == p1), Not(r2 == p1))]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), p2 == b0, Or(r1 == p2, r2 == p2)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == p2), Not(r2 == p2)), p2 == p1, b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(b0 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), True, p2 == b0, And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(p2 == b0), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1, Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == b0), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(p2 == b0), b0 == p1, True, And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(b0 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), Not(p2 == b0)]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(b0 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), True, Or(r1 == p1, r2 == p1), p2 == b0, And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), p2 == b0, Or(r1 == p2, r2 == p2)]
+root - DEBUG : MUS [Not(p2 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), p2 == b0, Or(r1 == p2, r2 == p2), b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Or(r1 == p2, r2 == p2), b0 == p1, True, Not(p2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [Not(p2 == p1), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1, Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1), Not(p2 == b0)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1]
+root - DEBUG : MUS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Or(r1 == b0, r2 == b0), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), True, Or(r1 == p1, r2 == p1), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0)), Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))), b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MSS [And(Not(r1 == p2), Not(r2 == p2)), And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0)), Not(p2 == b0)]
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0)), Not(b0 == p1), p2 == p1]
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1), p2 == p1]
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p2, r2 == p2)]
+root - DEBUG : [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == b0), b0 == p1]
+root - DEBUG : [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p2, r2 == p2), b0 == p1]
+root - DEBUG : [And(Not(r1 == p1), Not(r2 == p1)), Not(p2 == p1), b0 == p1]
+root - DEBUG : [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), Or(r1 == p2, r2 == p2), Or(r1 == p1, r2 == p1)]
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0)), Not(p2 == p1), b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(b0)) and Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(b0)) and (I_contains(p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(b0)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(p1)) and Not((p2 == b0)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(p1)) and (I_contains(p2)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(p1)) and Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not((p2 == p1)) and Not((p2 == b0)) and Not((b0 == p1)) and (I_contains(p2)) and (I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(b0)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == b0),
+    Not(r2 == b0),
+    Or(r1 == p2, r2 == p2),
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3],
+       And(Not(r1 == b0),
+           Not(r2 == b0),
+           Or(r1 == p2, r2 == p2),
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(b0)) and (I_contains(p2)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(b0)) and Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == b0),
+    Not(r2 == b0),
+    Not(b0 == p1),
+    p2 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == b0),
+           Not(r2 == b0),
+           Not(b0 == p1),
+           p2 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(b0)) and Not((b0 == p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(b0)) and (I_contains(p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == b0),
+    Not(r2 == b0),
+    Or(r1 == p1, r2 == p1),
+    p2 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == b0),
+           Not(r2 == b0),
+           Or(r1 == p1, r2 == p1),
+           p2 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(b0)) and (I_contains(p1)) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(p1)) and Not((p2 == b0)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p1),
+    Not(r2 == p1),
+    Not(p2 == b0),
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == p1),
+           Not(r2 == p1),
+           Not(p2 == b0),
+           b0 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(p1)) and Not((p2 == b0)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(p1)) and (I_contains(p2)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p1),
+    Not(r2 == p1),
+    Or(r1 == p2, r2 == p2),
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == p1),
+           Not(r2 == p1),
+           Or(r1 == p2, r2 == p2),
+           b0 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(p1)) and (I_contains(p2)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(p1)) and Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p1),
+    Not(r2 == p1),
+    Not(p2 == p1),
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == p1),
+           Not(r2 == p1),
+           Not(p2 == p1),
+           b0 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(p1)) and Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == b0),
+    Not(r2 == b0),
+    Not(p2 == p1),
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == b0),
+           Not(r2 == b0),
+           Not(p2 == p1),
+           b0 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not(I_contains(b0)) and Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not((p2 == p1)) and Not((p2 == b0)) and Not((b0 == p1)) and (I_contains(p2)) and (I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(p2 == p1),
+    Not(p2 == b0),
+    Not(b0 == p1),
+    Or(r1 == p2, r2 == p2),
+    Or(r1 == p1, r2 == p1),
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(p2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(p2 == p1),
+           Not(p2 == b0),
+           Not(b0 == p1),
+           Or(r1 == p2, r2 == p2),
+           Or(r1 == p1, r2 == p1),
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(p2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not((p2 == p1)) and Not((p2 == b0)) and Not((b0 == p1)) and (I_contains(p2)) and (I_contains(p1)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(I_isempty()) and Not(I_isfull()))) or (Not(I_contains(b0)) and Not((p2 == b0))))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l11
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_contains(b0) == True
+root - DEBUG : Derived weakest precondition:Or(r1 == b0, r2 == b0, r3 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == True, I_contains(p2) == False, I_contains(b0) == True, I_contains(b0) == False, I_contains(p1) == True, I_contains(p1) == False, I_isfull() == True, I_isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, p2 == p1]
+root - DEBUG : Final list of guards: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(Or(r1 == b0, r2 == b0, r3 == b0)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MUS [Not(Or(r1 == b0, r2 == b0, r3 == b0)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MUS [Not(p2 == p1), b0 == p1, p2 == b0]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == p1, r2 == p1, r3 == p1), b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(r1 == b0, r2 == b0, r3 == b0))]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(r1 == b0, r2 == b0, r3 == b0)), p2 == p1]
+root - DEBUG : MUS [Not(p2 == b0), b0 == p1, p2 == p1]
+root - DEBUG : MSS [Not(p2 == b0), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0), p2 == p1, Not(b0 == p1)]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), p2 == p1, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Not(Or(r1 == b0, r2 == b0, r3 == b0)), p2 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(r1 == b0, r2 == b0, r3 == b0)), And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1)]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0), Not(p2 == p1)]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == p1, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(Or(r1 == b0, r2 == b0, r3 == b0)), Not(p2 == p1)]
+root - DEBUG : MSS [Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), Not(p2 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, Not(p2 == p1)]
+root - DEBUG : MUS [Not(b0 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), p2 == b0, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MUS [Not(Or(r1 == b0, r2 == b0, r3 == b0)), p2 == b0, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MSS [Not(b0 == p1), True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(Or(r1 == b0, r2 == b0, r3 == b0)), p2 == b0, And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(Or(r1 == b0, r2 == b0, r3 == b0)), p2 == b0, p2 == p1, b0 == p1, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MSS [True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), p2 == b0, p2 == p1, b0 == p1, Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == p1, r2 == p1, r3 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(r1 == b0, r2 == b0, r3 == b0)), p2 == b0, p2 == p1]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), True, Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(r1 == b0, r2 == b0, r3 == b0)), p2 == b0, Not(p2 == p1), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MSS [Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, Not(p2 == p1)]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(r1 == b0, r2 == b0, r3 == b0)), b0 == p1]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), b0 == p1, p2 == b0, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MSS [Not(p2 == b0), b0 == p1, True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), Not(p2 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == b0), b0 == p1, True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Not(Or(r1 == b0, r2 == b0, r3 == b0)), Not(p2 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0, r3 == b0), b0 == p1, p2 == p1, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2))]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), Not(Or(r1 == b0, r2 == b0, r3 == b0)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), b0 == p1, p2 == p1, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MUS [Not(Or(r1 == b0, r2 == b0, r3 == b0)), b0 == p1, p2 == p1, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(Or(r1 == b0, r2 == b0, r3 == b0))]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), b0 == p1, p2 == b0, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : [p2 == b0, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : [Or(r1 == p1, r2 == p1, r3 == p1), p2 == b0, p2 == p1]
+root - DEBUG : [Or(r1 == p1, r2 == p1, r3 == p1), b0 == p1]
+root - DEBUG : [b0 == p1, p2 == p1, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((p2 == b0) and (I_contains(p2)))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and (p2 == b0) and (p2 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((b0 == p1) and (p2 == p1) and (I_contains(p2)))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((p2 == b0) and (I_contains(p2)))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(p2 == b0,
+    Or(r1 == p2, r2 == p2, r3 == p2),
+    Not(Or(r1 == b0, r2 == b0, r3 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3],
+       And(p2 == b0,
+           Or(r1 == p2, r2 == p2, r3 == p2),
+           Not(Or(r1 == b0, r2 == b0, r3 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((p2 == b0) and (I_contains(p2)))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Or(r1 == p1, r2 == p1, r3 == p1),
+    b0 == p1,
+    Not(Or(r1 == b0, r2 == b0, r3 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(Or(r1 == p1, r2 == p1, r3 == p1),
+           b0 == p1,
+           Not(Or(r1 == b0, r2 == b0, r3 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((I_contains(p1)) and (p2 == b0) and (p2 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Or(r1 == p1, r2 == p1, r3 == p1),
+    p2 == b0,
+    p2 == p1,
+    Not(Or(r1 == b0, r2 == b0, r3 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Or(r1 == p1, r2 == p1, r3 == p1),
+           p2 == b0,
+           p2 == p1,
+           Not(Or(r1 == b0, r2 == b0, r3 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((I_contains(p1)) and (p2 == b0) and (p2 == p1))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(I_contains(b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((b0 == p1) and (p2 == p1) and (I_contains(p2)))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1,
+    p2 == p1,
+    Or(r1 == p2, r2 == p2, r3 == p2),
+    Not(Or(r1 == b0, r2 == b0, r3 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(b0 == p1,
+           p2 == p1,
+           Or(r1 == p2, r2 == p2, r3 == p2),
+           Not(Or(r1 == b0, r2 == b0, r3 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((b0 == p1) and (p2 == p1) and (I_contains(p2)))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((I_contains(b0)) or Not(((I_isfull()) and Not(I_isempty()))))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_contains(b0) == False
+root - DEBUG : Derived weakest precondition:And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(p2 == b0), Not(p2 == b0), (p2 == p1), Not(p2 == p1), (b0 == p1), Not(b0 == p1), I_contains(p2) == True, I_contains(p2) == False, I_contains(b0) == True, I_contains(b0) == False, I_contains(p1) == True, I_contains(p1) == False, I_isfull() == True, I_isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, p2 == p1]
+root - DEBUG : Final list of guards: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(p2 == b0), Not(b0 == p1), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, p2 == p1]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)))]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [Not(p2 == b0), p2 == b0]
+root - DEBUG : MUS [Not(p2 == p1), p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), p2 == b0, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MSS [Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0]
+root - DEBUG : MUS [Not(b0 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == p1, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MUS [p2 == p1, Not(p2 == b0), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), b0 == p1]
+root - DEBUG : MSS [Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(p2 == b0), True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == p1, Not(b0 == p1), And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, p2 == p1, Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), b0 == p1, True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == p1, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), p2 == b0]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == p1, r2 == p1, r3 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), p2 == p1, b0 == p1, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), p2 == p1, Not(p2 == b0), Not(b0 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == p1, Not(p2 == b0)]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == p1, r2 == p1, r3 == p1), p2 == b0, p2 == p1]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), Not(b0 == p1)]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), b0 == p1, True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [Not(p2 == p1), Not(p2 == b0), b0 == p1, True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), b0 == p1, True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), p2 == b0]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == b0]
+root - DEBUG : MSS [Not(p2 == p1), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), p2 == b0, Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [Not(p2 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == b0, b0 == p1, Or(r1 == p2, r2 == p2, r3 == p2)]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), p2 == b0, b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), p2 == b0, p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0, p2 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == b0, r2 == b0, r3 == b0), p2 == b0]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), p2 == b0]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), b0 == p1]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1)]
+root - DEBUG : MSS [Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), p2 == p1, Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(p2 == b0), Not(b0 == p1), True, Or(r1 == p2, r2 == p2, r3 == p2), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), Not(p2 == p1)]
+root - DEBUG : MSS [Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [Not(p2 == p1), Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(p2 == p1), Not(p2 == b0), Not(b0 == p1), True, And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), p2 == p1, Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), p2 == p1, Or(r1 == b0, r2 == b0, r3 == b0), b0 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding WP:
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))]
+root - DEBUG : [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), b0 == p1]
+root - DEBUG : [And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), p2 == b0, p2 == p1]
+root - DEBUG : [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), p2 == b0]
+root - DEBUG : [And(Not(r1 == p2), Not(r2 == p2), Not(r3 == p2)), p2 == p1, b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {Not(I_contains(b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(p1)) and (p2 == b0) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(p2)) and (p2 == b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {(Not(I_contains(p2)) and (p2 == p1) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(I_contains(b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p1),
+    Not(r2 == p1),
+    Not(r3 == p1),
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(Not(r1 == p1),
+           Not(r2 == p1),
+           Not(r3 == p1),
+           b0 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(r3 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(p1)) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(I_contains(b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(p2)) and (p2 == b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p2),
+    Not(r2 == p2),
+    Not(r3 == p2),
+    p2 == b0,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([r1, r2, b0, p2, r3],
+       And(Not(r1 == p2),
+           Not(r2 == p2),
+           Not(r3 == p2),
+           p2 == b0,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(r3 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(p2)) and (p2 == b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(I_contains(b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(p1)) and (p2 == b0) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p1),
+    Not(r2 == p1),
+    Not(r3 == p1),
+    p2 == b0,
+    p2 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == p1),
+           Not(r2 == p1),
+           Not(r3 == p1),
+           p2 == b0,
+           p2 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(r3 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(p1)) and (p2 == b0) and (p2 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(I_contains(b0))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(I_contains(p2)) and (p2 == p1) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p2),
+    Not(r2 == p2),
+    Not(r3 == p2),
+    p2 == p1,
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, p2, r3],
+       And(Not(r1 == p2),
+           Not(r2 == p2),
+           Not(r3 == p2),
+           p2 == p1,
+           b0 == p1,
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(r3 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(I_contains(p2)) and (p2 == p1) and (b0 == p1))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not(I_contains(b0)) or Not(((I_isfull()) and Not(I_isempty()))))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isfull() == True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((I_isfull()) and Not(I_isempty())))} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((I_isfull()) and Not(I_isempty())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l13
+root - DEBUG : Observer method at post-state: I_isempty() == False
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+================ CONTRACTS PER LOCATION ====================
+root - DEBUG : Location: l0: {(Not((Not(I_isfull()) and (I_isempty()))) or (p2 == b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Location: l0: {(Not((Not(I_isfull()) and (I_isempty()))) or Not((p2 == b0)))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Location: l0: {Not((Not(I_isfull()) and (I_isempty())))} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : Location: l0: {True} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : Location: l0: {Not((Not(I_isfull()) and (I_isempty())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : Location: l0: {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : Location: l7: {(Not((Not(I_isempty()) and Not(I_isfull()))) or (I_contains(b0)) or (p2 == b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Location: l7: {(Not((Not(I_isempty()) and Not(I_isfull()))) or (Not((p2 == b0)) and Not(I_contains(b0))))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Location: l7: {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : Location: l7: {True} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : Location: l7: {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : Location: l7: {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : Location: l11: {(Not((Not(I_isempty()) and Not(I_isfull()))) or (I_contains(b0)) or (p2 == b0))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Location: l11: {(Not((Not(I_isempty()) and Not(I_isfull()))) or (Not(I_contains(b0)) and Not((p2 == b0))))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Location: l11: {True} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : Location: l11: {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : Location: l11: {Not((Not(I_isempty()) and Not(I_isfull())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : Location: l11: {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : Location: l13: {((I_contains(b0)) or Not(((I_isfull()) and Not(I_isempty()))))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : Location: l13: {(Not(I_contains(b0)) or Not(((I_isfull()) and Not(I_isempty()))))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : Location: l13: {True} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : Location: l13: {Not(((I_isfull()) and Not(I_isempty())))} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - DEBUG : Location: l13: {Not(((I_isfull()) and Not(I_isempty())))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : Location: l13: {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+Observer to Boolean literal mapping:
+root - DEBUG : p2 == b0 : a0
+root - DEBUG : p2 == p1 : a1
+root - DEBUG : b0 == p1 : a2
+root - DEBUG : I_contains(p2) : a3
+root - DEBUG : I_contains(b0) : a4
+root - DEBUG : I_contains(p1) : a5
+root - DEBUG : I_isfull() : a6
+root - DEBUG : I_isempty() : a7
+root - DEBUG : 
+
+root - DEBUG : 
+
+===================== LOCATION INDEPENDENT CONTRACTS =====================
+root - DEBUG : {(Not((Not(I_isfull()) and (I_isempty()))) and Not((Not(I_isempty()) and Not(I_isfull()))) and Not(((I_isfull()) and Not(I_isempty()))))} I_insert(p1, p2) {(I_isempty())} :: True
+root - DEBUG : {((Not((Not(I_isfull()) and (I_isempty()))) or (p2 == b0)) and (Not((Not(I_isempty()) and Not(I_isfull()))) or (I_contains(b0)) or (p2 == b0)) and ((I_contains(b0)) or Not(((I_isfull()) and Not(I_isempty())))))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - DEBUG : {((Not((Not(I_isfull()) and (I_isempty()))) or Not((p2 == b0))) and (Not((Not(I_isempty()) and Not(I_isfull()))) or (Not((p2 == b0)) and Not(I_contains(b0)))) and (Not((Not(I_isempty()) and Not(I_isfull()))) or (Not(I_contains(b0)) and Not((p2 == b0)))) and (Not(I_contains(b0)) or Not(((I_isfull()) and Not(I_isempty())))))} I_insert(p1, p2) {Not(I_contains(b0))} :: True
+root - DEBUG : {True} I_insert(p1, p2) {Not(I_isempty())} :: True
+root - DEBUG : {(Not((Not(I_isfull()) and (I_isempty()))) and Not((Not(I_isempty()) and Not(I_isfull()))))} I_insert(p1, p2) {(I_isfull())} :: True
+root - DEBUG : {(Not((Not(I_isempty()) and Not(I_isfull()))) and Not(((I_isfull()) and Not(I_isempty()))))} I_insert(p1, p2) {Not(I_isfull())} :: True
+root - INFO : 
+
+ ================ FINAL CONTRACTS AFTER SIMPLIFICATION ====================
+root - INFO : {(I_isfull()) & (I_isempty())} I_insert(p1, p2) {(I_isempty())} :: True
+root - INFO : {((I_isfull()) & (I_isempty())) | ((p2 == b0) & ~(I_isfull())) | ((I_contains(b0)) & ~(I_isempty()))} I_insert(p1, p2) {(I_contains(b0))} :: True
+root - INFO : {((I_isfull()) & (I_isempty())) | ((I_isfull()) & ~(I_contains(b0))) | ((I_isempty()) & ~(p2 == b0)) | (~(p2 == b0) & ~(I_contains(b0)))} I_insert(p1, p2) {~(I_contains(b0))} :: True
+root - INFO : {True} I_insert(p1, p2) {~(I_isempty())} :: True
+root - INFO : {(I_isfull())} I_insert(p1, p2) {(I_isfull())} :: True
+root - INFO : {(I_isempty())} I_insert(p1, p2) {~(I_isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Time taken for synthesis:2.1095497608184814sec

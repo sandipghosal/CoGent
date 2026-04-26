@@ -1,0 +1,6 @@
+{(isfull()) & (isempty())} insert(p1, p2) {(isempty())} :: True
+{((isfull()) & (isempty())) | ((p2 == b0) & ~(isfull())) | ((contains(b0)) & ~(isempty()))} insert(p1, p2) {(contains(b0))} :: True
+{((isfull()) & (isempty())) | ((isfull()) & ~(contains(b0))) | ((isempty()) & ~(p2 == b0)) | (~(p2 == b0) & ~(contains(b0)))} insert(p1, p2) {~(contains(b0))} :: True
+{True} insert(p1, p2) {~(isempty())} :: True
+{(isfull())} insert(p1, p2) {(isfull())} :: True
+{(isempty())} insert(p1, p2) {~(isfull())} :: True

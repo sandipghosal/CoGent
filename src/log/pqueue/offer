@@ -1,0 +1,2408 @@
+root - DEBUG : input XML file path:input/pqueue/pqueue.xml
+root - DEBUG : target method:offer
+root - DEBUG : Map of input symbols imported from the file:
+root - DEBUG : {'offer': offer(p1), 'poll': poll(), 'contains': contains(p1), 'isfull': isfull(), 'isempty': isempty()}
+root - DEBUG : Map of constants imported from the file:
+root - DEBUG : {}
+root - DEBUG : List of registers imported from the file:
+root - DEBUG : ['r1', 'r2', 'r3']
+root - DEBUG : Map of locations imported from the file:
+root - DEBUG : {'l0': l0, 'l1': l1, 'l2': l2, 'l3': l3, 'l4': l4, 'l5': l5, 'l6': l6, 'l7': l7, 'l8': l8, 'l9': l9, 'l10': l10, 'l11': l11, 'l12': l12, 'l13': l13, 'l14': l14, 'l15': l15, 'l16': l16, 'l17': l17, 'l18': l18, 'l19': l19, 'l20': l20, 'l21': l21, 'l22': l22, 'l23': l23, 'l24': l24, 'l25': l25, 'l26': l26, 'l27': l27, 'l28': l28, 'l29': l29, 'l30': l30, 'l31': l31, 'l32': l32, 'l33': l33, 'l34': l34, 'l35': l35, 'l36': l36, 'l37': l37, 'l38': l38, 'l39': l39, 'l40': l40, 'l41': l41, 'l42': l42, 'l43': l43, 'l44': l44}
+root - DEBUG : Map of output symbols imported from the file:
+root - DEBUG : {'_ok': _ok, '_out': _out, '_not_ok': _not_ok, 'FALSE': FALSE, 'TRUE': TRUE}
+root - DEBUG : Transition created:
+root - DEBUG : l0:poll():True:[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l0:offer(p1):True:[(r1, p1)]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l1:_not_ok:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l4:_ok:True:[]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l0:contains(p1):True:[]:None:l29
+root - DEBUG : Transition created:
+root - DEBUG : l0:isfull():True:[]:None:l29
+root - DEBUG : Transition created:
+root - DEBUG : l29:FALSE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l0:isempty():True:[]:None:l30
+root - DEBUG : Transition created:
+root - DEBUG : l30:TRUE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l5:poll():True:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l5:offer(p1):p1 > r1:[(r2, p1)]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l5:offer(p1):r1 == p1:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l5:contains(p1):r1 == p1:[]:None:l31
+root - DEBUG : Transition created:
+root - DEBUG : l31:TRUE:True:[]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l5:contains(p1):Not(r1 == p1):[]:None:l32
+root - DEBUG : Transition created:
+root - DEBUG : l5:isfull():True:[]:None:l32
+root - DEBUG : Transition created:
+root - DEBUG : l5:isempty():True:[]:None:l32
+root - DEBUG : Transition created:
+root - DEBUG : l32:FALSE:True:[]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l6:_out:True:[(p1, r1)]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l7:_ok:True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l8:contains(p1):Or(r1 == p1, r2 == p1):[]:None:l33
+root - DEBUG : Transition created:
+root - DEBUG : l33:TRUE:True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l8:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:None:l34
+root - DEBUG : Transition created:
+root - DEBUG : l8:isfull():True:[]:None:l34
+root - DEBUG : Transition created:
+root - DEBUG : l8:isempty():True:[]:None:l34
+root - DEBUG : Transition created:
+root - DEBUG : l34:FALSE:True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l8:offer(p1):r1 == p1:[]:None:l9
+root - DEBUG : Transition created:
+root - DEBUG : l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2)]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l8:offer(p1):p1 > r2:[(r3, p1)]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l8:offer(p1):r2 == p1:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l8:poll():True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l9:_ok:True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l10:contains(p1):Or(r1 == p1, r2 == p1):[]:None:l37
+root - DEBUG : Transition created:
+root - DEBUG : l37:TRUE:True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l10:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:None:l38
+root - DEBUG : Transition created:
+root - DEBUG : l10:isfull():True:[]:None:l37
+root - DEBUG : Transition created:
+root - DEBUG : l10:isempty():True:[]:None:l38
+root - DEBUG : Transition created:
+root - DEBUG : l38:FALSE:True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l10:poll():True:[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l10:offer(p1):True:[]:None:l25
+root - DEBUG : Transition created:
+root - DEBUG : l11:_out:True:[(r1, r2), (p1, r1)]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l12:_out:True:[(p1, r1)]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l13:_ok:True:[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l15:contains(p1):r1 == p1:[]:None:l39
+root - DEBUG : Transition created:
+root - DEBUG : l39:TRUE:True:[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l15:contains(p1):Not(r1 == p1):[]:None:l40
+root - DEBUG : Transition created:
+root - DEBUG : l15:isfull():True:[]:None:l40
+root - DEBUG : Transition created:
+root - DEBUG : l15:isempty():True:[]:None:l40
+root - DEBUG : Transition created:
+root - DEBUG : l40:FALSE:True:[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l14:_ok:True:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l16:contains(p1):Or(r1 == p1, r2 == p1, r3 == p1):[]:None:l35
+root - DEBUG : Transition created:
+root - DEBUG : l35:TRUE:True:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l16:contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:None:l36
+root - DEBUG : Transition created:
+root - DEBUG : l16:isfull():True:[]:None:l35
+root - DEBUG : Transition created:
+root - DEBUG : l16:isempty():True:[]:None:l36
+root - DEBUG : Transition created:
+root - DEBUG : l36:FALSE:True:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l15:offer(p1):p1 > r1:[(r2, p1)]:None:l9
+root - DEBUG : Transition created:
+root - DEBUG : l15:offer(p1):r1 == p1:[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l15:poll():True:[]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l16:poll():True:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l16:offer(p1):True:[]:None:l26
+root - DEBUG : Transition created:
+root - DEBUG : l17:_out:True:[(r1, r2), (r2, r3), (p1, r1)]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l18:_out:True:[(p1, r1)]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l19:_ok:True:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l21:contains(p1):r1 == p1:[]:None:l43
+root - DEBUG : Transition created:
+root - DEBUG : l43:TRUE:True:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l21:contains(p1):Not(r1 == p1):[]:None:l44
+root - DEBUG : Transition created:
+root - DEBUG : l21:isfull():True:[]:None:l43
+root - DEBUG : Transition created:
+root - DEBUG : l21:isempty():True:[]:None:l44
+root - DEBUG : Transition created:
+root - DEBUG : l44:FALSE:True:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l20:_ok:True:[]:None:l22
+root - DEBUG : Transition created:
+root - DEBUG : l22:contains(p1):Or(r1 == p1, r2 == p1):[]:None:l41
+root - DEBUG : Transition created:
+root - DEBUG : l41:TRUE:True:[]:None:l22
+root - DEBUG : Transition created:
+root - DEBUG : l22:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:None:l42
+root - DEBUG : Transition created:
+root - DEBUG : l22:isfull():True:[]:None:l41
+root - DEBUG : Transition created:
+root - DEBUG : l22:isempty():True:[]:None:l42
+root - DEBUG : Transition created:
+root - DEBUG : l42:FALSE:True:[]:None:l22
+root - DEBUG : Transition created:
+root - DEBUG : l21:poll():True:[]:None:l23
+root - DEBUG : Transition created:
+root - DEBUG : l21:offer(p1):True:[]:None:l27
+root - DEBUG : Transition created:
+root - DEBUG : l22:poll():True:[]:None:l24
+root - DEBUG : Transition created:
+root - DEBUG : l22:offer(p1):True:[]:None:l28
+root - DEBUG : Transition created:
+root - DEBUG : l23:_out:True:[(p1, r1)]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l24:_out:True:[(r1, r2), (p1, r1)]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l25:_not_ok:True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l26:_not_ok:True:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l27:_not_ok:True:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l28:_not_ok:True:[]:None:l22
+root - DEBUG : 
+
+New list of transitions after pruning:
+root - DEBUG : [l0:poll():True:[]:_not_ok:l0, l0:offer(p1):True:[(r1, p1)]:_ok:l5, l0:contains(p1):True:[]:FALSE:l0, l0:isfull():True:[]:FALSE:l0, l0:isempty():True:[]:TRUE:l0, l5:poll():True:[(p1, r1)]:_out:l0, l5:offer(p1):p1 > r1:[(r2, p1)]:_ok:l8, l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l8, l5:offer(p1):r1 == p1:[]:_ok:l15, l5:contains(p1):r1 == p1:[]:TRUE:l5, l5:contains(p1):Not(r1 == p1):[]:FALSE:l5, l5:isfull():True:[]:FALSE:l5, l5:isempty():True:[]:FALSE:l5, l8:contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l8, l8:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l8, l8:isfull():True:[]:FALSE:l8, l8:isempty():True:[]:FALSE:l8, l8:offer(p1):r1 == p1:[]:_ok:l10, l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:_ok:l16, l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2)]:_ok:l16, l8:offer(p1):p1 > r2:[(r3, p1)]:_ok:l16, l8:offer(p1):r2 == p1:[]:_ok:l22, l8:poll():True:[(r1, r2), (p1, r1)]:_out:l5, l10:contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l10, l10:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l10, l10:isfull():True:[]:TRUE:l10, l10:isempty():True:[]:FALSE:l10, l10:poll():True:[(p1, r1)]:_out:l8, l10:offer(p1):True:[]:_not_ok:l10, l15:contains(p1):r1 == p1:[]:TRUE:l15, l15:contains(p1):Not(r1 == p1):[]:FALSE:l15, l15:isfull():True:[]:FALSE:l15, l15:isempty():True:[]:FALSE:l15, l16:contains(p1):Or(r1 == p1, r2 == p1, r3 == p1):[]:TRUE:l16, l16:contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:FALSE:l16, l16:isfull():True:[]:TRUE:l16, l16:isempty():True:[]:FALSE:l16, l15:offer(p1):p1 > r1:[(r2, p1)]:_ok:l10, l15:offer(p1):r1 == p1:[]:_ok:l21, l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l22, l15:poll():True:[(p1, r1)]:_out:l5, l16:poll():True:[(r1, r2), (r2, r3), (p1, r1)]:_out:l8, l16:offer(p1):True:[]:_not_ok:l16, l21:contains(p1):r1 == p1:[]:TRUE:l21, l21:contains(p1):Not(r1 == p1):[]:FALSE:l21, l21:isfull():True:[]:TRUE:l21, l21:isempty():True:[]:FALSE:l21, l22:contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l22, l22:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l22, l22:isfull():True:[]:TRUE:l22, l22:isempty():True:[]:FALSE:l22, l21:poll():True:[(p1, r1)]:_out:l15, l21:offer(p1):True:[]:_not_ok:l21, l22:poll():True:[(r1, r2), (p1, r1)]:_out:l15, l22:offer(p1):True:[]:_not_ok:l22]
+root - DEBUG : 
+
+New list of locations after pruning:
+root - DEBUG : {'l0': l0, 'l2': l2, 'l3': l3, 'l5': l5, 'l8': l8, 'l10': l10, 'l15': l15, 'l16': l16, 'l21': l21, 'l22': l22}
+root - DEBUG : 
+
+New list of transitions after condensing:
+root - DEBUG : [l0:poll():True:[]:_not_ok:l0, l0:offer(p1):True:[(r1, p1)]:_ok:l5, l0:contains(p1):True:[]:FALSE:l0, l0:isfull():True:[]:FALSE:l0, l0:isempty():True:[]:TRUE:l0, l5:poll():True:[(p1, r1)]:_out:l0, l5:offer(p1):p1 > r1:[(r2, p1)]:_ok:l8, l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l8, l5:offer(p1):r1 == p1:[]:_ok:l15, l5:contains(p1):r1 == p1:[]:TRUE:l5, l5:contains(p1):Not(r1 == p1):[]:FALSE:l5, l5:isfull():True:[]:FALSE:l5, l5:isempty():True:[]:FALSE:l5, l8:contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l8, l8:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l8, l8:isfull():True:[]:FALSE:l8, l8:isempty():True:[]:FALSE:l8, l8:offer(p1):r1 == p1:[]:_ok:l10, l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:_ok:l16, l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2)]:_ok:l16, l8:offer(p1):p1 > r2:[(r3, p1)]:_ok:l16, l8:offer(p1):r2 == p1:[]:_ok:l22, l8:poll():True:[(r1, r2), (p1, r1)]:_out:l5, l10:contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l10, l10:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l10, l10:isfull():True:[]:TRUE:l10, l10:isempty():True:[]:FALSE:l10, l10:poll():True:[(p1, r1)]:_out:l8, l10:offer(p1):True:[]:_not_ok:l10, l15:contains(p1):r1 == p1:[]:TRUE:l15, l15:contains(p1):Not(r1 == p1):[]:FALSE:l15, l15:isfull():True:[]:FALSE:l15, l15:isempty():True:[]:FALSE:l15, l16:contains(p1):Or(r1 == p1, r2 == p1, r3 == p1):[]:TRUE:l16, l16:contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:FALSE:l16, l16:isfull():True:[]:TRUE:l16, l16:isempty():True:[]:FALSE:l16, l15:offer(p1):p1 > r1:[(r2, p1)]:_ok:l10, l15:offer(p1):r1 == p1:[]:_ok:l21, l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l22, l15:poll():True:[(p1, r1)]:_out:l5, l16:poll():True:[(r1, r2), (r2, r3), (p1, r1)]:_out:l8, l16:offer(p1):True:[]:_not_ok:l16, l21:contains(p1):r1 == p1:[]:TRUE:l21, l21:contains(p1):Not(r1 == p1):[]:FALSE:l21, l21:isfull():True:[]:TRUE:l21, l21:isempty():True:[]:FALSE:l21, l22:contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l22, l22:contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l22, l22:isfull():True:[]:TRUE:l22, l22:isempty():True:[]:FALSE:l22, l21:poll():True:[(p1, r1)]:_out:l15, l21:offer(p1):True:[]:_not_ok:l21, l22:poll():True:[(r1, r2), (p1, r1)]:_out:l15, l22:offer(p1):True:[]:_not_ok:l22]
+root - DEBUG : 
+
+List of symbols:
+root - DEBUG : [(b0 == p1, 'TRUE'), (b0 == p1, 'FALSE'), (contains(b0), 'TRUE'), (contains(b0), 'FALSE'), (contains(p1), 'TRUE'), (contains(p1), 'FALSE'), (isfull(), 'TRUE'), (isfull(), 'FALSE'), (isempty(), 'TRUE'), (isempty(), 'FALSE')]
+root - DEBUG : 
+
+List of literals:
+root - DEBUG : {b0 == p1: 'a0', contains(b0): 'a1', contains(p1): 'a2', isfull(): 'a3', isempty(): 'a4'}
+root - DEBUG : 
+
+=========== Starting Contract Generation =================
+root - DEBUG : Dependency graph: {l0: {l5}, l5: {l8, l15}, l8: {l10, l16, l22}, l15: {l10, l22, l21}, l10: {l10}, l16: {l16}, l22: {l22}, l21: {l21}}
+root - DEBUG : 
+Source: l0, Destination: l5
+root - DEBUG : [l0:offer(p1):True:[(r1, p1)]:_ok:l5]
+root - DEBUG : Derive postcondition for l5
+root - DEBUG : Registers in location l5: [r1]
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: True
+root - DEBUG : Assignment: [(r1, p1)]
+root - DEBUG : Strongest Postcondition: Exists(p1, r1 == p1)
+root - DEBUG : Postcondition after quantifier elimination: True
+root - DEBUG : Final postcondition: True
+root - DEBUG : Postcondition has changed
+root - DEBUG : 
+Source: l5, Destination: l8
+root - DEBUG : [l5:offer(p1):p1 > r1:[(r2, p1)]:_ok:l8, l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l8]
+root - DEBUG : Derive postcondition for l8
+root - DEBUG : Registers in location l8: [r1, r2]
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: p1 > r1
+root - DEBUG : Assignment: [(r2, p1)]
+root - DEBUG : Strongest Postcondition: Exists([p1, r1'], And(r2 == p1, r1 == r1', Not(p1 <= r1')))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: p1 < r1
+root - DEBUG : Assignment: [(r1, p1), (r2, r1)]
+root - DEBUG : Strongest Postcondition: Exists([p1, r1'], And(r1 == p1, r2 == r1', Not(r1' <= p1)))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Final postcondition: r1 + -1*r2 <= -1
+root - DEBUG : Postcondition has changed
+root - DEBUG : 
+Source: l8, Destination: l10
+root - DEBUG : [l8:offer(p1):r1 == p1:[]:_ok:l10]
+root - DEBUG : Derive postcondition for l10
+root - DEBUG : Registers in location l10: [r1, r2]
+root - DEBUG : Precondition: r1 + -1*r2 <= -1
+root - DEBUG : Guard: r1 == p1
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists([r2', p1, r1'],
+       And(r1 == r1',
+           r2 == r2',
+           r1' == p1,
+           r1' + -1*r2' <= -1))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Final postcondition: r1 + -1*r2 <= -1
+root - DEBUG : Postcondition has changed
+root - DEBUG : 
+Source: l10, Destination: l10
+root - DEBUG : [l10:offer(p1):True:[]:_not_ok:l10]
+root - DEBUG : Derive postcondition for l10
+root - DEBUG : Registers in location l10: [r1, r2]
+root - DEBUG : Precondition: r1 + -1*r2 <= -1
+root - DEBUG : Guard: True
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists([r2', r1'],
+       And(r1 == r1', r2 == r2', r1' + -1*r2' <= -1))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Final postcondition: r1 + -1*r2 <= -1
+root - DEBUG : 
+Source: l8, Destination: l16
+root - DEBUG : [l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:_ok:l16, l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2)]:_ok:l16, l8:offer(p1):p1 > r2:[(r3, p1)]:_ok:l16]
+root - DEBUG : Derive postcondition for l16
+root - DEBUG : Registers in location l16: [r1, r2, r3]
+root - DEBUG : Precondition: r1 + -1*r2 <= -1
+root - DEBUG : Guard: p1 < r1
+root - DEBUG : Assignment: [(r1, p1), (r2, r1), (r3, r2)]
+root - DEBUG : Strongest Postcondition: Exists([p1, r1', r2'],
+       And(r1 == p1,
+           r2 == r1',
+           r3 == r2',
+           Not(r1' <= p1),
+           r1' + -1*r2' <= -1))
+root - DEBUG : Postcondition after quantifier elimination: And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1)
+root - DEBUG : Precondition: r1 + -1*r2 <= -1
+root - DEBUG : Guard: And(Not(r2 <= p1), Not(p1 <= r1))
+root - DEBUG : Assignment: [(r2, p1), (r3, r2)]
+root - DEBUG : Strongest Postcondition: Exists([p1, r1', r2'],
+       And(r2 == p1,
+           r3 == r2',
+           r1 == r1',
+           Not(r2' <= p1),
+           Not(p1 <= r1'),
+           r1' + -1*r2' <= -1))
+root - DEBUG : Postcondition after quantifier elimination: And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1, r1 + -1*r3 <= -1)
+root - DEBUG : Precondition: r1 + -1*r2 <= -1
+root - DEBUG : Guard: p1 > r2
+root - DEBUG : Assignment: [(r3, p1)]
+root - DEBUG : Strongest Postcondition: Exists([p1, r1', r2'],
+       And(r3 == p1,
+           r1 == r1',
+           r2 == r2',
+           Not(p1 <= r2'),
+           r1' + -1*r2' <= -1))
+root - DEBUG : Postcondition after quantifier elimination: And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1)
+root - DEBUG : Final postcondition: Or(And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1, r1 + -1*r3 <= -1),
+   And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+   And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))
+root - DEBUG : Postcondition has changed
+root - DEBUG : 
+Source: l16, Destination: l16
+root - DEBUG : [l16:offer(p1):True:[]:_not_ok:l16]
+root - DEBUG : Derive postcondition for l16
+root - DEBUG : Registers in location l16: [r1, r2, r3]
+root - DEBUG : Precondition: Or(And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1, r1 + -1*r3 <= -1),
+   And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+   And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))
+root - DEBUG : Guard: True
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists([r1', r3', r2'],
+       And(r1 == r1',
+           r2 == r2',
+           r3 == r3',
+           Or(And(r1' + -1*r2' <= -1, r2' + -1*r3' <= -1),
+              And(r2' + -1*r3' <= -1,
+                  r1' + -1*r2' <= -1,
+                  r1' + -1*r3' <= -1),
+              And(r2' + -1*r3' <= -1, r1' + -1*r2' <= -1))))
+root - DEBUG : Postcondition after quantifier elimination: And(Or(r1 + -1*r3 <= -1, True, True),
+    r1 + -1*r2 <= -1,
+    r2 + -1*r3 <= -1)
+root - DEBUG : Final postcondition: And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1)
+root - DEBUG : 
+Source: l8, Destination: l22
+root - DEBUG : [l8:offer(p1):r2 == p1:[]:_ok:l22]
+root - DEBUG : Derive postcondition for l22
+root - DEBUG : Registers in location l22: [r1, r2]
+root - DEBUG : Precondition: r1 + -1*r2 <= -1
+root - DEBUG : Guard: r2 == p1
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists([r2', p1, r1'],
+       And(r1 == r1',
+           r2 == r2',
+           r2' == p1,
+           r1' + -1*r2' <= -1))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Final postcondition: r1 + -1*r2 <= -1
+root - DEBUG : Postcondition has changed
+root - DEBUG : 
+Source: l22, Destination: l22
+root - DEBUG : [l22:offer(p1):True:[]:_not_ok:l22]
+root - DEBUG : Derive postcondition for l22
+root - DEBUG : Registers in location l22: [r1, r2]
+root - DEBUG : Precondition: r1 + -1*r2 <= -1
+root - DEBUG : Guard: True
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists([r2', r1'],
+       And(r1 == r1', r2 == r2', r1' + -1*r2' <= -1))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Final postcondition: r1 + -1*r2 <= -1
+root - DEBUG : 
+Source: l5, Destination: l15
+root - DEBUG : [l5:offer(p1):r1 == p1:[]:_ok:l15]
+root - DEBUG : Derive postcondition for l15
+root - DEBUG : Registers in location l15: [r1]
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: r1 == p1
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists([p1, r1'], And(r1 == r1', r1' == p1))
+root - DEBUG : Postcondition after quantifier elimination: True
+root - DEBUG : Final postcondition: True
+root - DEBUG : Postcondition has changed
+root - DEBUG : 
+Source: l15, Destination: l10
+root - DEBUG : [l15:offer(p1):p1 > r1:[(r2, p1)]:_ok:l10]
+root - DEBUG : Derive postcondition for l10
+root - DEBUG : Registers in location l10: [r1, r2]
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: p1 > r1
+root - DEBUG : Assignment: [(r2, p1)]
+root - DEBUG : Strongest Postcondition: Exists([p1, r1'], And(r2 == p1, r1 == r1', Not(p1 <= r1')))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Final postcondition: r1 + -1*r2 <= -1
+root - DEBUG : 
+Source: l15, Destination: l22
+root - DEBUG : [l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l22]
+root - DEBUG : Derive postcondition for l22
+root - DEBUG : Registers in location l22: [r1, r2]
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: p1 < r1
+root - DEBUG : Assignment: [(r1, p1), (r2, r1)]
+root - DEBUG : Strongest Postcondition: Exists([p1, r1'], And(r1 == p1, r2 == r1', Not(r1' <= p1)))
+root - DEBUG : Postcondition after quantifier elimination: r1 + -1*r2 <= -1
+root - DEBUG : Final postcondition: r1 + -1*r2 <= -1
+root - DEBUG : 
+Source: l15, Destination: l21
+root - DEBUG : [l15:offer(p1):r1 == p1:[]:_ok:l21]
+root - DEBUG : Derive postcondition for l21
+root - DEBUG : Registers in location l21: [r1]
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: r1 == p1
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists([p1, r1'], And(r1 == r1', r1' == p1))
+root - DEBUG : Postcondition after quantifier elimination: True
+root - DEBUG : Final postcondition: True
+root - DEBUG : Postcondition has changed
+root - DEBUG : 
+Source: l21, Destination: l21
+root - DEBUG : [l21:offer(p1):True:[]:_not_ok:l21]
+root - DEBUG : Derive postcondition for l21
+root - DEBUG : Registers in location l21: [r1]
+root - DEBUG : Precondition: True
+root - DEBUG : Guard: True
+root - DEBUG : Assignment: []
+root - DEBUG : Strongest Postcondition: Exists(r1', r1 == r1')
+root - DEBUG : Postcondition after quantifier elimination: True
+root - DEBUG : Final postcondition: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l0:offer(p1):True:[(r1, p1)]:_ok:l5 	 r1 == b0
+root - DEBUG : Derived weakest precondition:p1 == b0
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == False, contains(p1) == False, isfull() == False, isempty() == True]
+root - DEBUG : Guards for the candidates: [True, b0 == p1, Not(b0 == p1)]
+root - DEBUG : Invariant at location l0 : True
+root - DEBUG : Final list of guards: [b0 == p1, True, Not(b0 == p1)]
+root - DEBUG : MUS [b0 == p1, Not(b0 == p1)]
+root - DEBUG : MSS [b0 == p1, True]
+root - DEBUG : MSS [True, Not(b0 == p1)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((b0 == p1) or Not((Not(isfull()) and (isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l0:offer(p1):True:[(r1, p1)]:_ok:l5 	 Not(r1 == b0)
+root - DEBUG : Derived weakest precondition:Not(p1 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == False, contains(p1) == False, isfull() == False, isempty() == True]
+root - DEBUG : Guards for the candidates: [True, b0 == p1, Not(b0 == p1)]
+root - DEBUG : Invariant at location l0 : True
+root - DEBUG : Final list of guards: [b0 == p1, True, Not(b0 == p1)]
+root - DEBUG : MUS [b0 == p1, Not(b0 == p1)]
+root - DEBUG : MSS [b0 == p1, True]
+root - DEBUG : MSS [True, Not(b0 == p1)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Not(b0 == p1)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {Not((b0 == p1))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((b0 == p1)) or Not((Not(isfull()) and (isempty()))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and (isempty())))} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l0:offer(p1):True:[(r1, p1)]:_ok:l5 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and (isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l0
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l0:offer(p1):True:[(r1, p1)]:_ok:l5 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l5
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l5:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l8 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l8 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : l5:offer(p1):r1 == p1:[(r1, r1)]:_ok:l15 	 r1 == b0
+root - DEBUG : Derived weakest precondition:And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+    Or(p1 <= r1, p1 == b0, r1 == b0),
+    Or(r1 <= p1, p1 == b0, r1 == b0),
+    Or(Not(r1 == p1), r1 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(b0 == p1), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l5 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(b0 == p1), True, b0 == p1, r1 == b0, Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0))), Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == b0, Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0)))]
+root - DEBUG : MSS [Not(b0 == p1), True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [r1 == p1, Not(b0 == p1), True, Not(r1 == b0), Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0)))]
+root - DEBUG : MUS [r1 == p1, b0 == p1, Not(r1 == b0)]
+root - DEBUG : MUS [b0 == p1, Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0)))]
+root - DEBUG : MUS [b0 == p1, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [True, b0 == p1, Not(r1 == b0), Not(r1 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0))), Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MSS [True, b0 == p1, r1 == b0, r1 == p1]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), r1 == b0]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [r1 == b0]
+root - DEBUG : [b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == b0, Not(b0 == p1))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3], And(r1 == b0, Not(b0 == p1)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1, Not(r1 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3], And(b0 == p1, Not(r1 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((b0 == p1) or (contains(b0)) or Not((Not(isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l5
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l5:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l8 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l8 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : l5:offer(p1):r1 == p1:[(r1, r1)]:_ok:l15 	 Not(r1 == b0)
+root - DEBUG : Derived weakest precondition:And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+    Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+    Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+    Or(Not(r1 == p1), Not(r1 == b0)))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(b0 == p1), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l5 : True
+root - DEBUG : Final list of guards: [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)))), r1 == p1, Not(b0 == p1), True, b0 == p1, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), r1 == b0]
+root - DEBUG : MSS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)))), Not(b0 == p1), True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MUS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)))), Not(b0 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, b0 == p1, Not(r1 == b0)]
+root - DEBUG : MSS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)))), True, b0 == p1, Not(r1 == b0), Not(r1 == p1)]
+root - DEBUG : MUS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)))), r1 == p1, Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, Not(r1 == b0), Not(b0 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)))), r1 == p1, Not(b0 == p1)]
+root - DEBUG : MSS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)))), r1 == p1, True, b0 == p1, r1 == b0]
+root - DEBUG : MUS [b0 == p1, r1 == b0, Not(r1 == p1)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Not(b0 == p1), Not(r1 == b0)]
+root - DEBUG : [r1 == p1, Not(r1 == b0)]
+root - DEBUG : [r1 == p1, Not(b0 == p1)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {((contains(p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(b0 == p1),
+    Not(And(Not(b0 == p1), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(r1 == p1,
+           Not(b0 == p1),
+           Not(And(Not(b0 == p1), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((contains(p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(r1 == b0),
+    Not(And(Not(b0 == p1), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(r1 == p1,
+           Not(r1 == b0),
+           Not(And(Not(b0 == p1), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((contains(p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(isfull()) and Not(isempty()))) or (Not((b0 == p1)) and Not(contains(b0))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l5
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l5
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l5:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l8 	 True
+root - DEBUG : l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l8 	 True
+root - DEBUG : l5:offer(p1):r1 == p1:[(r1, r1)]:_ok:l15 	 True
+root - DEBUG : Derived weakest precondition:Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))
+root - DEBUG : Candidate observer methods at pre-state: [contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l5 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))), True, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)))]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, r1 == b0]
+root - DEBUG : MSS [True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [r1 == p1, True, Not(r1 == b0)]
+root - DEBUG : MSS [True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : []
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l5
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l5
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l5:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l8 	 True
+root - DEBUG : l5:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l8 	 True
+root - DEBUG : l5:offer(p1):r1 == p1:[(r1, r1)]:_ok:l15 	 True
+root - DEBUG : Derived weakest precondition:Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))
+root - DEBUG : Candidate observer methods at pre-state: [contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l5 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))), True, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)))]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, r1 == b0]
+root - DEBUG : MSS [True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [r1 == p1, True, Not(r1 == b0)]
+root - DEBUG : MSS [True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : []
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l8
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l8:offer(p1):r1 == p1:[(r1, r1), (r2, r2)]:_ok:l10 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:_ok:l16 	 Or(r1 == b0, r2 == b0, r3 == b0)
+root - DEBUG : l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2), (r1, r1)]:_ok:l16 	 Or(r1 == b0, r2 == b0, r3 == b0)
+root - DEBUG : l8:offer(p1):p1 > r2:[(r3, p1), (r1, r1), (r2, r2)]:_ok:l16 	 Or(r1 == b0, r2 == b0, r3 == b0)
+root - DEBUG : l8:offer(p1):r2 == p1:[(r1, r1), (r2, r2)]:_ok:l22 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : Derived weakest precondition:And(Or(r1 == p1,
+       r2 == p1,
+       And(Not(r2 <= p1), Not(p1 <= r1)),
+       Not(r1 <= p1),
+       Not(p1 <= r2)),
+    Or(Not(r1 == p1), r2 == b0, r1 == b0),
+    Or(r1 <= p1, p1 == b0, r2 == b0, r1 == b0),
+    Or(p1 == b0,
+       r2 == b0,
+       r1 == b0,
+       Not(And(Not(r2 <= p1), Not(p1 <= r1)))),
+    Or(p1 <= r2, p1 == b0, r2 == b0, r1 == b0),
+    Or(Not(r2 == p1), r2 == b0, r1 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l8 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1), r2 == b0, r1 == b0),
+           Or(r1 <= p1, p1 == b0, r2 == b0, r1 == b0),
+           Or(p1 == b0,
+              r2 == b0,
+              r1 == b0,
+              Not(And(Not(r2 <= p1), Not(p1 <= r1)))),
+           Or(p1 <= r2, p1 == b0, r2 == b0, r1 == b0),
+           Or(Not(r2 == p1), r2 == b0, r1 == b0))))]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1), r2 == b0, r1 == b0),
+           Or(r1 <= p1, p1 == b0, r2 == b0, r1 == b0),
+           Or(p1 == b0,
+              r2 == b0,
+              r1 == b0,
+              Not(And(Not(r2 <= p1), Not(p1 <= r1)))),
+           Or(p1 <= r2, p1 == b0, r2 == b0, r1 == b0),
+           Or(Not(r2 == p1), r2 == b0, r1 == b0))))]
+root - DEBUG : MSS [Not(b0 == p1), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True, Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1), r2 == b0, r1 == b0),
+           Or(r1 <= p1, p1 == b0, r2 == b0, r1 == b0),
+           Or(p1 == b0,
+              r2 == b0,
+              r1 == b0,
+              Not(And(Not(r2 <= p1), Not(p1 <= r1)))),
+           Or(p1 <= r2, p1 == b0, r2 == b0, r1 == b0),
+           Or(Not(r2 == p1), r2 == b0, r1 == b0))))]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MUS [b0 == p1, Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1), r2 == b0, r1 == b0),
+           Or(r1 <= p1, p1 == b0, r2 == b0, r1 == b0),
+           Or(p1 == b0,
+              r2 == b0,
+              r1 == b0,
+              Not(And(Not(r2 <= p1), Not(p1 <= r1)))),
+           Or(p1 <= r2, p1 == b0, r2 == b0, r1 == b0),
+           Or(Not(r2 == p1), r2 == b0, r1 == b0))))]
+root - DEBUG : MSS [Not(b0 == p1), True, Or(r1 == p1, r2 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1), r2 == b0, r1 == b0),
+           Or(r1 <= p1, p1 == b0, r2 == b0, r1 == b0),
+           Or(p1 == b0,
+              r2 == b0,
+              r1 == b0,
+              Not(And(Not(r2 <= p1), Not(p1 <= r1)))),
+           Or(p1 <= r2, p1 == b0, r2 == b0, r1 == b0),
+           Or(Not(r2 == p1), r2 == b0, r1 == b0)))), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [b0 == p1, True, Or(r1 == p1, r2 == p1), Or(r1 == b0, r2 == b0)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, Or(r1 == b0, r2 == b0)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Or(r1 == b0, r2 == b0)]
+root - DEBUG : [b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Or(r1 == b0, r2 == b0), Not(b0 == p1))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(Or(r1 == b0, r2 == b0), Not(b0 == p1)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1, Not(Or(r1 == b0, r2 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(b0 == p1, Not(Or(r1 == b0, r2 == b0))))
+root - DEBUG : Result: False
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((b0 == p1) or (contains(b0)) or Not((Not(isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l8
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l8:offer(p1):r1 == p1:[(r1, r1), (r2, r2)]:_ok:l10 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:_ok:l16 	 And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))
+root - DEBUG : l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2), (r1, r1)]:_ok:l16 	 And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))
+root - DEBUG : l8:offer(p1):p1 > r2:[(r3, p1), (r1, r1), (r2, r2)]:_ok:l16 	 And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))
+root - DEBUG : l8:offer(p1):r2 == p1:[(r1, r1), (r2, r2)]:_ok:l22 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : Derived weakest precondition:And(Or(r1 == p1,
+       r2 == p1,
+       And(Not(r2 <= p1), Not(p1 <= r1)),
+       Not(r1 <= p1),
+       Not(p1 <= r2)),
+    Or(Not(r1 == p1), And(Not(r1 == b0), Not(r2 == b0))),
+    Or(r1 <= p1,
+       And(Not(p1 == b0), Not(r1 == b0), Not(r2 == b0))),
+    Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+       And(Not(r1 == b0), Not(p1 == b0), Not(r2 == b0))),
+    Or(p1 <= r2,
+       And(Not(r1 == b0), Not(r2 == b0), Not(p1 == b0))),
+    Or(Not(r2 == p1), And(Not(r1 == b0), Not(r2 == b0))))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l8 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1),
+              And(Not(r1 == b0), Not(r2 == b0))),
+           Or(r1 <= p1,
+              And(Not(p1 == b0),
+                  Not(r1 == b0),
+                  Not(r2 == b0))),
+           Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+              And(Not(r1 == b0),
+                  Not(p1 == b0),
+                  Not(r2 == b0))),
+           Or(p1 <= r2,
+              And(Not(r1 == b0),
+                  Not(r2 == b0),
+                  Not(p1 == b0))),
+           Or(Not(r2 == p1),
+              And(Not(r1 == b0), Not(r2 == b0)))))), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1),
+              And(Not(r1 == b0), Not(r2 == b0))),
+           Or(r1 <= p1,
+              And(Not(p1 == b0),
+                  Not(r1 == b0),
+                  Not(r2 == b0))),
+           Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+              And(Not(r1 == b0),
+                  Not(p1 == b0),
+                  Not(r2 == b0))),
+           Or(p1 <= r2,
+              And(Not(r1 == b0),
+                  Not(r2 == b0),
+                  Not(p1 == b0))),
+           Or(Not(r2 == p1),
+              And(Not(r1 == b0), Not(r2 == b0)))))), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1),
+              And(Not(r1 == b0), Not(r2 == b0))),
+           Or(r1 <= p1,
+              And(Not(p1 == b0),
+                  Not(r1 == b0),
+                  Not(r2 == b0))),
+           Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+              And(Not(r1 == b0),
+                  Not(p1 == b0),
+                  Not(r2 == b0))),
+           Or(p1 <= r2,
+              And(Not(r1 == b0),
+                  Not(r2 == b0),
+                  Not(p1 == b0))),
+           Or(Not(r2 == p1),
+              And(Not(r1 == b0), Not(r2 == b0)))))), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1),
+              And(Not(r1 == b0), Not(r2 == b0))),
+           Or(r1 <= p1,
+              And(Not(p1 == b0),
+                  Not(r1 == b0),
+                  Not(r2 == b0))),
+           Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+              And(Not(r1 == b0),
+                  Not(p1 == b0),
+                  Not(r2 == b0))),
+           Or(p1 <= r2,
+              And(Not(r1 == b0),
+                  Not(r2 == b0),
+                  Not(p1 == b0))),
+           Or(Not(r2 == p1),
+              And(Not(r1 == b0), Not(r2 == b0)))))), And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), Not(b0 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1),
+              And(Not(r1 == b0), Not(r2 == b0))),
+           Or(r1 <= p1,
+              And(Not(p1 == b0),
+                  Not(r1 == b0),
+                  Not(r2 == b0))),
+           Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+              And(Not(r1 == b0),
+                  Not(p1 == b0),
+                  Not(r2 == b0))),
+           Or(p1 <= r2,
+              And(Not(r1 == b0),
+                  Not(r2 == b0),
+                  Not(p1 == b0))),
+           Or(Not(r2 == p1),
+              And(Not(r1 == b0), Not(r2 == b0)))))), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, Or(r1 == b0, r2 == b0)]
+root - DEBUG : MSS [b0 == p1, True, Or(r1 == p1, r2 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1),
+              And(Not(r1 == b0), Not(r2 == b0))),
+           Or(r1 <= p1,
+              And(Not(p1 == b0),
+                  Not(r1 == b0),
+                  Not(r2 == b0))),
+           Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+              And(Not(r1 == b0),
+                  Not(p1 == b0),
+                  Not(r2 == b0))),
+           Or(p1 <= r2,
+              And(Not(r1 == b0),
+                  Not(r2 == b0),
+                  Not(p1 == b0))),
+           Or(Not(r2 == p1),
+              And(Not(r1 == b0), Not(r2 == b0)))))), Or(r1 == b0, r2 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Or(r1 == p1,
+              r2 == p1,
+              And(Not(r2 <= p1), Not(p1 <= r1)),
+              Not(r1 <= p1),
+              Not(p1 <= r2)),
+           Or(Not(r1 == p1),
+              And(Not(r1 == b0), Not(r2 == b0))),
+           Or(r1 <= p1,
+              And(Not(p1 == b0),
+                  Not(r1 == b0),
+                  Not(r2 == b0))),
+           Or(Not(And(Not(r2 <= p1), Not(p1 <= r1))),
+              And(Not(r1 == b0),
+                  Not(p1 == b0),
+                  Not(r2 == b0))),
+           Or(p1 <= r2,
+              And(Not(r1 == b0),
+                  Not(r2 == b0),
+                  Not(p1 == b0))),
+           Or(Not(r2 == p1),
+              And(Not(r1 == b0), Not(r2 == b0)))))), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : [Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(Not(contains(b0)) and (contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(contains(b0)) and (contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == b0),
+    Not(r2 == b0),
+    Or(r1 == p1, r2 == p1),
+    Not(And(Not(b0 == p1), Not(r1 == b0), Not(r2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(Not(r1 == b0),
+           Not(r2 == b0),
+           Or(r1 == p1, r2 == p1),
+           Not(And(Not(b0 == p1),
+                   Not(r1 == b0),
+                   Not(r2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(contains(b0)) and (contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(isfull()) and Not(isempty()))) or (Not((b0 == p1)) and Not(contains(b0))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l8
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l8:offer(p1):r1 == p1:[(r1, r1), (r2, r2)]:_ok:l10 	 True
+root - DEBUG : l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:_ok:l16 	 True
+root - DEBUG : l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2), (r1, r1)]:_ok:l16 	 True
+root - DEBUG : l8:offer(p1):p1 > r2:[(r3, p1), (r1, r1), (r2, r2)]:_ok:l16 	 True
+root - DEBUG : l8:offer(p1):r2 == p1:[(r1, r1), (r2, r2)]:_ok:l22 	 True
+root - DEBUG : Derived weakest precondition:Or(r1 == p1,
+   r2 == p1,
+   And(Not(r2 <= p1), Not(p1 <= r1)),
+   Not(r1 <= p1),
+   Not(p1 <= r2))
+root - DEBUG : Candidate observer methods at pre-state: [contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == b0, r2 == b0), True, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l8 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(Or(r1 == p1,
+       r2 == p1,
+       And(Not(r2 <= p1), Not(p1 <= r1)),
+       Not(r1 <= p1),
+       Not(p1 <= r2),
+       Not(r1 + -1*r2 <= -1))), Or(r1 == b0, r2 == b0), True, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [Not(Or(r1 == p1,
+       r2 == p1,
+       And(Not(r2 <= p1), Not(p1 <= r1)),
+       Not(r1 <= p1),
+       Not(p1 <= r2),
+       Not(r1 + -1*r2 <= -1)))]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), True, And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [True, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : []
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l8
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l8
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l8
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l8:offer(p1):r1 == p1:[(r1, r1), (r2, r2)]:_ok:l10 	 True
+root - DEBUG : l8:offer(p1):p1 < r1:[(r1, p1), (r2, r1), (r3, r2)]:_ok:l16 	 True
+root - DEBUG : l8:offer(p1):And(Not(r2 <= p1), Not(p1 <= r1)):[(r2, p1), (r3, r2), (r1, r1)]:_ok:l16 	 True
+root - DEBUG : l8:offer(p1):p1 > r2:[(r3, p1), (r1, r1), (r2, r2)]:_ok:l16 	 True
+root - DEBUG : l8:offer(p1):r2 == p1:[(r1, r1), (r2, r2)]:_ok:l22 	 True
+root - DEBUG : Derived weakest precondition:Or(r1 == p1,
+   r2 == p1,
+   And(Not(r2 <= p1), Not(p1 <= r1)),
+   Not(r1 <= p1),
+   Not(p1 <= r2))
+root - DEBUG : Candidate observer methods at pre-state: [contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == b0, r2 == b0), True, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l8 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(Or(r1 == p1,
+       r2 == p1,
+       And(Not(r2 <= p1), Not(p1 <= r1)),
+       Not(r1 + -1*r2 <= -1),
+       Not(r1 <= p1),
+       Not(p1 <= r2))), Or(r1 == b0, r2 == b0), True, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [Not(Or(r1 == p1,
+       r2 == p1,
+       And(Not(r2 <= p1), Not(p1 <= r1)),
+       Not(r1 + -1*r2 <= -1),
+       Not(r1 <= p1),
+       Not(p1 <= r2)))]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), True, And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [True, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : []
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l10
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l10:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l10 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : Derived weakest precondition:Or(r2 == b0, r1 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l10 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), Or(r1 == b0, r2 == b0)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, Or(r1 == b0, r2 == b0)]
+root - DEBUG : MSS [b0 == p1, Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0))]
+root - DEBUG : MUS [Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), b0 == p1, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True, Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0))]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Or(r1 == b0, r2 == b0)]
+root - DEBUG : [b0 == p1, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1,
+    Or(r1 == p1, r2 == p1),
+    Not(Or(r1 == b0, r2 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(b0 == p1,
+           Or(r1 == p1, r2 == p1),
+           Not(Or(r1 == b0, r2 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l10
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l10:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l10 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : Derived weakest precondition:And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l10 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), Not(b0 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, Or(r1 == b0, r2 == b0)]
+root - DEBUG : MSS [Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), b0 == p1, Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), b0 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {(Not(contains(p1)) and (b0 == p1))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(contains(p1)) and (b0 == p1))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p1),
+    Not(r2 == p1),
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(Not(r1 == p1),
+           Not(r2 == p1),
+           b0 == p1,
+           Not(And(Not(r1 == b0), Not(r2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(contains(p1)) and (b0 == p1))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l10
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l10:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l10 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l10
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l10
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l10
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l10:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l10 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l15
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l15:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l10 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : l15:offer(p1):r1 == p1:[(r1, r1)]:_ok:l21 	 r1 == b0
+root - DEBUG : l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l22 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : Derived weakest precondition:And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+    Or(p1 <= r1, p1 == b0, r1 == b0),
+    Or(Not(r1 == p1), r1 == b0),
+    Or(r1 <= p1, p1 == b0, r1 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(b0 == p1), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l15 : True
+root - DEBUG : Final list of guards: [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0))), r1 == p1, Not(b0 == p1), True, b0 == p1, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0))), r1 == b0]
+root - DEBUG : MSS [Not(b0 == p1), True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [r1 == p1, Not(b0 == p1), True, Not(r1 == b0), Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0)))]
+root - DEBUG : MUS [r1 == p1, b0 == p1, Not(r1 == b0)]
+root - DEBUG : MUS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0))), b0 == p1]
+root - DEBUG : MUS [b0 == p1, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [True, b0 == p1, Not(r1 == b0), Not(r1 == p1)]
+root - DEBUG : MSS [Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, p1 == b0, r1 == b0),
+        Or(Not(r1 == p1), r1 == b0),
+        Or(r1 <= p1, p1 == b0, r1 == b0))), Not(b0 == p1), True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MSS [True, b0 == p1, r1 == b0, r1 == p1]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), r1 == b0]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [r1 == b0]
+root - DEBUG : [b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == b0, Not(b0 == p1))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3], And(r1 == b0, Not(b0 == p1)))
+root - DEBUG : Result: False
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(b0 == p1)} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1, Not(r1 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3], And(b0 == p1, Not(r1 == b0)))
+root - DEBUG : Result: False
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((b0 == p1) or (contains(b0)) or Not((Not(isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l15
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l15:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l10 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : l15:offer(p1):r1 == p1:[(r1, r1)]:_ok:l21 	 Not(r1 == b0)
+root - DEBUG : l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l22 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : Derived weakest precondition:And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+    Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+    Or(Not(r1 == p1), Not(r1 == b0)),
+    Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(b0 == p1), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l15 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(b0 == p1), True, b0 == p1, r1 == b0, Not(r1 == p1), Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))))), Not(r1 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), r1 == b0]
+root - DEBUG : MSS [Not(b0 == p1), True, r1 == b0, Not(r1 == p1), Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0)))))]
+root - DEBUG : MUS [Not(b0 == p1), Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))))), Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, b0 == p1, Not(r1 == b0)]
+root - DEBUG : MSS [True, b0 == p1, Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))))), Not(r1 == b0), Not(r1 == p1)]
+root - DEBUG : MUS [r1 == p1, Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))))), Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, Not(r1 == b0), Not(b0 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0)))))]
+root - DEBUG : MSS [r1 == p1, True, Not(And(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)),
+        Or(p1 <= r1, And(Not(r1 == b0), Not(p1 == b0))),
+        Or(Not(r1 == p1), Not(r1 == b0)),
+        Or(r1 <= p1, And(Not(p1 == b0), Not(r1 == b0))))), b0 == p1, r1 == b0]
+root - DEBUG : MUS [b0 == p1, r1 == b0, Not(r1 == p1)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Not(b0 == p1), Not(r1 == b0)]
+root - DEBUG : [r1 == p1, Not(r1 == b0)]
+root - DEBUG : [r1 == p1, Not(b0 == p1)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {((contains(p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(b0 == p1),
+    Not(And(Not(b0 == p1), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(r1 == p1,
+           Not(b0 == p1),
+           Not(And(Not(b0 == p1), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(Not((b0 == p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((contains(p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1,
+    Not(r1 == b0),
+    Not(And(Not(b0 == p1), Not(r1 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(r1 == p1,
+           Not(r1 == b0),
+           Not(And(Not(b0 == p1), Not(r1 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((contains(p1)) and Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not((Not(isfull()) and Not(isempty()))) or (Not((b0 == p1)) and Not(contains(b0))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l15
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l15:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l10 	 True
+root - DEBUG : l15:offer(p1):r1 == p1:[(r1, r1)]:_ok:l21 	 True
+root - DEBUG : l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l22 	 True
+root - DEBUG : Derived weakest precondition:Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))
+root - DEBUG : Candidate observer methods at pre-state: [contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l15 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))), True, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)))]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, r1 == b0]
+root - DEBUG : MSS [True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [r1 == p1, True, Not(r1 == b0)]
+root - DEBUG : MSS [True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : []
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l15
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l15
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l15
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l15:offer(p1):p1 > r1:[(r2, p1), (r1, r1)]:_ok:l10 	 True
+root - DEBUG : l15:offer(p1):r1 == p1:[(r1, r1)]:_ok:l21 	 True
+root - DEBUG : l15:offer(p1):p1 < r1:[(r1, p1), (r2, r1)]:_ok:l22 	 True
+root - DEBUG : Derived weakest precondition:Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))
+root - DEBUG : Candidate observer methods at pre-state: [contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == False, isempty() == False]
+root - DEBUG : Guards for the candidates: [True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l15 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1))), True, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(Or(r1 == p1, Not(p1 <= r1), Not(r1 <= p1)))]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, r1 == b0]
+root - DEBUG : MSS [True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [r1 == p1, True, Not(r1 == b0)]
+root - DEBUG : MSS [True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : []
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l16
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l16:offer(p1):True:[(r1, r1), (r2, r2), (r3, r3)]:_not_ok:l16 	 Or(r1 == b0, r2 == b0, r3 == b0)
+root - DEBUG : Derived weakest precondition:Or(r3 == b0, r2 == b0, r1 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), b0 == p1, True, Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : Invariant at location l16 : Or(And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1, r1 + -1*r3 <= -1),
+   And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+   And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))
+root - DEBUG : Final list of guards: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), True, b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       r3 == b0,
+       r2 == b0,
+       r1 == b0))]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), True, Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       r3 == b0,
+       r2 == b0,
+       r1 == b0))]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0, r3 == b0), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       r3 == b0,
+       r2 == b0,
+       r1 == b0))]
+root - DEBUG : MSS [True, b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0), Not(b0 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), True, Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       r3 == b0,
+       r2 == b0,
+       r1 == b0))]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), True, b0 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       r3 == b0,
+       r2 == b0,
+       r1 == b0))]
+root - DEBUG : MUS [b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       r3 == b0,
+       r2 == b0,
+       r1 == b0))]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : [b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1,
+    Or(r1 == p1, r2 == p1, r3 == p1),
+    Not(Or(r1 == b0, r2 == b0, r3 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(b0 == p1,
+           Or(r1 == p1, r2 == p1, r3 == p1),
+           Not(Or(r1 == b0, r2 == b0, r3 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l16
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l16:offer(p1):True:[(r1, r1), (r2, r2), (r3, r3)]:_not_ok:l16 	 And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))
+root - DEBUG : Derived weakest precondition:And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), b0 == p1, True, Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : Invariant at location l16 : Or(And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1, r1 + -1*r3 <= -1),
+   And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+   And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))
+root - DEBUG : Final list of guards: [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)))), True, b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))))]
+root - DEBUG : MUS [Or(r1 == p1, r2 == p1, r3 == p1), And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [Not(b0 == p1), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)))), True, Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)))), True, b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), True, b0 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MSS [Not(b0 == p1), Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)))), True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)), Or(r1 == b0, r2 == b0, r3 == b0)]
+root - DEBUG : MUS [Not(Or(Not(Or(And(r2 + -1*r3 <= -1,
+                  r1 + -1*r2 <= -1,
+                  r1 + -1*r3 <= -1),
+              And(r1 + -1*r2 <= -1, r2 + -1*r3 <= -1),
+              And(r2 + -1*r3 <= -1, r1 + -1*r2 <= -1))),
+       And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)))), b0 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : MUS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), b0 == p1, Or(r1 == p1, r2 == p1, r3 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), True, Or(r1 == p1, r2 == p1, r3 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0)), Not(b0 == p1), True, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))]
+root - DEBUG : [b0 == p1, And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1))]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {((b0 == p1) and Not(contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((b0 == p1) and Not(contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1,
+    Not(r1 == p1),
+    Not(r2 == p1),
+    Not(r3 == p1),
+    Not(And(Not(r1 == b0), Not(r2 == b0), Not(r3 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(b0 == p1,
+           Not(r1 == p1),
+           Not(r2 == p1),
+           Not(r3 == p1),
+           Not(And(Not(r1 == b0),
+                   Not(r2 == b0),
+                   Not(r3 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((b0 == p1) and Not(contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l16
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l16:offer(p1):True:[(r1, r1), (r2, r2), (r3, r3)]:_not_ok:l16 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l16
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l16
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l16
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l16:offer(p1):True:[(r1, r1), (r2, r2), (r3, r3)]:_not_ok:l16 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l21
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l21:offer(p1):True:[(r1, r1)]:_not_ok:l21 	 r1 == b0
+root - DEBUG : Derived weakest precondition:r1 == b0
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(b0 == p1), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l21 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(b0 == p1), True, b0 == p1, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), r1 == b0]
+root - DEBUG : MSS [Not(b0 == p1), True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(r1 == b0), r1 == p1]
+root - DEBUG : MUS [r1 == p1, b0 == p1, Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, b0 == p1, r1 == b0]
+root - DEBUG : MUS [b0 == p1, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [True, b0 == p1, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [r1 == b0]
+root - DEBUG : [r1 == p1, b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {((contains(p1)) and (b0 == p1))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((contains(p1)) and (b0 == p1))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1, b0 == p1, Not(r1 == b0))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(r1 == p1, b0 == p1, Not(r1 == b0)))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((contains(p1)) and (b0 == p1))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l21
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l21:offer(p1):True:[(r1, r1)]:_not_ok:l21 	 Not(r1 == b0)
+root - DEBUG : Derived weakest precondition:Not(r1 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [Not(b0 == p1), b0 == p1, True, Not(r1 == p1), r1 == b0, r1 == p1, Not(r1 == b0)]
+root - DEBUG : Invariant at location l21 : True
+root - DEBUG : Final list of guards: [r1 == p1, Not(b0 == p1), True, b0 == p1, r1 == b0, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [r1 == p1, Not(r1 == p1)]
+root - DEBUG : MUS [r1 == b0, Not(r1 == b0)]
+root - DEBUG : MUS [r1 == p1, Not(b0 == p1), r1 == b0]
+root - DEBUG : MSS [Not(b0 == p1), True, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(r1 == b0), r1 == p1]
+root - DEBUG : MUS [r1 == p1, b0 == p1, Not(r1 == b0)]
+root - DEBUG : MSS [r1 == p1, True, b0 == p1, r1 == b0]
+root - DEBUG : MUS [b0 == p1, r1 == b0, Not(r1 == p1)]
+root - DEBUG : MSS [True, b0 == p1, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : MSS [Not(b0 == p1), True, Not(r1 == p1), Not(r1 == b0)]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Not(r1 == b0)]
+root - DEBUG : [r1 == p1, Not(b0 == p1)]
+root - DEBUG : [b0 == p1, Not(r1 == p1)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {((b0 == p1) and Not(contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(r1 == p1, Not(b0 == p1), r1 == b0)
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(r1 == p1, Not(b0 == p1), r1 == b0))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((contains(p1)) and Not((b0 == p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((b0 == p1) and Not(contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1, Not(r1 == p1), r1 == b0)
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(b0 == p1, Not(r1 == p1), r1 == b0))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((b0 == p1) and Not(contains(p1)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l21
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l21:offer(p1):True:[(r1, r1)]:_not_ok:l21 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l21
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l21
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l21
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l21:offer(p1):True:[(r1, r1)]:_not_ok:l21 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l22
+root - DEBUG : Observer method at post-state: contains(p1) == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l22:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l22 	 Or(r1 == b0, r2 == b0)
+root - DEBUG : Derived weakest precondition:Or(r2 == b0, r1 == b0)
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l22 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), Or(r1 == b0, r2 == b0)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, Or(r1 == b0, r2 == b0)]
+root - DEBUG : MSS [b0 == p1, Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [Not(b0 == p1), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0))]
+root - DEBUG : MUS [Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0)), b0 == p1, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True, Not(Or(Not(r1 + -1*r2 <= -1), r2 == b0, r1 == b0))]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [Or(r1 == b0, r2 == b0)]
+root - DEBUG : [b0 == p1, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {(contains(b0))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(b0 == p1,
+    Or(r1 == p1, r2 == p1),
+    Not(Or(r1 == b0, r2 == b0)))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(b0 == p1,
+           Or(r1 == p1, r2 == p1),
+           Not(Or(r1 == b0, r2 == b0))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {((b0 == p1) and (contains(p1)))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l22
+root - DEBUG : Observer method at post-state: contains(p1) == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l22:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l22 	 And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : Derived weakest precondition:And(Not(r1 == b0), Not(r2 == b0))
+root - DEBUG : Candidate observer methods at pre-state: [(b0 == p1), Not(b0 == p1), contains(b0) == True, contains(b0) == False, contains(p1) == True, contains(p1) == False, isfull() == True, isempty() == False]
+root - DEBUG : Guards for the candidates: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : Invariant at location l22 : r1 + -1*r2 <= -1
+root - DEBUG : Final list of guards: [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), b0 == p1, Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(b0 == p1), b0 == p1]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), Or(r1 == b0, r2 == b0), True]
+root - DEBUG : MSS [Not(b0 == p1), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [Or(r1 == b0, r2 == b0), And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : MUS [b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), Or(r1 == p1, r2 == p1)]
+root - DEBUG : MSS [And(Not(r1 == b0), Not(r2 == b0)), True, Or(r1 == p1, r2 == p1), Not(b0 == p1)]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), Not(b0 == p1), And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MSS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, And(Not(r1 == b0), Not(r2 == b0)), True]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1, Or(r1 == b0, r2 == b0)]
+root - DEBUG : MSS [Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), b0 == p1, Or(r1 == b0, r2 == b0), True, Or(r1 == p1, r2 == p1)]
+root - DEBUG : MUS [And(Not(r1 == p1), Not(r2 == p1)), Not(Or(Not(r1 + -1*r2 <= -1),
+       And(Not(r1 == b0), Not(r2 == b0)))), b0 == p1]
+root - DEBUG : 
+
+root - DEBUG : MUSes after excluding ~(Inv->WP):
+root - DEBUG : [And(Not(r1 == b0), Not(r2 == b0))]
+root - DEBUG : [And(Not(r1 == p1), Not(r2 == p1)), b0 == p1]
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : {(Not(contains(p1)) and (b0 == p1))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Checking IF the contract:
+root - DEBUG : {Not(contains(b0))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : subsumes the following:
+root - DEBUG : {(Not(contains(p1)) and (b0 == p1))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Negation of implication: And(Not(r1 == p1),
+    Not(r2 == p1),
+    b0 == p1,
+    Not(And(Not(r1 == b0), Not(r2 == b0))))
+root - DEBUG : Final expression before checking SAT: Exists([p1, r1, r2, b0, r3],
+       And(Not(r1 == p1),
+           Not(r2 == p1),
+           b0 == p1,
+           Not(And(Not(r1 == b0), Not(r2 == b0)))))
+root - DEBUG : Result: True
+root - DEBUG : Adding the following into the list of abandoned contracts:
+root - DEBUG : {(Not(contains(p1)) and (b0 == p1))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l22
+root - DEBUG : Observer method at post-state: isfull() == True
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l22:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l22 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l22
+root - DEBUG : Observer method at post-state: isfull() == False
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l22
+root - DEBUG : Observer method at post-state: isempty() == True
+root - DEBUG : Derived weakest precondition:False
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {False} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Generating contract at location: l22
+root - DEBUG : Observer method at post-state: isempty() == False
+root - DEBUG : 
+
+root - DEBUG : For WP consider the following transition(s) and postcondition:
+root - DEBUG : l22:offer(p1):True:[(r1, r1), (r2, r2)]:_not_ok:l22 	 True
+root - DEBUG : Derived weakest precondition:True
+root - DEBUG : Following contracts are generated from MUSes:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : Location specific contracts after adding invariants:
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+================ CONTRACTS PER LOCATION ====================
+root - DEBUG : Location: l0: {((b0 == p1) or Not((Not(isfull()) and (isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l0: {(Not((b0 == p1)) or Not((Not(isfull()) and (isempty()))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l0: {Not((Not(isfull()) and (isempty())))} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l0: {True} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l0: {Not((Not(isfull()) and (isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l0: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : Location: l5: {((b0 == p1) or (contains(b0)) or Not((Not(isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l5: {(Not((Not(isfull()) and Not(isempty()))) or (Not((b0 == p1)) and Not(contains(b0))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l5: {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l5: {True} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l5: {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l5: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : Location: l8: {((b0 == p1) or (contains(b0)) or Not((Not(isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l8: {(Not((Not(isfull()) and Not(isempty()))) or (Not((b0 == p1)) and Not(contains(b0))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l8: {True} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l8: {Not((Not(isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l8: {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l8: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : Location: l10: {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l10: {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l10: {True} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l10: {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l10: {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l10: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : Location: l15: {((b0 == p1) or (contains(b0)) or Not((Not(isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l15: {(Not((Not(isfull()) and Not(isempty()))) or (Not((b0 == p1)) and Not(contains(b0))))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l15: {True} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l15: {Not((Not(isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l15: {Not((Not(isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l15: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : Location: l16: {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l16: {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l16: {True} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l16: {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l16: {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l16: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : Location: l21: {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l21: {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l21: {True} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l21: {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l21: {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l21: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : Location: l22: {((contains(b0)) or Not(((isfull()) and Not(isempty()))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : Location: l22: {(Not(((isfull()) and Not(isempty()))) or Not(contains(b0)))} offer(p1) {Not(contains(b0))} :: True
+root - DEBUG : Location: l22: {True} offer(p1) {(isfull())} :: True
+root - DEBUG : Location: l22: {Not(((isfull()) and Not(isempty())))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : Location: l22: {Not(((isfull()) and Not(isempty())))} offer(p1) {(isempty())} :: True
+root - DEBUG : Location: l22: {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+
+Observer to Boolean literal mapping:
+root - DEBUG : b0 == p1 : a0
+root - DEBUG : contains(b0) : a1
+root - DEBUG : contains(p1) : a2
+root - DEBUG : isfull() : a3
+root - DEBUG : isempty() : a4
+root - DEBUG : 
+
+root - DEBUG : 
+
+===================== LOCATION INDEPENDENT CONTRACTS =====================
+root - DEBUG : {True} offer(p1) {Not(isempty())} :: True
+root - DEBUG : {(Not((Not(isfull()) and (isempty()))) and Not((Not(isfull()) and Not(isempty()))) and Not(((isfull()) and Not(isempty()))))} offer(p1) {(isempty())} :: True
+root - DEBUG : {(Not((Not(isfull()) and Not(isempty()))) and Not(((isfull()) and Not(isempty()))))} offer(p1) {Not(isfull())} :: True
+root - DEBUG : {(Not((Not(isfull()) and (isempty()))) and Not((Not(isfull()) and Not(isempty()))))} offer(p1) {(isfull())} :: True
+root - DEBUG : {(((b0 == p1) or Not((Not(isfull()) and (isempty())))) and ((b0 == p1) or (contains(b0)) or Not((Not(isfull()) and Not(isempty())))) and ((contains(b0)) or Not(((isfull()) and Not(isempty())))))} offer(p1) {(contains(b0))} :: True
+root - DEBUG : {((Not((b0 == p1)) or Not((Not(isfull()) and (isempty())))) and (Not((Not(isfull()) and Not(isempty()))) or (Not((b0 == p1)) and Not(contains(b0)))) and (Not(((isfull()) and Not(isempty()))) or Not(contains(b0))))} offer(p1) {Not(contains(b0))} :: True
+root - INFO : 
+
+ ================ FINAL CONTRACTS AFTER SIMPLIFICATION ====================
+root - INFO : {True} offer(p1) {~(isempty())} :: True
+root - INFO : {(isfull()) & (isempty())} offer(p1) {(isempty())} :: True
+root - INFO : {(isempty())} offer(p1) {~(isfull())} :: True
+root - INFO : {(isfull())} offer(p1) {(isfull())} :: True
+root - INFO : {((isfull()) & (isempty())) | ((b0 == p1) & ~(isfull())) | ((contains(b0)) & ~(isempty()))} offer(p1) {(contains(b0))} :: True
+root - INFO : {((isfull()) & (isempty())) | ((isfull()) & ~(contains(b0))) | ((isempty()) & ~(b0 == p1)) | (~(b0 == p1) & ~(contains(b0)))} offer(p1) {~(contains(b0))} :: True
+root - DEBUG : 
+
+root - DEBUG : 
+Time taken for synthesis:4.266496419906616sec

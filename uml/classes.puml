@@ -1,0 +1,143 @@
+@startuml
+
+enum DataType{
+    INT
+    FLOAT
+    STRING
+    DOUBLE
+    BOOL
+}
+
+class Variable{
+    name: String
+    typ : DataType
+    constant: Boolean
+    value: None
+}
+
+class Register{
+    name: String
+    typ : DataType
+    value: None
+}
+
+class Constant{
+    name: String
+    typ : DataType
+    value: None
+}
+
+class ConstantPool{
+    consts = Map<String, Constant>
+    void add(Constant)
+    bool __contains__(String)
+    Constant __getitem__(String)
+}
+
+Variable --> DataType
+Constant --> DataType
+Register --> DataType
+ConstantPool "1" *-- "many" Constant: contains
+
+class Param{
+    name: String
+    typ : DataType
+}
+
+class Symbol{
+    name: String
+    params: List[Param]
+    String signature()
+}
+
+Param --> DataType
+Symbol "1" *-- "many" Param: contains
+
+class Method{
+
+}
+
+Symbol <|-- Method
+
+enum OutputKind{
+    TRUE
+    FALSE 
+    VOID 
+    ERROR 
+    VALUE 
+    OTHER 
+}
+
+class Output{
+    kind: OutputKind
+}
+
+Output --> OutputKind
+Symbol <|-- Output
+
+class Location{
+    name: String
+    start_loc: bool 
+    invariant: List[String]
+    contracts: List[String]
+}
+
+class Assignment{
+    target_reg: Register
+    expr: String
+}
+
+Assignment --> Register
+
+class Transition{
+    source: Location
+    dest: Location
+    input: Method     
+    output: Output
+    guard: String
+    assignments: List[Assignment]
+    output_params_binding: List[String]
+    bool is_input()
+    bool is_output()
+    bool is_io()
+    String symbol_name()
+}
+
+Transition --> Location
+Transition --> Method
+Transition --> Output
+Transition "1" *-- "many" Assignment: contains
+
+class Automaton{
+    inputs: Map<String, Method>
+    outputs: Map<String, Output>
+    constants: ConstantPool
+    registers: List[Register]
+    locations: Map<String, Location>
+    transitions: List[Transition]
+    trans_by_loc: Map<String, List[Transition]>
+    trans_into_loc: Map<String, List[Transition]>
+    trans_by_loc_sym: Map<Tuple[String, String], List[Transition]>
+    trans_by_loc_out: Map<Tuple[String, String], List[Transition]>
+    trans_by_loc_io: Map<Tuple[String, String], List[Transition]>
+    trans_by_src_dest: Map<Tuple[String, String], List[Transition]>
+    Automaton from_file()
+    Automaton from_string(String)
+    void _build_indices()
+    void _combine_in_out_transitions()
+    void _merge_same_io_transition_by_or()
+    List[Transition] outgoing(String)
+    List[Transition] incoming(String)
+    List[Transition] outgoing_for_input(String, String)
+    List[Transition] outgoing_for_output(String, String)
+    List[Transition] outgoing_for_io(String, String, String)
+    List[Transition] between(String, String)
+}
+
+Automaton "1" *-- "many" Method: contains
+Automaton "1" *-- "many" Output: contains
+Automaton "1" *-- "many" Register: contains
+Automaton --> ConstantPool
+Automaton "1" *-- "many" Location: contains
+Automaton "1" *-- "many" Transition: contains
+@enduml

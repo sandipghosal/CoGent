@@ -1,0 +1,388 @@
+root - DEBUG : input XML file path:input/queue/queue.xml
+root - DEBUG : target method:poll
+root - DEBUG : Map of input symbols imported from the file:
+root - DEBUG : {'I_remove': I_remove(p1), 'I_contains': I_contains(p1), 'I_isfull': I_isfull(), 'I_isempty': I_isempty(), 'I_add': I_add(p1), 'I_matchHead': I_matchHead(p1), 'I_poll': I_poll(p1)}
+root - DEBUG : Map of constants imported from the file:
+root - DEBUG : {'c1': 0, 'c2': 1, 'c3': 2}
+root - DEBUG : List of registers imported from the file:
+root - DEBUG : ['r1', 'r2', 'r3']
+root - DEBUG : Map of locations imported from the file:
+root - DEBUG : {'l0': l0, 'l1': l1, 'l2': l2, 'l3': l3, 'l4': l4, 'l5': l5, 'l6': l6, 'l7': l7, 'l8': l8, 'l9': l9, 'l10': l10, 'l11': l11, 'l12': l12, 'l13': l13, 'l14': l14, 'l15': l15, 'l16': l16, 'l17': l17, 'l18': l18, 'l19': l19, 'l20': l20, 'l21': l21, 'l22': l22, 'l23': l23, 'l24': l24, 'l25': l25, 'l26': l26, 'l27': l27, 'l28': l28, 'l29': l29, 'l30': l30, 'l31': l31, 'l32': l32, 'l33': l33, 'l34': l34, 'l35': l35, 'l36': l36, 'l37': l37, 'l38': l38, 'l39': l39, 'l40': l40, 'l41': l41, 'l42': l42, 'l43': l43, 'l44': l44, 'l45': l45, 'l46': l46, 'l47': l47, 'l48': l48, 'l49': l49, 'l50': l50, 'l51': l51, 'l52': l52, 'l53': l53}
+root - DEBUG : Map of output symbols imported from the file:
+root - DEBUG : {'V': V, 'FALSE': FALSE, 'TRUE': TRUE}
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_add(p1):True:[(r1, p1)]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_matchHead(p1):True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_contains(p1):True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_isfull():True:[]:None:l4
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_isempty():True:[]:None:l5
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_poll(p1):True:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l0:I_remove(p1):True:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l1:V:True:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l4:FALSE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l5:TRUE:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l6:V:True:[]:None:l0
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_remove(p1):Not(r1 == p1):[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_remove(p1):r1 == p1:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_poll(p1):True:[]:None:l6
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_matchHead(p1):Not(r1 == p1):[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_matchHead(p1):r1 == p1:[]:None:l9
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_contains(p1):Not(r1 == p1):[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_contains(p1):r1 == p1:[]:None:l9
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_isempty():True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_isfull():True:[]:None:l8
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_add(p1):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[(r2, p1)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_add(p1):c1 == p1:[]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_add(p1):c2 == p1:[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l7:I_add(p1):c3 == p1:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l8:FALSE:True:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l9:TRUE:True:[]:None:l7
+root - DEBUG : Transition created:
+root - DEBUG : l10:V:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_poll(p1):True:[(r1, r2)]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_remove(p1):True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[(r3, p1)]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1):c1 == p1:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1):c2 == p1:[]:None:l22
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_add(p1):c3 == p1:[]:None:l23
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_matchHead(p1):Not(r1 == p1):[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_matchHead(p1):r1 == p1:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_contains(p1):r1 == p1:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_contains(p1):r2 == p1:[]:None:l16
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_isempty():True:[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l11:I_isfull():True:[]:None:l14
+root - DEBUG : Transition created:
+root - DEBUG : l12:V:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_poll(p1):True:[(r1, r2), (r2, r3)]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_add(p1):True:[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_remove(p1):True:[]:None:l12
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_matchHead(p1):Not(r1 == p1):[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_matchHead(p1):r1 == p1:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):r1 == p1:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):r2 == p1:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_contains(p1):r3 == p1:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_isempty():True:[]:None:l15
+root - DEBUG : Transition created:
+root - DEBUG : l13:I_isfull():True:[]:None:l17
+root - DEBUG : Transition created:
+root - DEBUG : l14:FALSE:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l15:FALSE:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l16:TRUE:True:[]:None:l11
+root - DEBUG : Transition created:
+root - DEBUG : l17:TRUE:True:[]:None:l13
+root - DEBUG : Transition created:
+root - DEBUG : l18:V:True:[]:None:l24
+root - DEBUG : Transition created:
+root - DEBUG : l19:V:True:[]:None:l25
+root - DEBUG : Transition created:
+root - DEBUG : l20:V:True:[]:None:l26
+root - DEBUG : Transition created:
+root - DEBUG : l21:V:True:[]:None:l27
+root - DEBUG : Transition created:
+root - DEBUG : l22:V:True:[]:None:l28
+root - DEBUG : Transition created:
+root - DEBUG : l23:V:True:[]:None:l29
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_poll(p1):True:[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_remove(p1):True:[]:None:l18
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_add(p1):True:[(r2, p1)]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_matchHead(p1):c1 == p1:[]:None:l30
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_matchHead(p1):Not(c1 == p1):[]:None:l31
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_contains(p1):c1 == p1:[]:None:l30
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_contains(p1):r1 == p1:[]:None:l30
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_contains(p1):And(Not(c1 == p1), Not(r1 == p1)):[]:None:l31
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_isempty():True:[]:None:l31
+root - DEBUG : Transition created:
+root - DEBUG : l24:I_isfull():True:[]:None:l31
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_poll(p1):True:[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_remove(p1):True:[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_add(p1):Not(c1 == p1):[(r2, p1)]:None:l22
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_add(p1):c1 == p1:[]:None:l32
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_matchHead(p1):c2 == p1:[]:None:l33
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_matchHead(p1):Not(c2 == p1):[]:None:l34
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_contains(p1):c2 == p1:[]:None:l33
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_contains(p1):r1 == p1:[]:None:l33
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_contains(p1):And(Not(c2 == p1), Not(r1 == p1)):[]:None:l34
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_isempty():True:[]:None:l34
+root - DEBUG : Transition created:
+root - DEBUG : l25:I_isfull():True:[]:None:l34
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_poll(p1):True:[]:None:l1
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_remove(p1):True:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_add(p1):And(Not(c1 == p1), Not(c2 == p1)):[(r2, p1)]:None:l23
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_add(p1):c1 == p1:[]:None:l35
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_add(p1):c2 == p1:[]:None:l36
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_matchHead(p1):c3 == p1:[]:None:l37
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_matchHead(p1):Not(c3 == p1):[]:None:l38
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_contains(p1):c3 == p1:[]:None:l37
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_contains(p1):r1 == p1:[]:None:l37
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_contains(p1):And(Not(c3 == p1), Not(r1 == p1)):[]:None:l38
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_isempty():True:[]:None:l38
+root - DEBUG : Transition created:
+root - DEBUG : l26:I_isfull():True:[]:None:l38
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_poll(p1):True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_add(p1):True:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_remove(p1):True:[]:None:l21
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_matchHead(p1):c1 == p1:[]:None:l39
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_matchHead(p1):Not(c1 == p1):[]:None:l40
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_contains(p1):c1 == p1:[]:None:l39
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_contains(p1):r1 == p1:[]:None:l39
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_contains(p1):r2 == p1:[]:None:l39
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_contains(p1):And(Not(c1 == p1), Not(r1 == p1), Not(r2 == p1)):[]:None:l40
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_isfull():True:[]:None:l39
+root - DEBUG : Transition created:
+root - DEBUG : l27:I_isempty():True:[]:None:l40
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_poll(p1):True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_add(p1):True:[]:None:l22
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_remove(p1):True:[]:None:l22
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_matchHead(p1):c2 == p1:[]:None:l41
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_matchHead(p1):Not(c2 == p1):[]:None:l42
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_contains(p1):c2 == p1:[]:None:l41
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_contains(p1):r1 == p1:[]:None:l41
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_contains(p1):r2 == p1:[]:None:l41
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_contains(p1):And(Not(c2 == p1), Not(r1 == p1), Not(r2 == p1)):[]:None:l42
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_isfull():True:[]:None:l41
+root - DEBUG : Transition created:
+root - DEBUG : l28:I_isempty():True:[]:None:l42
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_poll(p1):True:[]:None:l10
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_add(p1):True:[]:None:l23
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_remove(p1):True:[]:None:l23
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_matchHead(p1):c3 == p1:[]:None:l43
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_matchHead(p1):Not(c3 == p1):[]:None:l44
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_contains(p1):c3 == p1:[]:None:l43
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_contains(p1):r1 == p1:[]:None:l43
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_contains(p1):r2 == p1:[]:None:l43
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_contains(p1):And(Not(c3 == p1), Not(r1 == p1), Not(r2 == p1)):[]:None:l44
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_isfull():True:[]:None:l43
+root - DEBUG : Transition created:
+root - DEBUG : l29:I_isempty():True:[]:None:l44
+root - DEBUG : Transition created:
+root - DEBUG : l30:TRUE:True:[]:None:l24
+root - DEBUG : Transition created:
+root - DEBUG : l31:FALSE:True:[]:None:l24
+root - DEBUG : Transition created:
+root - DEBUG : l32:V:True:[]:None:l45
+root - DEBUG : Transition created:
+root - DEBUG : l33:TRUE:True:[]:None:l25
+root - DEBUG : Transition created:
+root - DEBUG : l34:FALSE:True:[]:None:l25
+root - DEBUG : Transition created:
+root - DEBUG : l35:V:True:[]:None:l46
+root - DEBUG : Transition created:
+root - DEBUG : l36:V:True:[]:None:l47
+root - DEBUG : Transition created:
+root - DEBUG : l37:TRUE:True:[]:None:l26
+root - DEBUG : Transition created:
+root - DEBUG : l38:FALSE:True:[]:None:l26
+root - DEBUG : Transition created:
+root - DEBUG : l39:TRUE:True:[]:None:l27
+root - DEBUG : Transition created:
+root - DEBUG : l40:FALSE:True:[]:None:l27
+root - DEBUG : Transition created:
+root - DEBUG : l41:TRUE:True:[]:None:l28
+root - DEBUG : Transition created:
+root - DEBUG : l42:FALSE:True:[]:None:l28
+root - DEBUG : Transition created:
+root - DEBUG : l43:TRUE:True:[]:None:l29
+root - DEBUG : Transition created:
+root - DEBUG : l44:FALSE:True:[]:None:l29
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_poll(p1):True:[]:None:l19
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_add(p1):True:[]:None:l32
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_remove(p1):True:[]:None:l32
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_matchHead(p1):c1 == p1:[]:None:l48
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_matchHead(p1):Not(c1 == p1):[]:None:l49
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_contains(p1):c1 == p1:[]:None:l48
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_contains(p1):c2 == p1:[]:None:l48
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_contains(p1):r1 == p1:[]:None:l48
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_contains(p1):And(Not(c1 == p1), Not(c2 == p1), Not(r1 == p1)):[]:None:l49
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_isfull():True:[]:None:l48
+root - DEBUG : Transition created:
+root - DEBUG : l45:I_isempty():True:[]:None:l49
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_poll(p1):True:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_add(p1):True:[]:None:l35
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_remove(p1):True:[]:None:l35
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_matchHead(p1):c1 == p1:[]:None:l50
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_matchHead(p1):Not(c1 == p1):[]:None:l51
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_contains(p1):c1 == p1:[]:None:l50
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_contains(p1):c3 == p1:[]:None:l50
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_contains(p1):r1 == p1:[]:None:l50
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_contains(p1):And(Not(c1 == p1), Not(c3 == p1), Not(r1 == p1)):[]:None:l51
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_isfull():True:[]:None:l50
+root - DEBUG : Transition created:
+root - DEBUG : l46:I_isempty():True:[]:None:l51
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_poll(p1):True:[]:None:l20
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_add(p1):True:[]:None:l36
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_remove(p1):True:[]:None:l36
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_matchHead(p1):c2 == p1:[]:None:l52
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_matchHead(p1):Not(c2 == p1):[]:None:l53
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_contains(p1):c2 == p1:[]:None:l52
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_contains(p1):c3 == p1:[]:None:l52
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_contains(p1):r1 == p1:[]:None:l52
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_contains(p1):And(Not(c2 == p1), Not(c3 == p1), Not(r1 == p1)):[]:None:l53
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_isfull():True:[]:None:l52
+root - DEBUG : Transition created:
+root - DEBUG : l47:I_isempty():True:[]:None:l53
+root - DEBUG : Transition created:
+root - DEBUG : l48:TRUE:True:[]:None:l45
+root - DEBUG : Transition created:
+root - DEBUG : l49:FALSE:True:[]:None:l45
+root - DEBUG : Transition created:
+root - DEBUG : l50:TRUE:True:[]:None:l46
+root - DEBUG : Transition created:
+root - DEBUG : l51:FALSE:True:[]:None:l46
+root - DEBUG : Transition created:
+root - DEBUG : l52:TRUE:True:[]:None:l47
+root - DEBUG : Transition created:
+root - DEBUG : l53:FALSE:True:[]:None:l47
+root - DEBUG : 
+
+New list of transitions after pruning:
+root - DEBUG : [l0:I_add(p1):True:[(r1, p1)]:V:l7, l0:I_matchHead(p1):True:[]:FALSE:l0, l0:I_contains(p1):True:[]:FALSE:l0, l0:I_isfull():True:[]:FALSE:l0, l0:I_isempty():True:[]:TRUE:l0, l0:I_poll(p1):True:[]:V:l0, l0:I_remove(p1):True:[]:V:l0, l7:I_remove(p1):Not(r1 == p1):[]:V:l7, l7:I_remove(p1):r1 == p1:[]:V:l0, l7:I_poll(p1):True:[]:V:l0, l7:I_matchHead(p1):Not(r1 == p1):[]:FALSE:l7, l7:I_matchHead(p1):r1 == p1:[]:TRUE:l7, l7:I_contains(p1):Not(r1 == p1):[]:FALSE:l7, l7:I_contains(p1):r1 == p1:[]:TRUE:l7, l7:I_isempty():True:[]:FALSE:l7, l7:I_isfull():True:[]:FALSE:l7, l7:I_add(p1):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[(r2, p1)]:V:l11, l7:I_add(p1):c1 == p1:[]:V:l24, l7:I_add(p1):c2 == p1:[]:V:l25, l7:I_add(p1):c3 == p1:[]:V:l26, l11:I_poll(p1):True:[(r1, r2)]:V:l7, l11:I_remove(p1):True:[]:V:l11, l11:I_add(p1):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[(r3, p1)]:V:l13, l11:I_add(p1):c1 == p1:[]:V:l27, l11:I_add(p1):c2 == p1:[]:V:l28, l11:I_add(p1):c3 == p1:[]:V:l29, l11:I_matchHead(p1):Not(r1 == p1):[]:FALSE:l11, l11:I_matchHead(p1):r1 == p1:[]:TRUE:l11, l11:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l11, l11:I_contains(p1):r1 == p1:[]:TRUE:l11, l11:I_contains(p1):r2 == p1:[]:TRUE:l11, l11:I_isempty():True:[]:FALSE:l11, l11:I_isfull():True:[]:FALSE:l11, l13:I_poll(p1):True:[(r1, r2), (r2, r3)]:V:l11, l13:I_add(p1):True:[]:V:l13, l13:I_remove(p1):True:[]:V:l13, l13:I_matchHead(p1):Not(r1 == p1):[]:FALSE:l13, l13:I_matchHead(p1):r1 == p1:[]:TRUE:l13, l13:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:FALSE:l13, l13:I_contains(p1):r1 == p1:[]:TRUE:l13, l13:I_contains(p1):r2 == p1:[]:TRUE:l13, l13:I_contains(p1):r3 == p1:[]:TRUE:l13, l13:I_isempty():True:[]:FALSE:l13, l13:I_isfull():True:[]:TRUE:l13, l24:I_poll(p1):True:[]:V:l7, l24:I_remove(p1):True:[]:V:l24, l24:I_add(p1):True:[(r2, p1)]:V:l27, l24:I_matchHead(p1):c1 == p1:[]:TRUE:l24, l24:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l24, l24:I_contains(p1):c1 == p1:[]:TRUE:l24, l24:I_contains(p1):r1 == p1:[]:TRUE:l24, l24:I_contains(p1):And(Not(c1 == p1), Not(r1 == p1)):[]:FALSE:l24, l24:I_isempty():True:[]:FALSE:l24, l24:I_isfull():True:[]:FALSE:l24, l25:I_poll(p1):True:[]:V:l7, l25:I_remove(p1):True:[]:V:l25, l25:I_add(p1):Not(c1 == p1):[(r2, p1)]:V:l28, l25:I_add(p1):c1 == p1:[]:V:l45, l25:I_matchHead(p1):c2 == p1:[]:TRUE:l25, l25:I_matchHead(p1):Not(c2 == p1):[]:FALSE:l25, l25:I_contains(p1):c2 == p1:[]:TRUE:l25, l25:I_contains(p1):r1 == p1:[]:TRUE:l25, l25:I_contains(p1):And(Not(c2 == p1), Not(r1 == p1)):[]:FALSE:l25, l25:I_isempty():True:[]:FALSE:l25, l25:I_isfull():True:[]:FALSE:l25, l26:I_poll(p1):True:[]:V:l7, l26:I_remove(p1):True:[]:V:l26, l26:I_add(p1):And(Not(c1 == p1), Not(c2 == p1)):[(r2, p1)]:V:l29, l26:I_add(p1):c1 == p1:[]:V:l46, l26:I_add(p1):c2 == p1:[]:V:l47, l26:I_matchHead(p1):c3 == p1:[]:TRUE:l26, l26:I_matchHead(p1):Not(c3 == p1):[]:FALSE:l26, l26:I_contains(p1):c3 == p1:[]:TRUE:l26, l26:I_contains(p1):r1 == p1:[]:TRUE:l26, l26:I_contains(p1):And(Not(c3 == p1), Not(r1 == p1)):[]:FALSE:l26, l26:I_isempty():True:[]:FALSE:l26, l26:I_isfull():True:[]:FALSE:l26, l27:I_poll(p1):True:[]:V:l11, l27:I_add(p1):True:[]:V:l27, l27:I_remove(p1):True:[]:V:l27, l27:I_matchHead(p1):c1 == p1:[]:TRUE:l27, l27:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l27, l27:I_contains(p1):c1 == p1:[]:TRUE:l27, l27:I_contains(p1):r1 == p1:[]:TRUE:l27, l27:I_contains(p1):r2 == p1:[]:TRUE:l27, l27:I_contains(p1):And(Not(c1 == p1), Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l27, l27:I_isfull():True:[]:TRUE:l27, l27:I_isempty():True:[]:FALSE:l27, l28:I_poll(p1):True:[]:V:l11, l28:I_add(p1):True:[]:V:l28, l28:I_remove(p1):True:[]:V:l28, l28:I_matchHead(p1):c2 == p1:[]:TRUE:l28, l28:I_matchHead(p1):Not(c2 == p1):[]:FALSE:l28, l28:I_contains(p1):c2 == p1:[]:TRUE:l28, l28:I_contains(p1):r1 == p1:[]:TRUE:l28, l28:I_contains(p1):r2 == p1:[]:TRUE:l28, l28:I_contains(p1):And(Not(c2 == p1), Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l28, l28:I_isfull():True:[]:TRUE:l28, l28:I_isempty():True:[]:FALSE:l28, l29:I_poll(p1):True:[]:V:l11, l29:I_add(p1):True:[]:V:l29, l29:I_remove(p1):True:[]:V:l29, l29:I_matchHead(p1):c3 == p1:[]:TRUE:l29, l29:I_matchHead(p1):Not(c3 == p1):[]:FALSE:l29, l29:I_contains(p1):c3 == p1:[]:TRUE:l29, l29:I_contains(p1):r1 == p1:[]:TRUE:l29, l29:I_contains(p1):r2 == p1:[]:TRUE:l29, l29:I_contains(p1):And(Not(c3 == p1), Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l29, l29:I_isfull():True:[]:TRUE:l29, l29:I_isempty():True:[]:FALSE:l29, l45:I_poll(p1):True:[]:V:l25, l45:I_add(p1):True:[]:V:l45, l45:I_remove(p1):True:[]:V:l45, l45:I_matchHead(p1):c1 == p1:[]:TRUE:l45, l45:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l45, l45:I_contains(p1):c1 == p1:[]:TRUE:l45, l45:I_contains(p1):c2 == p1:[]:TRUE:l45, l45:I_contains(p1):r1 == p1:[]:TRUE:l45, l45:I_contains(p1):And(Not(c1 == p1), Not(c2 == p1), Not(r1 == p1)):[]:FALSE:l45, l45:I_isfull():True:[]:TRUE:l45, l45:I_isempty():True:[]:FALSE:l45, l46:I_poll(p1):True:[]:V:l26, l46:I_add(p1):True:[]:V:l46, l46:I_remove(p1):True:[]:V:l46, l46:I_matchHead(p1):c1 == p1:[]:TRUE:l46, l46:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l46, l46:I_contains(p1):c1 == p1:[]:TRUE:l46, l46:I_contains(p1):c3 == p1:[]:TRUE:l46, l46:I_contains(p1):r1 == p1:[]:TRUE:l46, l46:I_contains(p1):And(Not(c1 == p1), Not(c3 == p1), Not(r1 == p1)):[]:FALSE:l46, l46:I_isfull():True:[]:TRUE:l46, l46:I_isempty():True:[]:FALSE:l46, l47:I_poll(p1):True:[]:V:l26, l47:I_add(p1):True:[]:V:l47, l47:I_remove(p1):True:[]:V:l47, l47:I_matchHead(p1):c2 == p1:[]:TRUE:l47, l47:I_matchHead(p1):Not(c2 == p1):[]:FALSE:l47, l47:I_contains(p1):c2 == p1:[]:TRUE:l47, l47:I_contains(p1):c3 == p1:[]:TRUE:l47, l47:I_contains(p1):r1 == p1:[]:TRUE:l47, l47:I_contains(p1):And(Not(c2 == p1), Not(c3 == p1), Not(r1 == p1)):[]:FALSE:l47, l47:I_isfull():True:[]:TRUE:l47, l47:I_isempty():True:[]:FALSE:l47]
+root - DEBUG : 
+
+New list of locations after pruning:
+root - DEBUG : {'l0': l0, 'l2': l2, 'l3': l3, 'l7': l7, 'l11': l11, 'l13': l13, 'l24': l24, 'l25': l25, 'l26': l26, 'l27': l27, 'l28': l28, 'l29': l29, 'l45': l45, 'l46': l46, 'l47': l47}
+root - DEBUG : 
+
+New list of transitions after condensing:
+root - DEBUG : [l0:I_add(p1):True:[(r1, p1)]:V:l7, l0:I_matchHead(p1):True:[]:FALSE:l0, l0:I_contains(p1):True:[]:FALSE:l0, l0:I_isfull():True:[]:FALSE:l0, l0:I_isempty():True:[]:TRUE:l0, l0:I_poll(p1):True:[]:V:l0, l0:I_remove(p1):True:[]:V:l0, l7:I_remove(p1):Not(r1 == p1):[]:V:l7, l7:I_remove(p1):r1 == p1:[]:V:l0, l7:I_poll(p1):True:[]:V:l0, l7:I_matchHead(p1):Not(r1 == p1):[]:FALSE:l7, l7:I_matchHead(p1):r1 == p1:[]:TRUE:l7, l7:I_contains(p1):Not(r1 == p1):[]:FALSE:l7, l7:I_contains(p1):r1 == p1:[]:TRUE:l7, l7:I_isempty():True:[]:FALSE:l7, l7:I_isfull():True:[]:FALSE:l7, l7:I_add(p1):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[(r2, p1)]:V:l11, l7:I_add(p1):c1 == p1:[]:V:l24, l7:I_add(p1):c2 == p1:[]:V:l25, l7:I_add(p1):c3 == p1:[]:V:l26, l11:I_poll(p1):True:[(r1, r2)]:V:l7, l11:I_remove(p1):True:[]:V:l11, l11:I_add(p1):And(Not(c1 == p1), Not(c2 == p1), Not(c3 == p1)):[(r3, p1)]:V:l13, l11:I_add(p1):c1 == p1:[]:V:l27, l11:I_add(p1):c2 == p1:[]:V:l28, l11:I_add(p1):c3 == p1:[]:V:l29, l11:I_matchHead(p1):Not(r1 == p1):[]:FALSE:l11, l11:I_matchHead(p1):r1 == p1:[]:TRUE:l11, l11:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l11, l11:I_contains(p1):Or(r1 == p1, r2 == p1):[]:TRUE:l11, l11:I_contains(p1):r2 == p1:[]:TRUE:l11, l11:I_isempty():True:[]:FALSE:l11, l11:I_isfull():True:[]:FALSE:l11, l13:I_poll(p1):True:[(r1, r2), (r2, r3)]:V:l11, l13:I_add(p1):True:[]:V:l13, l13:I_remove(p1):True:[]:V:l13, l13:I_matchHead(p1):Not(r1 == p1):[]:FALSE:l13, l13:I_matchHead(p1):r1 == p1:[]:TRUE:l13, l13:I_contains(p1):And(Not(r1 == p1), Not(r2 == p1), Not(r3 == p1)):[]:FALSE:l13, l13:I_contains(p1):Or(r1 == p1, r2 == p1, r3 == p1):[]:TRUE:l13, l13:I_contains(p1):r2 == p1:[]:TRUE:l13, l13:I_contains(p1):r3 == p1:[]:TRUE:l13, l13:I_isempty():True:[]:FALSE:l13, l13:I_isfull():True:[]:TRUE:l13, l24:I_poll(p1):True:[]:V:l7, l24:I_remove(p1):True:[]:V:l24, l24:I_add(p1):True:[(r2, p1)]:V:l27, l24:I_matchHead(p1):c1 == p1:[]:TRUE:l24, l24:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l24, l24:I_contains(p1):Or(c1 == p1, r1 == p1):[]:TRUE:l24, l24:I_contains(p1):r1 == p1:[]:TRUE:l24, l24:I_contains(p1):And(Not(c1 == p1), Not(r1 == p1)):[]:FALSE:l24, l24:I_isempty():True:[]:FALSE:l24, l24:I_isfull():True:[]:FALSE:l24, l25:I_poll(p1):True:[]:V:l7, l25:I_remove(p1):True:[]:V:l25, l25:I_add(p1):Not(c1 == p1):[(r2, p1)]:V:l28, l25:I_add(p1):c1 == p1:[]:V:l45, l25:I_matchHead(p1):c2 == p1:[]:TRUE:l25, l25:I_matchHead(p1):Not(c2 == p1):[]:FALSE:l25, l25:I_contains(p1):Or(c2 == p1, r1 == p1):[]:TRUE:l25, l25:I_contains(p1):r1 == p1:[]:TRUE:l25, l25:I_contains(p1):And(Not(c2 == p1), Not(r1 == p1)):[]:FALSE:l25, l25:I_isempty():True:[]:FALSE:l25, l25:I_isfull():True:[]:FALSE:l25, l26:I_poll(p1):True:[]:V:l7, l26:I_remove(p1):True:[]:V:l26, l26:I_add(p1):And(Not(c1 == p1), Not(c2 == p1)):[(r2, p1)]:V:l29, l26:I_add(p1):c1 == p1:[]:V:l46, l26:I_add(p1):c2 == p1:[]:V:l47, l26:I_matchHead(p1):c3 == p1:[]:TRUE:l26, l26:I_matchHead(p1):Not(c3 == p1):[]:FALSE:l26, l26:I_contains(p1):Or(c3 == p1, r1 == p1):[]:TRUE:l26, l26:I_contains(p1):r1 == p1:[]:TRUE:l26, l26:I_contains(p1):And(Not(c3 == p1), Not(r1 == p1)):[]:FALSE:l26, l26:I_isempty():True:[]:FALSE:l26, l26:I_isfull():True:[]:FALSE:l26, l27:I_poll(p1):True:[]:V:l11, l27:I_add(p1):True:[]:V:l27, l27:I_remove(p1):True:[]:V:l27, l27:I_matchHead(p1):c1 == p1:[]:TRUE:l27, l27:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l27, l27:I_contains(p1):Or(r1 == p1, c1 == p1, r2 == p1):[]:TRUE:l27, l27:I_contains(p1):r1 == p1:[]:TRUE:l27, l27:I_contains(p1):r2 == p1:[]:TRUE:l27, l27:I_contains(p1):And(Not(c1 == p1), Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l27, l27:I_isfull():True:[]:TRUE:l27, l27:I_isempty():True:[]:FALSE:l27, l28:I_poll(p1):True:[]:V:l11, l28:I_add(p1):True:[]:V:l28, l28:I_remove(p1):True:[]:V:l28, l28:I_matchHead(p1):c2 == p1:[]:TRUE:l28, l28:I_matchHead(p1):Not(c2 == p1):[]:FALSE:l28, l28:I_contains(p1):Or(r1 == p1, c2 == p1, r2 == p1):[]:TRUE:l28, l28:I_contains(p1):r1 == p1:[]:TRUE:l28, l28:I_contains(p1):r2 == p1:[]:TRUE:l28, l28:I_contains(p1):And(Not(c2 == p1), Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l28, l28:I_isfull():True:[]:TRUE:l28, l28:I_isempty():True:[]:FALSE:l28, l29:I_poll(p1):True:[]:V:l11, l29:I_add(p1):True:[]:V:l29, l29:I_remove(p1):True:[]:V:l29, l29:I_matchHead(p1):c3 == p1:[]:TRUE:l29, l29:I_matchHead(p1):Not(c3 == p1):[]:FALSE:l29, l29:I_contains(p1):Or(r1 == p1, c3 == p1, r2 == p1):[]:TRUE:l29, l29:I_contains(p1):r1 == p1:[]:TRUE:l29, l29:I_contains(p1):r2 == p1:[]:TRUE:l29, l29:I_contains(p1):And(Not(c3 == p1), Not(r1 == p1), Not(r2 == p1)):[]:FALSE:l29, l29:I_isfull():True:[]:TRUE:l29, l29:I_isempty():True:[]:FALSE:l29, l45:I_poll(p1):True:[]:V:l25, l45:I_add(p1):True:[]:V:l45, l45:I_remove(p1):True:[]:V:l45, l45:I_matchHead(p1):c1 == p1:[]:TRUE:l45, l45:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l45, l45:I_contains(p1):Or(r1 == p1, c1 == p1, c2 == p1):[]:TRUE:l45, l45:I_contains(p1):c2 == p1:[]:TRUE:l45, l45:I_contains(p1):r1 == p1:[]:TRUE:l45, l45:I_contains(p1):And(Not(c1 == p1), Not(c2 == p1), Not(r1 == p1)):[]:FALSE:l45, l45:I_isfull():True:[]:TRUE:l45, l45:I_isempty():True:[]:FALSE:l45, l46:I_poll(p1):True:[]:V:l26, l46:I_add(p1):True:[]:V:l46, l46:I_remove(p1):True:[]:V:l46, l46:I_matchHead(p1):c1 == p1:[]:TRUE:l46, l46:I_matchHead(p1):Not(c1 == p1):[]:FALSE:l46, l46:I_contains(p1):Or(r1 == p1, c1 == p1, c3 == p1):[]:TRUE:l46, l46:I_contains(p1):c3 == p1:[]:TRUE:l46, l46:I_contains(p1):r1 == p1:[]:TRUE:l46, l46:I_contains(p1):And(Not(c1 == p1), Not(c3 == p1), Not(r1 == p1)):[]:FALSE:l46, l46:I_isfull():True:[]:TRUE:l46, l46:I_isempty():True:[]:FALSE:l46, l47:I_poll(p1):True:[]:V:l26, l47:I_add(p1):True:[]:V:l47, l47:I_remove(p1):True:[]:V:l47, l47:I_matchHead(p1):c2 == p1:[]:TRUE:l47, l47:I_matchHead(p1):Not(c2 == p1):[]:FALSE:l47, l47:I_contains(p1):Or(r1 == p1, c2 == p1, c3 == p1):[]:TRUE:l47, l47:I_contains(p1):c3 == p1:[]:TRUE:l47, l47:I_contains(p1):r1 == p1:[]:TRUE:l47, l47:I_contains(p1):And(Not(c2 == p1), Not(c3 == p1), Not(r1 == p1)):[]:FALSE:l47, l47:I_isfull():True:[]:TRUE:l47, l47:I_isempty():True:[]:FALSE:l47]
