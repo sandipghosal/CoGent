@@ -1,7 +1,12 @@
-import smtsolvers.solver as S
+
 from constraintbuilder.tokens import *
 from errors import *
 
+from solvers.factory import get_solver
+solver = get_solver()
+
+from customlogger import getlogger
+log = getlogger(__name__)
 
 class NodeVisitor:
     def visit(self, node):
@@ -22,51 +27,54 @@ class Builder(NodeVisitor):
     def visit_BinaryOp(self, node):
         if node.operator.type == OR:
             # return (self.visit(node.left))._or(self.visit(node.right))
-            return S._or(self.visit(node.left), self.visit(node.right))
+            return solver._or(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == AND:
             # return (self.visit(node.left))._and(self.visit(node.right))
-            return S._and(self.visit(node.left), self.visit(node.right))
+            return solver._and(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == NEQ:
             # return (self.visit(node.left))._ne(self.visit(node.right))
-            return S._ne(self.visit(node.left), self.visit(node.right))
+            return solver._ne(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == COMPARE:
-            return S._eq(self.visit(node.left), self.visit(node.right))
+            return solver._eq(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == GTHAN:
-            return S._gt(self.visit(node.left), self.visit(node.right))
+            return solver._gt(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == LTHAN:
-            return S._lt(self.visit(node.left), self.visit(node.right))
+            return solver._lt(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == GEQ:
-            return S._geq(self.visit(node.left), self.visit(node.right))
+            return solver._geq(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == LEQ:
-            return S._leq(self.visit(node.left), self.visit(node.right))
+            return solver._leq(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == IMPLY:
-            return S._implies(self.visit(node.left), self.visit(node.right))
+            return solver._implies(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == PLUS:
-            return S._add(self.visit(node.left), self.visit(node.right))
+            return solver._add(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == MINUS:
-            return S._sub(self.visit(node.left), self.visit(node.right))
+            return solver._sub(self.visit(node.left), self.visit(node.right))
         else:
+            log.critical('Node '+ str(node) + ' not found')
             raise ValueNotFound('Node not found: ' + str(node))
 
     def visit_UnaryOp(self, node):
         if node.operator.type == NOT:
-            return S._neg(self.visit(node.expr))
+            return solver._neg(self.visit(node.expr))
             # return get_neg(self.visit(node.expr))
         else:
+            log.critical('Node '+ str(node) + ' not found')
             raise ValueNotFound('Node not found: ' + str(node))
 
     def visit_Boolean(self, node):
         if node.token.type == BOOL:
-            return S._boolval(node.value)
+            return solver.bool_val(node.value)
             # return get_bool_object(node.value)
         else:
+            log.critical('Node '+ str(node) + ' not found')
             raise ValueNotFound('Node not found: ' + str(node))
 
     def visit_Variable(self, node):
-        return S._int(node.value)
+        return solver._int(node.value)
 
     def visit_IntConstant(self, node):
-        return S._intval(node.value)
+        return solver.int_val(node.value)
 
 
     def build(self, tree):

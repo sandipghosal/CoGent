@@ -7,7 +7,7 @@ log = getlogger(__name__)
 
 SOLVER = None  # private singleton
 
-def get_solver(name):
+def get_solver(name=None):
     global SOLVER
 
     if SOLVER is not None:

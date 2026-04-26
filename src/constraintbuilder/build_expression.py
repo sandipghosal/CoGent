@@ -6,6 +6,9 @@ from constraintbuilder.stringparser import StringBuilder
 
 import re
 
+from customlogger import getlogger
+log = getlogger(__name__)
+
 operators = [
     r'==',
     r'!=',
@@ -87,8 +90,9 @@ def put_brackets(expressions, col):
 
 
 def build_expr(expression):
-    """ Process an expression and returns a BoolRef object """
+    """ Process an expression and returns a Solver object """
     # put brackets if not there already around lhs and rhs for each binary operator
+    log.debug('Get the solver object for expression: '+ expression)
     expr = put_brackets(expression, 0)
     lexer = Lexer(expr)
     tokens = lexer.create_tokens()
