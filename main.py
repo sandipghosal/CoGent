@@ -5,18 +5,11 @@ import time
 
 import os
 import ramodel.config
-# from ramodel.automaton_new import Automaton
 from errors import *
 from generator import generate
-from solvers.factory import get_solver
 
 
-from customlogger import getlogger
-# Main logging handler
-log = None
-
-
-def configure_logger(switch, logfile_, loglevel=logging.DEBUG) -> logging.Logger:
+def setuplogger(switch, logfile_, loglevel=logging.DEBUG):
     # logger_name = inspect.stack()[1][3]
     # logger = logging.getLogger(logger_name)
     if switch:
@@ -33,14 +26,21 @@ def configure_logger(switch, logfile_, loglevel=logging.DEBUG) -> logging.Logger
             logfile = logfile_
 
         print('log file created:' + logfile)
-        log = getlogger("cogent", loglevel)
-        
+        logging.basicConfig(filename=logfile, filemode='w', level=loglevel,
+                            format="%(name)s - %(levelname)s : %(message)s")
+        # fhandler = logging.FileHandler(logfile)
+        # fhandler.setLevel(loglevel)
+        # fhandler.setFormatter(CustomFormatter())
+        # logger.addHandler(fhandler)
     else:
-        # logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel,
-        #                     format="%(name)s - %(levelname)s : %(message)s")
-        log = getlogger("cogent", logging.DEBUG)
+        logging.basicConfig(stream=sys.stdout, filemode='w', level=loglevel,
+                            format="%(name)s - %(levelname)s : %(message)s")
+        # chandler = logging.StreamHandler()
+        # chandler.setLevel(logging.DEBUG)
+        # chandler.setFormatter(CustomFormatter())
+        # logger.addHandler(chandler)
 
-    return log
+    # return logger
 
 
 def main(argv):
@@ -49,18 +49,16 @@ def main(argv):
             raise ValueError()
 
         options, arguments = getopt.getopt(sys.argv[1:],
-                                           "hi:t:a:s:l:g:",
+                                           "hi:t:a:l:g:",
                                            ["help",
                                             "input=",
                                             "target=",
                                             "axioms=",
-                                            "solver=",
                                             "log=",
                                             "log-level="])
 
         xmlfile = target = afile = logfile = None
         logswitch = False
-        solver = None
         level = logging.DEBUG
 
         for option, argument in options:
@@ -76,9 +74,6 @@ def main(argv):
 
             elif option in ("-a", "--axioms"):
                 afile = argument
-
-            elif option in ("-s", "--solver"):
-                solver = argument
 
             elif option in ("-l", "--log"):
                 logswitch = True
@@ -96,37 +91,21 @@ def main(argv):
         sys.exit(2)
 
     # set up the logging environment
-    log = configure_logger(switch=logswitch, logfile_=logfile, loglevel=level)
+    setuplogger(switch=logswitch, logfile_=logfile, loglevel=level)
 
     # check if user has provided the XML file
     try:
         if not xmlfile:
-            log.critical('XML file not found')
             raise InputsNotFound('XML file not found')
         elif not target:
-            log.critical('Target method not found')
             raise InputsNotFound('Target method not found')
         else:
-            log.debug('input XML file path:' + xmlfile)
+            logging.debug('input XML file path:' + xmlfile)
     except (InputsNotFound, getopt.GetoptError):
         print('python main.py -h [--help]')
         sys.exit(2)
 
-    log.debug('target method:' + target)
-
-    if solver is None:
-        SOLVER = get_solver('z3')
-    else:
-        SOLVER = get_solver(solver)
-
-
-    # ++++++++++++ NEW CODE START +++++++++++++
-    # import the automaton from the XML file
-    # A = Automaton.from_file(xmlfile)
-
-    # ++++++++++++ NEW CODE END +++++++++++++
-
-    # ++++++++++++ OLD CODE START ++++++++++++++
+    logging.debug('target method:' + target)
     # import the automaton from the XML file
     # automaton = import_ra(xmlfile)
     config = ramodel.Config(xmlfile)
@@ -134,9 +113,8 @@ def main(argv):
     start = time.time()
     generate(config)
     end = time.time()
-    # logging.debug('\n')
-
-    log.debug('\nTime taken for synthesis:' + str(end - start) + 'sec')
+    logging.debug('\n')
+    logging.debug('\nTime taken for synthesis:' + str(end - start) + 'sec')
 
     print('\nTime taken for synthesis:' + str(end - start) + 'sec')
 
