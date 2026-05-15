@@ -45,7 +45,7 @@ class Builder(NodeVisitor):
         elif node.operator.type == LEQ:
             return solver._leq(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == IMPLY:
-            return solver._implies(self.visit(node.left), self.visit(node.right))
+            return solver.implies(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == PLUS:
             return solver._add(self.visit(node.left), self.visit(node.right))
         elif node.operator.type == MINUS:
@@ -71,7 +71,7 @@ class Builder(NodeVisitor):
             raise ValueNotFound('Node not found: ' + str(node))
 
     def visit_Variable(self, node):
-        return solver._int(node.value)
+        return solver.int(node.value)
 
     def visit_IntConstant(self, node):
         return solver.int_val(node.value)

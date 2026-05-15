@@ -1,15 +1,18 @@
 
-from customlogger import getlogger
+
 
 from pathlib import Path
 from enum import Enum, auto
 import xml.etree.ElementTree as ET
+from constraintbuilder.build_expression import Expression
 from dataclasses import dataclass, field
-from typing import List, Callable, Dict, Optional, Tuple, Union    
+from typing import Set, List, Any, Callable, Dict, Optional, Tuple, Union    
 
-
+from customlogger import getlogger
 log = getlogger(__name__)
 
+from solvers.factory import get_solver
+solver = get_solver()
 
 
 ######################################
@@ -163,6 +166,18 @@ class Param:
     def __repr__(self):
         return self.name
 
+class OutputKind(Enum):
+    '''
+    Different kind of output a method can possibly returns
+    '''
+    # auto() assigns incrementing integers, starting from 1
+    # No two member share the same number
+    TRUE = auto()
+    FALSE = auto()
+    VOID = auto()   # given as 'V' in XML
+    ERROR = auto()  # __ERR
+    VALUE = auto()  # output with params, e.g., O_pop(p1)
+    OTHER = auto()
 
 @dataclass
 class Symbol:
@@ -187,20 +202,14 @@ class Method(Symbol):
     Input methods e.g., push, pop, isempty, contains.
     These correspond to API methods/observers.
     '''
+    # logical condition over registers and input parameters
+    condition: Optional[Expression] = None
+    
+    # method's output
+    output_kind : Optional[OutputKind] = None
 
-
-class OutputKind(Enum):
-    '''
-    Different kind of output a method can possibly returns
-    '''
-    # auto() assigns incrementing integers, starting from 1
-    # No two member share the same number
-    TRUE = auto()
-    FALSE = auto()
-    VOID = auto()   # given as 'V' in XML
-    ERROR = auto()  # __ERR
-    VALUE = auto()  # output with params, e.g., O_pop(p1)
-    OTHER = auto()
+    # output parameters (for returning values)
+    output_params: List[Param] = field(default_factory=list)
 
 
 def parse_output(name: str, params: List[Param]) -> OutputKind:
@@ -260,14 +269,13 @@ class Transition:
     dest: Location
     input: Optional[Method] = None       
     output: Optional[Output] = None
-    guard: Optional[str] = None
+    #guard: Optional[str] = None
     assignments: List[Assignment] = field(default_factory=list)
     # Bind some output such as O_pop with parameters
     output_params_binding: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         if (self.input is None) and (self.output is None):
-            print(self)
             raise ValueError("Transition must have exactly one of 'input' or 'output' set")
 
     @property
@@ -292,7 +300,10 @@ class Transition:
                                                    if self.Output else "<none>")
     
     def __repr__(self) -> str:
-        return f"{self.source}:{self.input}:{self.guard}:{self.assignments}:{self.output}:{self.dest}"
+        if self.input is None:
+            return f"{self.source}:{self.input}:{self.assignments}:{self.output}:{self.dest}"
+        else:
+            return f"{self.source}:{self.input}:{self.input.condition}:{self.assignments}:{self.output}:{self.dest}"
 
 
 
@@ -436,12 +447,14 @@ class Automaton:
                     log.critical('Either ' + src_name + ' or ' + dest_name+ ' is not specified earlier in XML file')
                     raise KeyError(f"Transition references to unknown location:{src_name}->{dest_name}")
                 
-                guard_text: Optional[str] = None
+                guard_expr: Optional[Expression] = None
                 g = t.find("guard")
                 if g is not None:
                     gtext = (g.text or "").strip()
                     if gtext:
-                        guard_text = gtext
+                        guard_expr = Expression(gtext)
+                else:
+                    guard_expr = Expression('True')
                 
                 assigns: List[Assignment] = []
                 a = t.find("assignments")
@@ -462,9 +475,19 @@ class Automaton:
                 resolved_input : Optional[Method] = None
                 resolved_output: Optional[Output] = None
                 if sym_name in inputs:
-                    resolved_input = inputs[sym_name]
+                    base_input = inputs[sym_name]
+                    resolved_input = Method(
+                        name=base_input.name,
+                        params=list(base_input.params),
+                        condition=guard_expr
+                    )
                 elif sym_name in outputs:
-                    resolved_output = outputs[sym_name]
+                    base_output = outputs[sym_name]
+                    resolved_output = Output(
+                        name=base_output.name, 
+                        params=list(base_output.params), 
+                        kind=base_output.kind
+                    )
                 else:
                     log.critical('Transition uses unknown symbol ' + sym_name)
                     raise KeyError("Transition uses unknown symbol '{sym_name}'")
@@ -475,14 +498,15 @@ class Automaton:
                     dest=locations[dest_name],
                     input=resolved_input,
                     output=resolved_output,
-                    guard=guard_text,
+                    # guard=guard_text,
                     assignments=assigns,
                     output_params_binding=out_params_binding
                 )
                 transitions.append(tr)
-        log.debug('List of Transitions: ')
-        log.debug('\n'.join(str(tr) for tr in transitions))
-        log.debug('\n')
+        log.debug(
+            "List of transitions:\n%s",
+            "\n".join(str(t) for t in transitions)
+        )
 
         A = Automaton(
             inputs=inputs,
@@ -541,10 +565,10 @@ class Automaton:
             outgoing_by_loc.setdefault(tr.source.name, []).append(tr)
             incoming_by_loc.setdefault(tr.dest.name, []).append(tr)
 
-        def combine_guards(g1:Optional[str], g2:Optional[str]) -> Optional[str]:
+        def combine_guards(g1:Optional[Expression], g2:Optional[Expression]) -> Optional[Expression]:
             if g1 and g2:
-                return f"{g1} && {g2}"
-            return g1 or g2
+                return Expression(g1.text + '&&' + g2.text)
+            return Expression(g1.text + '||' + g2.text)
         
         new_transitions: List[Transition] = []
         consumed_ids: set[int] = set()
@@ -561,14 +585,15 @@ class Automaton:
 
             for in_tr in ins:
                 for out_tr in pure_outputs:
-                    combine_guard = combine_guards(in_tr.guard, out_tr.guard)
+                    # since out transition does not have guard, hence no need to combine guards of output transition
+                    # commenting the function call combine_guards
+                    # combine_guard = combine_guards(in_tr.input.condition, out_tr.input.condition)
                     combine_assigns = in_tr.assignments + out_tr.assignments
                     io_tr = Transition(
                         source=in_tr.source,
                         dest=out_tr.dest,
                         input=in_tr.input,
                         output=out_tr.output,
-                        guard=combine_guard,
                         assignments=combine_assigns,
                         output_params_binding=list(out_tr.output_params_binding)
                     )
@@ -585,9 +610,10 @@ class Automaton:
                 new_transitions.append(tr)
 
         self.transitions = new_transitions
-        log.debug('List of transitions after merging in and out transitions: ')
-        log.debug('\n'.join(str(t) for t in self.transitions))
-        log.debug('\n')
+        log.debug(
+            "List of transitions after merging in and out transitions:\n%s",
+            "\n".join(str(t) for t in self.transitions)
+        )
 
     
     def _merge_same_io_transition_by_or(self, 
@@ -598,117 +624,123 @@ class Automaton:
                                        # e.g., {"I_isfull", "I_isempty", "I_contains", "I_issize"}
                                        ) -> None:
         '''
-        Merge IO transitions that are identical in (source, dest, input, output,
-        assignments, bindind) but differ only in guards, by OR-ing guards into a
-        single guard.
-        - Only IO transitions (input!=None and output!=None) are considered.
-        - If restrict_to_outputs is provided, only those output kinds are merged.
-        - If restrict_to_method is provided, only those input method names are merged.
-        - Assignments must be "structurally equal". We compare a canonicalized key:
-        tuple(sorted((target_reg.name, expr) for each assignment)) so that order
-        differenced do not prevent merging.
-        Guard OR-ing:
-        - If any member has guard None (unconditional), the merged guard become None.
-        - Otherwise merged_guard := "(g1) || (g2) || ...", deduplicated.
+        Merge IO transitions (input + output) that:
+        - have same src, dest, method, assignments, bindings
+        - differ only in guards
+        Policy:
+            TRUE -> OR guards
+            FALSE -> AND guards
         '''
+
         if not self.transitions:
             return
         
+        buckets: Dict[
+            Tuple[
+                str,    # src
+                str,    # dest
+                str,    # method
+                OutputKind,
+                Tuple[Tuple[str, str], ...],    # assignments
+                Tuple[str, ...]                 # param bindings
+            ],
+            List[Transition]
+        ] = {}
+
         # Helper to canonicalized assignments (order-insensitive, register identity agnostic)
-        def assignments_key(assigns: List[Assignment]) -> Tuple[Tuple[str, str], ...]:
+        def _assignments_key(assigns: List[Assignment]) -> Tuple[Tuple[str, str], ...]:
             return tuple(sorted((a.target_reg.name, a.expr) for a in assigns))
         
-        # Helper to OR guards
-        def or_guards(guards: List[Optional[str]]) -> Optional[str]:
-            # If any None (=unconditional) exists -> Overall None
-            if any(g is None for g in guards):
-                return None
+        def _merge_guards(guards: List[Expression], *, op: str) -> Expression:
+            '''
+            op \in {"OR", "AND"}
+            '''
             uniq = []
             seen = set()
             for g in guards:
-                # normalize whitespace to reduce duplicates, but keep readable
-                g_norm = g.strip() if g else g
-                if g_norm and g_norm not in seen:
-                    uniq.append(g_norm)
-                    seen.add(g_norm)
+                txt = g.text.strip()
+                if txt and txt not in seen:
+                        uniq.append(txt)
+                        seen.add(txt)
+            
             if not uniq:
-                return None
+                return Expression("True")
+            
             if len(uniq) == 1:
-                return uniq[0]
-            return " || ".join(f"({g})" for g in uniq)
-        
-        # bucket IO transitions by equivalence key
-        # each key maps to a list of Transition objects
-        # ... means variable length Tuple
-        buckets: Dict[
-                Tuple[str, str, str, str, Tuple[Tuple[str, str], ...], Tuple[str, ...]],
-                List[Transition]
-            ]={}
-        
+                return Expression(uniq[0])
+            
+            joiner = " || " if op == "OR" else " && "
+            merged = joiner.join(f"({t})" for t in uniq)
+            return Expression(merged)
+
         for tr in self.transitions:
-            # only IO transitions
             if not tr.is_io:
                 continue
-            # Optional filter
-            if restrict_to_methods is not None \
-                and tr.input.name not in restrict_to_methods:
-                # ignore for now
+            if restrict_to_methods and tr.input.name not in restrict_to_methods:
                 continue
-        
-            if restrict_to_outputs is not None \
-                and tr.output.kind not in restrict_to_outputs:
-                # ignore for now
+            if restrict_to_outputs and tr.output.kind not in restrict_to_outputs:
                 continue
-
+            
             key = (
                 tr.source.name,
                 tr.dest.name,
-                tr.input.name,  # ignore
-                tr.output.name, # ignore
-                assignments_key(tr.assignments),
-                tuple(tr.output_params_binding or [])
-            ) 
+                tr.input.name,
+                tr.output.kind,
+                _assignments_key(tr.assignments),
+                tuple(tr.output_params_binding)
+            )
             buckets.setdefault(key, []).append(tr)
 
         if not buckets:
             return
-            
+        
         new_transitions: List[Transition] = []
-        consumed_ids: set[int] = set()
+        consumed: set[int] = set()
 
-        # merge each bucket
         for key, trs in buckets.items():
             if len(trs) == 1:
-                # only one -> keep as it is
                 continue
-            # merge guards using OP
-            merged_guard = or_guards([tr.guard for tr in trs])
 
-            # create a representative merged transition using the first as a template
+            _, _, _, out_kind, *_ = key
+            op = "OR" if out_kind == OutputKind.TRUE else "AND"
+
+            guards = [tr.input.condition for tr in trs]
+            merged_guard = _merge_guards(guards, op=op)
             t0 = trs[0]
+
+            merged_input = Method(
+                name=t0.input.name,
+                params=list(t0.input.params),
+                condition=merged_guard,
+                output_kind=t0.input.output_kind,
+                output_params=list(t0.input.output_params)
+            )
+
             merged = Transition(
                 source=t0.source,
                 dest=t0.dest,
-                input=t0.input,
+                input=merged_input,
                 output=t0.output,
-                guard=merged_guard,
-                assignments=t0.assignments,
+                assignments=list(t0.assignments),
                 output_params_binding=list(t0.output_params_binding)
             )
 
             new_transitions.append(merged)
+
             for tr in trs:
-                consumed_ids.add(id(tr))
-            
-        # keep transitions that were not merged (and add merged ones)
+                consumed.add(id(tr))
+
         for tr in self.transitions:
-            if id(tr) not in consumed_ids:
+            if id(tr) not in consumed:
                 new_transitions.append(tr)
 
         self.transitions = new_transitions
-        log.debug("List of Transitions after AND-ing guards of same IO transitions with same output: ")
-        log.debug('\n'.join(str(t) for t in self.transitions))
-        log.debug('\n')
+
+        log.debug(
+            "Transitions after merging IO TRUE/AND | FALSE/OR guards:\n%s",
+            "\n".join(str(t) for t in self.transitions)
+        )
+    
 
 
     def _build_indices(self) -> None:

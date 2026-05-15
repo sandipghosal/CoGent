@@ -9,6 +9,9 @@ import re
 from customlogger import getlogger
 log = getlogger(__name__)
 
+from solvers.factory import get_solver
+solver = get_solver()
+
 operators = [
     r'==',
     r'!=',
@@ -89,6 +92,35 @@ def put_brackets(expressions, col):
     return expr
 
 
+def normalize_text(s: str) -> str:
+    # remove whitespace and normalize parentheses spacing
+    s = re.sub(r"\s+", "", s)
+    return s
+
+def equals_syntax(e1, e2) -> bool:
+    # check if two Expression objects e1 and e2 are syntactically same
+    if isinstance(e1, Expression) != isinstance(e2, Expression):
+        log.debug('Either e1 or e2 is not of Expression type')
+        return False
+    if sorted(normalize_text(e1.text)) == sorted(normalize_text(e2.text)):
+        log.debug('Expressions '+ e1.text + ' and ' + e2.text + ' are syntactically same')
+        return True
+    
+
+def equals_semantic(e1, e2) -> bool:
+    # check if two Expression objects e1 and e2 are semantically same
+    '''
+    Check logical equivalence using the solver.
+    '''
+    if isinstance(e1, Expression) != isinstance(e2, Expression):
+        log.debug('Either e1 or e2 is not of Expression type')
+        return False
+    if solver.check_equivalence(solver._ne(e1.solver_expr, e2.solver_expr)) is True:
+        log.debug('Expressions '+ e1.text + ' and ' + e2.text + ' are semantically same')
+        return True
+
+
+
 def build_expr(expression):
     """ Process an expression and returns a Solver object """
     # put brackets if not there already around lhs and rhs for each binary operator
@@ -131,3 +163,40 @@ def build_logical_expr(expression):
     builder = Builder()
     exp = builder.build(tree)
     return exp
+
+
+
+###############################################
+# Expression (Solver Specific Logical Expression)
+###############################################
+
+from dataclasses import dataclass, field
+from typing import Optional, Any
+
+@dataclass
+class Expression:
+    '''
+    Solver-independent logical and arithmetic expression
+    '''
+    text: str
+    solver_expr: Any = field(init=False, default=None)
+
+    def to_solver_expr(self):
+        '''
+        Convert string expression to solver-specific representation.
+        Cached after first build.
+        '''
+        if self.solver_expr is None:
+            self.solver_expr = build_expr(self.text)
+        return self.solver_expr
+    
+    def __eq__(self, other) -> bool:
+        # check if syntactically and sematically equal
+        log.debug("Checking if " + self.text + " is same as " + other.text)
+        return equals_semantic(self, other)
+
+    def __hash__(self):
+        return hash(normalize_text(self.text))
+    
+    def __str__(self):
+        return self.text

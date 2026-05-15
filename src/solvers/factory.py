@@ -12,10 +12,8 @@ def get_solver(name=None):
 
     if SOLVER is not None:
         return SOLVER
-    
-    name = name.lower()
 
-    if name == 'z3':
+    if name is None or 'z3':
         SOLVER = Z3Solver()
         log.debug('Solver selected is: '+ 'z3')
 
