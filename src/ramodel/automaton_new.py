@@ -316,6 +316,7 @@ class Automaton:
     # Alphabets
     inputs: Dict[str, Method] = field(default_factory=dict)
     outputs: Dict[str, Output] = field(default_factory=dict)
+    observers: Dict[str, Method] = field(default_factory=dict)
 
     # Pools
     constants: ConstantPool = field(default_factory=ConstantPool)
@@ -527,6 +528,7 @@ class Automaton:
             # Optionally restrict to observer methods only:
             # restrict_to_methods={"I_isfull", "I_isempty", "I_contains", "I_issize"}
         )
+        A._compute_observers()
         A._build_indices()
         return A
 
@@ -742,6 +744,33 @@ class Automaton:
         )
     
 
+    def _compute_observers(self)->None:
+        '''
+        Populate self.observers as a subset of inputs such that
+        - all transitions for those inputs are self-loops
+        '''
+        method_to_trans: Dict[str, List[Transition]] = {}
+
+        for tr in self.transitions:
+            if tr.input is None:
+                continue
+            method_to_trans.setdefault(tr.input.name, []).append(tr)
+
+        observers: Dict[str, Method] = {}
+        for m_name, trs in method_to_trans.items():
+            is_observer = all(
+                # tr.source.name == tr.dest.name and not tr.assignments
+                tr.source.name == tr.dest.name
+                for tr in trs
+            )
+
+            if is_observer:
+                observers[m_name] = self.inputs[m_name]
+
+        self.observers = observers
+        log.debug('List of observers identified:')
+        log.debug(self.observers)
+
 
     def _build_indices(self) -> None:
         '''
@@ -783,7 +812,7 @@ class Automaton:
 
             # IO pair index: only when both present
             if tr.input is not None and tr.output.name is not None:
-                self.trans_by_loc_io.setdefault((src, tr.input.name, tr.output.name), [])
+                self.trans_by_loc_io.setdefault((src, tr.input.name, tr.output.name), []).append(tr)
 
     # Find the outgoing transitions from a location
     def outgoing(self, loc_name: str) -> List[Transition]:
@@ -810,5 +839,6 @@ class Automaton:
         return self.trans_by_src_dst.get((src, dst), [])
 
 
+    
             
     
