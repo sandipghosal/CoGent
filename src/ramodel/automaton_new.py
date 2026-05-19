@@ -334,6 +334,10 @@ class Automaton:
     trans_by_loc_io: Dict[Tuple[str, str, str], List[Transition]] = field(default_factory=dict, init=False)
     trans_by_src_dst: Dict[Tuple[str, str], List[Transition]] = field(default_factory=dict, init=False)
 
+    # Location specific predicates
+    location_truth_predicates: Dict[str, List[Method]] = field(default_factory=dict, init=False)
+    
+    
     # ----------- Constructing the Automaton ----------------
     
     @staticmethod
@@ -530,6 +534,7 @@ class Automaton:
         )
         A._compute_observers()
         A._build_indices()
+        A._populate_location_truth_predicates()
         return A
 
 
@@ -617,6 +622,24 @@ class Automaton:
             "\n".join(str(t) for t in self.transitions)
         )
 
+        def remove_middle_locations()-> None:
+            '''
+            Remove intermediate locations k since
+            tranistion s->k and k->t has been joined into a
+            single transition s->t
+            '''
+            locs = set()
+            for tr in self.transitions:
+                locs.add(tr.source.name)
+                locs.add(tr.dest.name)
+            self.locations = {
+                name: loc for name, loc in self.locations.items()
+                if name in locs
+            }
+            log.debug('List of locations after removing intermediate locations: %s',
+                      ", ".join(self.locations.keys()))
+
+        remove_middle_locations()    
     
     def _merge_same_io_transition_by_or(self, 
                                        *,
@@ -837,6 +860,29 @@ class Automaton:
     # Find transitions between two given locations
     def between(self, src: str, dst: str) -> List[Transition]:
         return self.trans_by_src_dst.get((src, dst), [])
+
+
+    def _populate_location_truth_predicates(self) -> None:
+        '''
+        Populate location-specific unparameterized observers whose guards are True
+        on self-loop transitions.
+        '''
+        state_obs: Dict[str, List[Method]] = {}
+        for loc in self.locations:
+            valid_methods = []
+            trs = self.trans_by_src_dst[(loc, loc)]
+            if not trs:
+                continue
+
+            for tr in trs:
+                if str(tr.input.condition).strip() == "True" \
+                    and len(tr.input.params) == 0:
+                    valid_methods.append(tr.input)
+
+            state_obs[loc] = valid_methods
+
+        self.location_truth_predicates = state_obs
+                    
 
 
     
