@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "/home/sandip/MEGA/python/cogent/src/main.py",
-            "console": "-i input/list/list.xml -t I_push",
+            "console": "-i input/list/list_size.xml -t I_push",
             "args": "${command:pickArgs}"
         },
         {
@@ -17,7 +17,7 @@
             "type": "python",
             "request": "launch",
             "program": "/home/sandip/MEGA/python/cogent/src/main.py",
-            "args": "-i /home/sandip/MEGA/python/cogent/src/input/list/list.xml -t I_push",
+            "args": "-i /home/sandip/MEGA/python/cogent/src/input/list/list_size.xml -t I_push",
             "console": "integratedTerminal",
             "justMyCode": true
         }

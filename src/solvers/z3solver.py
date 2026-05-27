@@ -148,13 +148,13 @@ class Z3Solver(Solver):
         return simplify(argv)
     
     def solve(self, *args):
-        s = Solver()
+        s = z3.Solver()
         for a in args:
             s.add(a)
         return s.check()
 
     def check_equivalence(self, a, b) -> bool:
-        fm = (a != b)
+        fm = self._ne(a, b)
         if self.solve(fm) == unsat:
             return True
         else:

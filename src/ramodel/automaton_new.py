@@ -6,6 +6,7 @@ from enum import Enum, auto
 import xml.etree.ElementTree as ET
 from constraintbuilder.build_expression import Expression
 from dataclasses import dataclass, field
+from collections import deque
 from typing import Set, List, Any, Callable, Dict, Optional, Tuple, Union    
 
 from customlogger import getlogger
@@ -84,10 +85,21 @@ class Variable:
     '''
     name : str
     typ : DataType
+    solver_exp: Any = field(init=False, default=None)
     constant : bool = False
     # value which can be type of either int or float or bool or str
     # or none of them
     value : Optional[Union[int, float, bool, str]] = None
+
+    def to_solver_expr(self):
+        if self.solver_exp is None:
+            if self.typ == DataType.INT:
+                self.solver_exp = solver.int(self.name)
+        return self.solver_exp
+    
+    def set_value(self, val) -> None:
+        if self.typ == DataType.INT:
+            self.value = int(val)
 
     def __repr__(self):
         return self.value if str(self.value) else self.name
@@ -101,6 +113,17 @@ class Register:
     name: str
     typ: DataType
     value: Optional[Union[int, float, bool, str]] = None
+    solver_exp: Any = field(init=False, default=None)
+
+    def to_solver_expr(self):
+        if self.solver_exp is None:
+            if self.typ == DataType.INT:
+                self.solver_exp = solver.int(self.name)
+        return self.solver_exp
+    
+    def set_value(self, val) -> None:
+        if self.typ == DataType.INT:
+            self.value = int(val)
 
     def __repr__(self):
         return self.name
@@ -117,6 +140,17 @@ class Constant:
     # value which can be type of either int or float or bool or str
     # or none of them
     value : Optional[Union[int, float, bool, str]] = None
+    solver_exp: Any = field(init=False, default=None)
+
+    def to_solver_expr(self):
+        if self.solver_exp is None:
+            if self.typ == DataType.INT:
+                self.solver_exp = solver.int(self.name)
+        return self.solver_exp
+    
+    def set_value(self, val) -> None:
+        if self.typ == DataType.INT:
+            self.value = int(val)
 
     def __repr__(self):
         return self.name
@@ -155,16 +189,23 @@ class ConstantPool:
 # frozen=True makes the object read-only after initialization
 # Cannot modify any attribute after the object is created
 # any attempt of modification will raise a FrozenInstanceError
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class Param:
     '''
     Class for each parameter to a method
     '''
     name: str
     typ: DataType
+    solver_exp: Any = field(init=False, default=None)
 
     def __repr__(self):
         return self.name
+
+    def to_solver_expr(self):
+        if self.solver_exp is None:
+            if self.typ == DataType.INT:
+                self.solver_exp = solver.int(self.name)
+        return self.solver_exp
 
 class OutputKind(Enum):
     '''
@@ -249,7 +290,8 @@ class Output(Symbol):
 class Location:
     name: str
     start_loc: bool = False
-    invariant: Optional[str] = None
+    registers: Optional[str] = field(default_factory=set)
+    invariant: Optional[Expression] = None
     contracts: Optional[str] = field(default_factory=list)
 
     def __repr__(self):
@@ -320,7 +362,7 @@ class Automaton:
 
     # Pools
     constants: ConstantPool = field(default_factory=ConstantPool)
-    registers: List[Register] = field(default_factory=list)
+    registers: Dict[str, Register] = field(default_factory=list)
     
     # Graph
     locations: Dict[str, Location] = field(default_factory=dict)
@@ -405,14 +447,14 @@ class Automaton:
 
 
         # (C) Get registers
-        registers = []
+        registers: Dict[str, Register] = {}
         glob = root.find("globals")
         if glob is not None:
             for v in glob.findall("variable"):
                 rname = v.get("name")
                 rtyp = parse_datatype(v.get("type"))
                 rval = cast_value((v.text or "").strip(), rtyp)
-                registers.append(Register(name=rname, typ=rtyp, value=rval))
+                registers[rname] = Register(name=rname, typ=rtyp, value=rval)
         log.debug('List of Registers: ' + str(registers))
 
         # (D) Get Locations
@@ -535,6 +577,8 @@ class Automaton:
         A._compute_observers()
         A._build_indices()
         A._populate_location_truth_predicates()
+        A._compute_location_registers()
+        A._compute_invariants()
         return A
 
 
@@ -882,9 +926,137 @@ class Automaton:
             state_obs[loc] = valid_methods
 
         self.location_truth_predicates = state_obs
+
+    def _compute_location_registers(self) -> None:
+        '''
+        Compute for each location the set of registers available there
+        '''
+        for l in self.locations.values():
+            for tr in self.incoming(l.name):
+                for asn in tr.assignments:
+                    l.registers.add(asn.target_reg)
+
+
+    def _compute_invariants(self) -> None:
+        for loc in self.locations.values():
+            loc.invariant = Expression("False")
+        
+        start = next(l for l in self.locations.values() if l.start_loc)
+        start.invariant = Expression("True")
+
+        def join(e1: Expression, e2:Expression) -> Expression:
+            if str(e1) == "False":
+                return e2
+            elif str(e2) == "False":
+                return e1
+            elif str(e1) == str(e2):
+                return e1
+            else:
+                return Expression(f'({e1}) || ({e2})')
+
+        worklist = deque([start])
+
+        while worklist:
+            curr = worklist.popleft()
+
+            for tr in self.outgoing(curr.name):
+                log.debug(f'Consider transition: {tr}')
+                src_inv = curr.invariant
+                log.debug(f'Derive postcondition for {tr.dest}:')
+                new_inv = derive_sp(src_inv, tr, self)
+                dst = tr.dest
+                # merge with existing invariant at destination
+                joined_inv = join(dst.invariant, new_inv)
+                # check if changed
+                if not (joined_inv == dst.invariant):
+                    dst.invariant = joined_inv
+                    log.debug(f'Invariant updated for {dst} to {joined_inv}')
+                    worklist.append(dst)
+        
                     
+###############################################
+# Functions to derive postcondition
+###############################################
+
+def build_var_maps(A:Automaton, tr: Transition):
+    reg_map ={}
+    old_reg_map = {}
+    param_map ={}
+
+    for r in tr.dest.registers:
+        reg_map[r] = A.registers[r].to_solver_expr()
+        old_reg_map[r] = solver.int(f'{r}_old')
+        
+        if tr.input:
+            for p in tr.input.params:
+                param_map[p.name] = p.to_solver_expr()
+
+    return reg_map, old_reg_map, param_map
+
+def substitute_old(expr, reg_map, old_reg_map):
+    pairs = []
+    quantified_vars = set()
+    for name in reg_map:
+        pairs.append((reg_map[name], old_reg_map[name]))
+        quantified_vars.add(old_reg_map[name])
+    return quantified_vars, solver.substitute(expr, pairs)
 
 
+def build_assignment_constraint(tr, reg_map, old_reg_map, param_map):
+    '''
+    Returns:
+        (quantified_vars, constraint)
     
+    quantified_vars: list of Z3 variables (old registers + params)
+    constraint: Z3 formula
+    '''
+    constraints = solver.bool_val(True)
+    quantified_vars = set()
+
+    if tr.dest.registers is not None:
+        if tr.assignments is []:
+            for r in tr.dest.registers:
+                c = solver._eq(reg_map[r], old_reg_map[r])
+                quantified_vars.add(old_reg_map[r])
+                constraints = solver._and(constraints, c)
+        else:
+            for asn in tr.assignments:
+                lhs = asn.target_reg
+                rhs = asn.expr
+                if rhs in param_map.keys():
+                    c = solver._eq(reg_map[lhs], param_map[rhs])
+                    quantified_vars.add(param_map[rhs])
+                    constraints = solver._and(constraints, c)
+                elif rhs in reg_map.keys():
+                    c = solver._eq(reg_map[lhs], old_reg_map[rhs])
+                    quantified_vars.add(old_reg_map[rhs])
+                    constraints = solver._and(constraints, c)
+                else:
+                    ValueError("RHS of assignment should be a register or parameter")
+    return quantified_vars, constraints
+
+
+def derive_sp(pre: Expression, tr: Transition, A: Automaton) -> Expression:
+    log.debug(f'Precondition: {pre}')
+    log.debug(f'Guard: {tr.input.condition}')
+    log.debug(f'Assignment: {tr.assignments}')
+    reg_map, old_reg_map, param_map = build_var_maps(A, tr)
+    set1, a_expr = build_assignment_constraint(tr, reg_map, old_reg_map, param_map)
+    set2, p_expr = substitute_old(pre.to_solver_expr(), reg_map, old_reg_map)
+    set3, g_expr = substitute_old(tr.input.condition.to_solver_expr(), reg_map, old_reg_map)
+    quantified_vars = list(set1.union(set2, set3))
+    expr = solver.bool_val(True)
+    for e in [a_expr, p_expr, g_expr]:
+        expr = solver._and(expr, e)
+
+    if str(expr) not in ['True', 'False']:
+        sp = solver.eliminate(quantified_vars, expr)
+    else:
+        sp = expr
+    e = Expression(str(sp))
+    e.solver_expr = sp
+    log.debug(f'Postcondition after quantifier elimination: {e}') 
+    return e
+
             
     

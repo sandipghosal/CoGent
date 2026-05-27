@@ -115,16 +115,19 @@ def equals_semantic(e1, e2) -> bool:
     if isinstance(e1, Expression) != isinstance(e2, Expression):
         log.debug('Either e1 or e2 is not of Expression type')
         return False
-    if solver.check_equivalence(solver._ne(e1.solver_expr, e2.solver_expr)) is True:
+    if solver.check_equivalence(e1.solver_expr, e2.solver_expr) is True:
         log.debug('Expressions '+ e1.text + ' and ' + e2.text + ' are semantically same')
         return True
+    else:
+        log.debug('Expressions '+ e1.text + ' and ' + e2.text + ' are semantically different')
+        return False
 
 
 
 def build_expr(expression):
     """ Process an expression and returns a Solver object """
     # put brackets if not there already around lhs and rhs for each binary operator
-    log.debug('Get the solver object for expression: '+ expression)
+    # log.debug('Get the solver object for expression: '+ expression)
     expr = put_brackets(expression, 0)
     lexer = Lexer(expr)
     tokens = lexer.create_tokens()
@@ -180,6 +183,12 @@ class Expression:
     '''
     text: str
     solver_expr: Any = field(init=False, default=None)
+
+    def __post_init__(self):
+        # Automatically build solver expression on creation
+        if self.text is not None:
+            self.solver_expr = self.to_solver_expr()
+
 
     def to_solver_expr(self):
         '''

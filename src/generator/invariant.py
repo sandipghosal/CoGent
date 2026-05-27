@@ -129,7 +129,7 @@ def get_postcondition(source, dest, pre_registers, guard, assignments) -> z3.Boo
     Derive strongest postcondition for the destination location wrt. given source location, guard and the assignments
     :param source: source location (Location)
     :param dest: destination location (Location)
-    :param pre_registers: list of resgieters for source location
+    :param pre_registers: list of resgieters for source locat\\\\\\\\\\\\\\\\\ion
     :param guard: guard of the transition (BoolRef)
     :param assignments: list of assignments (Tuples)
     :return:
