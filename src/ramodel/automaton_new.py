@@ -86,7 +86,6 @@ class Variable:
     name : str
     typ : DataType
     solver_exp: Any = field(init=False, default=None)
-    constant : bool = False
     # value which can be type of either int or float or bool or str
     # or none of them
     value : Optional[Union[int, float, bool, str]] = None
@@ -102,7 +101,7 @@ class Variable:
             self.value = int(val)
 
     def __repr__(self):
-        return self.value if str(self.value) else self.name
+         return str(self.value) if self.value is not None else self.name
 
 
 @dataclass
@@ -190,13 +189,10 @@ class ConstantPool:
 # Cannot modify any attribute after the object is created
 # any attempt of modification will raise a FrozenInstanceError
 @dataclass(frozen=False)
-class Param:
+class Param(Variable):
     '''
     Class for each parameter to a method
     '''
-    name: str
-    typ: DataType
-    solver_exp: Any = field(init=False, default=None)
 
     def __repr__(self):
         return self.name
@@ -575,6 +571,7 @@ class Automaton:
             # restrict_to_methods={"I_isfull", "I_isempty", "I_contains", "I_issize"}
         )
         A._compute_observers()
+        A._infer_method_output_types()
         A._build_indices()
         A._populate_location_truth_predicates()
         A._compute_location_registers()
@@ -935,6 +932,33 @@ class Automaton:
             for tr in self.incoming(l.name):
                 for asn in tr.assignments:
                     l.registers.add(asn.target_reg)
+
+    def _infer_method_output_types(self):
+        """
+        Infer output_kind and output_params for each method
+        based on IO transitions
+        """
+
+        for tr in self.transitions:
+
+            if not tr.is_io:
+                continue
+
+            method = tr.input
+            out = tr.output
+
+            if method is None or out is None:
+                continue
+
+            method.output_kind = out.kind
+
+            if out.params:
+                method.output_params = list(out.params)
+            
+            if method.name in self.observers.keys():
+                self.observers[method.name].output_kind = out.kind
+                self.observers[method.name].output_params = list(out.params)
+
 
 
     def _compute_invariants(self) -> None:

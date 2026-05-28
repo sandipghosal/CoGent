@@ -7,7 +7,7 @@ import os
 # import ramodel.config
 from ramodel.automaton_new import Automaton
 from errors import *
-from generator import generate
+from generator.generate_new import generate
 from solvers.factory import get_solver
 
 
@@ -123,7 +123,7 @@ def main(argv):
     # ++++++++++++ NEW CODE START +++++++++++++
     # import the automaton from the XML file
     A = Automaton.from_file(xmlfile)
-
+    generate(A, target)
     # ++++++++++++ NEW CODE END +++++++++++++
 
     # ++++++++++++ OLD CODE START ++++++++++++++

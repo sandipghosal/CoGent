@@ -1,4 +1,5 @@
 from constraintbuilder.builder import Builder
+from constraintbuilder.logic_builder import LogicBuilder
 #from constraintbuilder.expr_builder import LExprBuilder
 from constraintbuilder.lexer import Lexer
 from constraintbuilder.parser import Parser
@@ -15,6 +16,7 @@ solver = get_solver()
 operators = [
     r'==',
     r'!=',
+    r'!',
     r'&&',
     r'&',
     r'and',
@@ -163,7 +165,7 @@ def build_logical_expr(expression):
     tokens = lexer.create_tokens()
     tree = Parser(tokens, expr).parse()
     #builder = LExprBuilder()
-    builder = Builder()
+    builder = LogicBuilder()
     exp = builder.build(tree)
     return exp
 
@@ -182,11 +184,11 @@ class Expression:
     Solver-independent logical and arithmetic expression
     '''
     text: str
-    solver_expr: Any = field(init=False, default=None)
+    solver_expr: Any = field(default=None)
 
     def __post_init__(self):
         # Automatically build solver expression on creation
-        if self.text is not None:
+        if self.solver_expr is None:
             self.solver_expr = self.to_solver_expr()
 
 
@@ -209,3 +211,14 @@ class Expression:
     
     def __str__(self):
         return self.text
+
+
+class LogicalExpression(Expression):
+    def to_solver_expr(self):
+        '''
+        Convert string expression to solver-specific representation.
+        Cached after first build.
+        '''
+        if self.solver_expr is None:
+            self.solver_expr = build_logical_expr(self.text)
+        return self.solver_expr
