@@ -214,15 +214,16 @@ class OutputKind(Enum):
     VOID = auto()   # given as 'V' in XML
     ERROR = auto()  # __ERR
     VALUE = auto()  # output with params, e.g., O_pop(p1)
+    MUL = auto()    # output/returning multiple values 
     OTHER = auto()
-
+        
 @dataclass
 class Symbol:
     '''
     These are the symbols given in XML file under <symbol> tag
     '''
     name: str
-    params: List[Param] = field(default_factory=list)
+    params: List[Param] = field(default_factory=None)
 
     def signature(self) -> str:
         if not self.params:
@@ -232,6 +233,25 @@ class Symbol:
     
     def __repr__(self):
         return self.signature()
+    
+@dataclass
+class Output(Symbol):
+    kind: OutputKind = field(init=True, default_factory=OutputKind.OTHER)
+    output: Any = field(default=None)
+
+    def __repr__(self):
+        if self.kind == OutputKind.TRUE:
+            return 'True'
+        elif self.kind == OutputKind.FALSE:
+            return 'False'
+        elif self.kind in [OutputKind.VALUE, OutputKind.MUL]:
+            return f'{self.output}'
+        elif self.kind == OutputKind.ERROR:
+            return 'Error'
+        elif self.kind == OutputKind.VOID:
+            return 'Void'
+        else:
+            return 'Not Found'
 
 @dataclass(repr=False) # disable auto __repr__ for Method
 class Method(Symbol):
@@ -242,11 +262,15 @@ class Method(Symbol):
     # logical condition over registers and input parameters
     condition: Optional[Expression] = None
     
-    # method's output
+    # method's output type
     output_kind : Optional[OutputKind] = None
 
     # output parameters (for returning values)
     output_params: List[Param] = field(default_factory=list)
+
+    # method's output can be True/False/Constant
+    output: Any = field(init=True, default=None)
+
 
 
 def parse_output(name: str, params: List[Param]) -> OutputKind:
@@ -267,13 +291,6 @@ def parse_output(name: str, params: List[Param]) -> OutputKind:
         return OutputKind.VALUE
     else:
         return OutputKind.OTHER
-
-@dataclass
-class Output(Symbol):
-    kind: OutputKind = OutputKind.OTHER
-
-    def __repr__(self):
-        return self.kind.name
 
 
 
@@ -305,12 +322,12 @@ class Assignment:
 class Transition:
     source: Location
     dest: Location
-    input: Optional[Method] = None       
+    input: Optional[Method] = None    
+    assignments: List[Assignment] = field(default_factory=list)   
     output: Optional[Output] = None
     #guard: Optional[str] = None
-    assignments: List[Assignment] = field(default_factory=list)
     # Bind some output such as O_pop with parameters
-    output_params_binding: List[str] = field(default_factory=list)
+    # output_params_binding: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         if (self.input is None) and (self.output is None):
@@ -409,8 +426,7 @@ class Automaton:
                     ptyp = parse_datatype(p.get("type"))
                     params.append(Param(name=pname, typ=ptyp))
                 inputs[name] = Method(name=name, params=params)
-        log.debug('List of Input symbols: ')
-        log.debug(inputs)
+        log.debug(f"List of Input symbols: {', '.join(str(i) for i in inputs.values())}")
 
         out_node = alphabet.find("outputs")
         if out_node is not None:
@@ -424,11 +440,12 @@ class Automaton:
                     pname = p.get("name")
                     ptyp = parse_datatype(p.get("type"))
                     params.append(Param(name=pname, typ=ptyp))
-
+                if len(params) > 1:
+                    log.critical(f"Output symbol {name} has more than one parameters")
+                    exit(1)
                 kind = parse_output(name=name, params=params)
                 outputs[name] = Output(name=name, params=params, kind=kind)
-        log.debug('List of Output symbols: ')
-        log.debug(outputs)
+        log.debug(f"List of Output symbols: {', '.join(o for o in outputs)}")
 
         # (B) Get constants
         constants = ConstantPool()
@@ -439,7 +456,7 @@ class Automaton:
                 ctyp = parse_datatype(c.get("type"))
                 cval = cast_value((c.text or "").strip(), ctyp)
                 constants.add(Constant(name=cname, typ=ctyp, value=cval))
-            log.debug('List of Constants: ' + str(constants))
+            log.debug(f"List of constants: {', '.join(c for c in constants.consts)}")
 
 
         # (C) Get registers
@@ -451,7 +468,7 @@ class Automaton:
                 rtyp = parse_datatype(v.get("type"))
                 rval = cast_value((v.text or "").strip(), rtyp)
                 registers[rname] = Register(name=rname, typ=rtyp, value=rval)
-        log.debug('List of Registers: ' + str(registers))
+        log.debug(f"List of registers: {', '.join(r for r in registers)}")
 
         # (D) Get Locations
         locations: Dict[str, Location] = {}
@@ -471,7 +488,7 @@ class Automaton:
         if not init_seen:
             log.critical('Start location not specified')
             raise ValueError("No start location specified")
-        log.debug('List of locations: ' + str(locations))
+        log.debug(f"List of locations: {", ".join(l for l in locations)}")
         
         # (E) Get Transitions
         transitions : List[Transition] = []
@@ -507,13 +524,13 @@ class Automaton:
                         expr = (asn.text or "").strip()
                         if not to:
                             log.critical('<assign> tag is missing for transition from'+ src_name)
-                            raise ValueError("<assign> missing 'to' attribute")
+                            raise ValueError("<assign> mi   ssing 'to' attribute")
                         assigns.append(Assignment(target_reg=to, expr=expr))
                 
                 params_attr = t.get("params")
-                out_params_binding: List[str] = []
+                out_params: List[str] = []
                 if params_attr:
-                    out_params_binding = [p.strip() for p in params_attr.split(",") if p.strip()]
+                    out_params = [p.strip() for p in params_attr.split(",") if p.strip()]
 
                 resolved_input : Optional[Method] = None
                 resolved_output: Optional[Output] = None
@@ -526,16 +543,19 @@ class Automaton:
                     )
                 elif sym_name in outputs:
                     base_output = outputs[sym_name]
+                    # assuming method has only one output
+                    output = assigns[0].expr if assigns else None
                     resolved_output = Output(
                         name=base_output.name, 
-                        params=list(base_output.params), 
-                        kind=base_output.kind
+                        params=list(out_params), 
+                        kind=base_output.kind,
+                        output=output
                     )
                 else:
                     log.critical('Transition uses unknown symbol ' + sym_name)
                     raise KeyError("Transition uses unknown symbol '{sym_name}'")
                 
-                # create the Transition object
+                # create the Transition object`
                 tr = Transition(
                     source=locations[src_name],
                     dest=locations[dest_name],
@@ -543,7 +563,7 @@ class Automaton:
                     output=resolved_output,
                     # guard=guard_text,
                     assignments=assigns,
-                    output_params_binding=out_params_binding
+                    # output_params_binding=out_params_binding
                 )
                 transitions.append(tr)
         log.debug(
@@ -643,7 +663,7 @@ class Automaton:
                         input=in_tr.input,
                         output=out_tr.output,
                         assignments=combine_assigns,
-                        output_params_binding=list(out_tr.output_params_binding)
+                        # output_params_binding=list(out_tr.output_params_binding)
                     )
                     new_transitions.append(io_tr)
 
@@ -677,7 +697,7 @@ class Automaton:
                 name: loc for name, loc in self.locations.items()
                 if name in locs
             }
-            log.debug('List of locations after removing intermediate locations: %s',
+            log.debug('List of locations after removing intermediate locations: %s\n',
                       ", ".join(self.locations.keys()))
 
         remove_middle_locations()    
@@ -706,9 +726,8 @@ class Automaton:
                 str,    # src
                 str,    # dest
                 str,    # method
-                OutputKind,
                 Tuple[Tuple[str, str], ...],    # assignments
-                Tuple[str, ...]                 # param bindings
+                Output                # output
             ],
             List[Transition]
         ] = {}
@@ -753,7 +772,7 @@ class Automaton:
                 tr.input.name,
                 tr.output.kind,
                 _assignments_key(tr.assignments),
-                tuple(tr.output_params_binding)
+                # tuple(tr.output_params_binding)
             )
             buckets.setdefault(key, []).append(tr)
 
@@ -776,10 +795,11 @@ class Automaton:
 
             merged_input = Method(
                 name=t0.input.name,
-                params=list(t0.input.params),
+                params=t0.input.params,
                 condition=merged_guard,
                 output_kind=t0.input.output_kind,
-                output_params=list(t0.input.output_params)
+                output=t0.input.output,
+                output_params=t0.input.output_params
             )
 
             merged = Transition(
@@ -788,7 +808,7 @@ class Automaton:
                 input=merged_input,
                 output=t0.output,
                 assignments=list(t0.assignments),
-                output_params_binding=list(t0.output_params_binding)
+                # output_params_binding=list(t0.output_params_binding)
             )
 
             new_transitions.append(merged)
@@ -803,7 +823,7 @@ class Automaton:
         self.transitions = new_transitions
 
         log.debug(
-            "Transitions after merging IO TRUE/AND | FALSE/OR guards:\n%s",
+            "Transitions after merging IO TRUE/AND | FALSE/OR guards:\n%s\n",
             "\n".join(str(t) for t in self.transitions)
         )
     
@@ -832,8 +852,7 @@ class Automaton:
                 observers[m_name] = self.inputs[m_name]
 
         self.observers = observers
-        log.debug('List of observers identified:')
-        log.debug(self.observers)
+        log.debug(f'List of observers identified: {", ".join(o for o in self.observers)}\n')
 
 
     def _build_indices(self) -> None:
@@ -953,12 +972,28 @@ class Automaton:
             method.output_kind = out.kind
 
             if out.params:
-                method.output_params = list(out.params)
+                method.output_params = out.params
+                # the rhs of assignments in out transition are the output
+                for asn in tr.assignments:
+                    if asn.expr in self.constants:
+                        method.output = self.constants[asn.expr]
+                    elif asn.expr in self.registers.keys():
+                        method.output = self.registers[asn.expr]
+                    else:
+                        ValueError(f"In {tr} method outputs unknown value {asn.expr}")
+            
+            if method.output_kind is OutputKind.TRUE:
+                method.output = True
+
+            if method.output_kind is OutputKind.FALSE:
+                method.output = False
+
+            log.debug(f"In {tr} method {method} outputs {method.output}")
             
             if method.name in self.observers.keys():
+                self.observers[method.name].output = out.output
                 self.observers[method.name].output_kind = out.kind
-                self.observers[method.name].output_params = list(out.params)
-
+                self.observers[method.name].output_params = out.params
 
 
     def _compute_invariants(self) -> None:
@@ -994,8 +1029,10 @@ class Automaton:
                 # check if changed
                 if not (joined_inv == dst.invariant):
                     dst.invariant = joined_inv
-                    log.debug(f'Invariant updated for {dst} to {joined_inv}')
+                    log.debug(f'Invariant updated for {dst} to {joined_inv}\n')
                     worklist.append(dst)
+                else:
+                    log.debug(f'Invariant is unchanged for {dst}\n')
         
                     
 ###############################################
