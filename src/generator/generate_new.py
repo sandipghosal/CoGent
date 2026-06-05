@@ -15,5 +15,5 @@ def generate(A: Automaton, target_method):
     log.debug(f'======== Starting contract generation for method {"\033[31m"}{target}{"\033[36m"} =============')
     postconditions = generate_postconditions(A)
     for Q in postconditions:
-        contracts_per_location = generate_contract_per_location(A, target_method, Q)
+        contracts_per_location = generate_contract_per_location(A, target, Q)
  
