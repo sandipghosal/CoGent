@@ -101,6 +101,15 @@ class Solver(ABC):
     def _unsat(self):
         pass
 
+
+    @abstractmethod
+    def is_false(self, x):
+        pass
+
+    @abstractmethod
+    def get_ast_id(self, x, y):
+        pass
+
     @abstractmethod
     def _wp(self, argv, args):
         '''

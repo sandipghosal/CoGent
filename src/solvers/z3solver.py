@@ -135,6 +135,13 @@ class Z3Solver(Solver):
     
     def _unsat(self):
         return unsat
+    
+
+    def is_false(self, x):
+        return is_false(x)
+
+    def get_ast_id(self, x, y):
+        return Z3_get_ast_id(x, y)
 
     def _wp(self, argv, args):
         return simplify(substitute(argv, args))

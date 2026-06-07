@@ -566,10 +566,14 @@ class Automaton:
                     # output_params_binding=out_params_binding
                 )
                 transitions.append(tr)
-        log.debug(
-            "List of transitions:\n%s",
-            "\n".join(str(t) for t in transitions)
-        )
+        # log.debug(
+        #     "List of transitions:%s",
+        #     ", ".join(str(t) for t in transitions)
+        # )
+        log.debug("List of transitions: ")
+        for t in transitions:
+            log.debug("     %s\n", t)
+        log.debug("\n")
 
         A = Automaton(
             inputs=inputs,
@@ -678,10 +682,14 @@ class Automaton:
                 new_transitions.append(tr)
 
         self.transitions = new_transitions
-        log.debug(
-            "List of transitions after merging in and out transitions:\n%s",
-            "\n".join(str(t) for t in self.transitions)
-        )
+        # log.debug(
+        #     "List of transitions after merging in and out transitions:\n%s",
+        #     ", ".join(str(t) for t in self.transitions)
+        # )
+        log.debug("List of transitions after merging in and out transitions: ")
+        for t in self.transitions:
+            log.debug("     %s\n", t)
+        log.debug("\n")
 
         def remove_middle_locations()-> None:
             '''
@@ -738,7 +746,7 @@ class Automaton:
         
         def _merge_guards(guards: List[Expression], *, op: str) -> Expression:
             '''
-            op \in {"OR", "AND"}
+            op in {"OR", "AND"}
             '''
             uniq = []
             seen = set()
@@ -822,10 +830,14 @@ class Automaton:
 
         self.transitions = new_transitions
 
-        log.debug(
-            "Transitions after merging IO TRUE/AND | FALSE/OR guards:\n%s\n",
-            "\n".join(str(t) for t in self.transitions)
-        )
+        # log.debug(
+        #     "Transitions after merging IO TRUE/AND | FALSE/OR guards:\n%s\n",
+        #     ", ".join(str(t) for t in self.transitions)
+        # )
+        log.debug("Transitions after merging IO TRUE/AND | FALSE/OR guards: ")
+        for t in self.transitions:
+            log.debug("     %s\n", t)
+        log.debug("\n")
     
 
     def _compute_observers(self)->None:
@@ -1019,6 +1031,7 @@ class Automaton:
             curr = worklist.popleft()
 
             for tr in self.outgoing(curr.name):
+                log.debug('\n')
                 log.debug(f'Consider transition: {tr}')
                 src_inv = curr.invariant
                 log.debug(f'Derive postcondition for {tr.dest}:')
