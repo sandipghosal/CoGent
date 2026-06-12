@@ -1,6 +1,6 @@
-import re
+from common_imports import re
 
-from constraintbuilder.tokens import *
+from .tokens import *
 
 
 ######################

@@ -121,7 +121,7 @@ def getlogger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     fh.setLevel(level)
 
     formatter = CustomFormatter(
-        "%(seq)5d %(filename)-30s %(lineno)4d - %(levelname)-8s :: %(message)s"
+        "%(seq)5d %(filename)-28s %(lineno)4d - %(levelname)-8s :: %(message)s"
         # "%(filename)-30s %(lineno)4d - %(levelname)-8s :: %(message)s"
     )
 

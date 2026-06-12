@@ -1,6 +1,5 @@
 # import all the solvers here
 from solvers.z3solver import Z3Solver
-# from XSolver import xsolver
 
 from customlogger import getlogger
 log = getlogger(__name__)
@@ -13,7 +12,7 @@ def get_solver(name=None):
     if SOLVER is not None:
         return SOLVER
 
-    if name is None or 'z3':
+    if name is None or name == 'z3':
         SOLVER = Z3Solver()
         log.debug('Solver selected is: '+ 'z3')
 
@@ -24,3 +23,15 @@ def get_solver(name=None):
         raise ValueError(f"Unknown Solver: {name}")
     
     return SOLVER
+
+def new_solver(name=None):
+    if isinstance(SOLVER, Z3Solver):
+        s = Z3Solver()
+        # log.debug('Solver selected is: '+ 'z3')
+
+    # elif name == 'x':
+    #     SOLVER = XSolver
+    else:
+        log.critical('No known solver is selected')
+        raise ValueError(f"Unknown Solver: {name}")
+    return s._solver

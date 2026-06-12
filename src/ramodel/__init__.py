@@ -1,3 +1,27 @@
+# Old import
 from ramodel.config import Config
 from ramodel.automaton import *
-from ramodel.automaton_new import Automaton
+
+
+# New import
+from .automaton_new import(
+    DataType,
+    Variable,
+    Param,
+    OutputKind,
+    Output,
+    Method,
+    Location,
+    Automaton
+)
+
+__all__ = [
+    "DataType",
+    "Variable",
+    "Param",
+    "OutputKind",
+    "Output",
+    "Method",
+    "Location",
+    "Automaton",
+]

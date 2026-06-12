@@ -136,7 +136,11 @@ class Solver(ABC):
         pass
 
     @abstractmethod
-    def check_equivalence(self, a, b) -> bool:
+    def is_implies(self, ante, cons):
+        pass
+
+    @abstractmethod
+    def check_equivalence(self, a, b, mode) -> bool:
         pass
 
     @abstractmethod

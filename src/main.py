@@ -119,18 +119,9 @@ def main(argv):
     else:
         SOLVER = get_solver(solver)
 
-
-    # ++++++++++++ NEW CODE START +++++++++++++
     # import the automaton from the XML file
     A = Automaton.from_file(xmlfile)
     generate(A, target)
-    # ++++++++++++ NEW CODE END +++++++++++++
-
-    # ++++++++++++ OLD CODE START ++++++++++++++
-    # import the automaton from the XML file
-    # automaton = import_ra(xmlfile)
-    # config = ramodel.Config(xmlfile)
-    # config.config(target, afile)
     start = time.time()
     # generate(config)
     end = time.time()

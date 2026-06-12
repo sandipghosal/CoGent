@@ -1,5 +1,5 @@
 
-from constraintbuilder.tokens import *
+from .tokens import *
 
 
 class StringBuilder:

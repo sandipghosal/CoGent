@@ -23,10 +23,10 @@
         </outputs>
     </alphabet>
     <constants>
-        <constant type="int" name="c1">0</constant>
-        <constant type="int" name="c2">1</constant>
-        <constant type="int" name="c3">2</constant>
-        <constant type="int" name="c4">3</constant>
+        <constant type="int" name="c0">0</constant>
+        <constant type="int" name="c1">1</constant>
+        <constant type="int" name="c2">2</constant>
+        <constant type="int" name="c3">3</constant>
     </constants>
     <globals>
         <variable type="int" name="r3">0</variable>
@@ -87,7 +87,7 @@
         </transition>
     	<transition from="l4" to="l0" symbol="O_size" params="x">
             <assignments>
-                <assign to="x">c1</assign>
+                <assign to="x">c0</assign>
             </assignments>
         </transition>
     	<transition from="l7" to="l9" symbol="I_contains">
@@ -116,7 +116,7 @@
         
         <transition from="l8" to="l7" symbol="O_size" params="x">
             <assignments>
-                <assign to="x">c2</assign>
+                <assign to="x">c1</assign>
             </assignments>
         </transition>
         <transition from="l7" to="l11" symbol="I_push">
@@ -157,7 +157,7 @@
         </transition>
         <transition from="l18" to="l12" symbol="O_size" params="x">
             <assignments>
-                <assign to="x">c3</assign>
+                <assign to="x">c2</assign>
             </assignments>
         </transition>
          <transition from="l12" to="l13" symbol="I_push">
@@ -205,7 +205,7 @@
         </transition>
         <transition from="l21" to="l14" symbol="O_size" params="x">
             <assignments>
-                <assign to="x">c4</assign>
+                <assign to="x">c3</assign>
             </assignments>
         </transition>
     </transitions>

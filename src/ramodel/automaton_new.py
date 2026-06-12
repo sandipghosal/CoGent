@@ -1,19 +1,11 @@
+from common_imports import (
+    Path, ET, Enum, auto,
+    log, SOLVER, dataclass, field, deque,
+    List, Any, Dict, Optional, Tuple, Union
+)
 
-
-
-from pathlib import Path
-from enum import Enum, auto
-import xml.etree.ElementTree as ET
-from constraintbuilder.build_expression import Expression
-from dataclasses import dataclass, field
-from collections import deque
-from typing import Set, List, Any, Callable, Dict, Optional, Tuple, Union    
-
-from customlogger import getlogger
-log = getlogger(__name__)
-
-from solvers.factory import get_solver
-solver = get_solver()
+from constraintbuilder import Expression
+# from conditionbuilder import Contract
 
 
 ######################################
@@ -93,7 +85,7 @@ class Variable:
     def to_solver_expr(self):
         if self.solver_exp is None:
             if self.typ == DataType.INT:
-                self.solver_exp = solver.int(self.name)
+                self.solver_exp = SOLVER.int(self.name)
         return self.solver_exp
     
     def set_value(self, val) -> None:
@@ -117,7 +109,7 @@ class Register:
     def to_solver_expr(self):
         if self.solver_exp is None:
             if self.typ == DataType.INT:
-                self.solver_exp = solver.int(self.name)
+                self.solver_exp = SOLVER.int(self.name)
         return self.solver_exp
     
     def set_value(self, val) -> None:
@@ -144,7 +136,7 @@ class Constant:
     def to_solver_expr(self):
         if self.solver_exp is None:
             if self.typ == DataType.INT:
-                self.solver_exp = solver.int(self.name)
+                self.solver_exp = SOLVER.int(self.name)
         return self.solver_exp
     
     def set_value(self, val) -> None:
@@ -200,7 +192,7 @@ class Param(Variable):
     def to_solver_expr(self):
         if self.solver_exp is None:
             if self.typ == DataType.INT:
-                self.solver_exp = solver.int(self.name)
+                self.solver_exp = SOLVER.int(self.name)
         return self.solver_exp
 
 class OutputKind(Enum):
@@ -305,7 +297,7 @@ class Location:
     start_loc: bool = False
     registers: Optional[str] = field(default_factory=set)
     invariant: Optional[Expression] = None
-    contracts: Optional[str] = field(default_factory=list)
+    contracts: Optional[Any] = field(default_factory=list)
 
     def __repr__(self):
         return self.name
@@ -1059,7 +1051,7 @@ def build_var_maps(A:Automaton, tr: Transition):
 
     for r in tr.dest.registers:
         reg_map[r] = A.registers[r].to_solver_expr()
-        old_reg_map[r] = solver.int(f'{r}_old')
+        old_reg_map[r] = SOLVER.int(f'{r}_old')
         
         if tr.input:
             for p in tr.input.params:
@@ -1073,7 +1065,7 @@ def substitute_old(expr, reg_map, old_reg_map):
     for name in reg_map:
         pairs.append((reg_map[name], old_reg_map[name]))
         quantified_vars.add(old_reg_map[name])
-    return quantified_vars, solver.substitute(expr, pairs)
+    return quantified_vars, SOLVER.substitute(expr, pairs)
 
 
 def build_assignment_constraint(tr, reg_map, old_reg_map, param_map):
@@ -1084,27 +1076,27 @@ def build_assignment_constraint(tr, reg_map, old_reg_map, param_map):
     quantified_vars: list of Z3 variables (old registers + params)
     constraint: Z3 formula
     '''
-    constraints = solver.bool_val(True)
+    constraints = SOLVER.bool_val(True)
     quantified_vars = set()
 
     if tr.dest.registers is not None:
         if tr.assignments is []:
             for r in tr.dest.registers:
-                c = solver._eq(reg_map[r], old_reg_map[r])
+                c = SOLVER._eq(reg_map[r], old_reg_map[r])
                 quantified_vars.add(old_reg_map[r])
-                constraints = solver._and(constraints, c)
+                constraints = SOLVER._and(constraints, c)
         else:
             for asn in tr.assignments:
                 lhs = asn.target_reg
                 rhs = asn.expr
                 if rhs in param_map.keys():
-                    c = solver._eq(reg_map[lhs], param_map[rhs])
+                    c = SOLVER._eq(reg_map[lhs], param_map[rhs])
                     quantified_vars.add(param_map[rhs])
-                    constraints = solver._and(constraints, c)
+                    constraints = SOLVER._and(constraints, c)
                 elif rhs in reg_map.keys():
-                    c = solver._eq(reg_map[lhs], old_reg_map[rhs])
+                    c = SOLVER._eq(reg_map[lhs], old_reg_map[rhs])
                     quantified_vars.add(old_reg_map[rhs])
-                    constraints = solver._and(constraints, c)
+                    constraints = SOLVER._and(constraints, c)
                 else:
                     ValueError("RHS of assignment should be a register or parameter")
     return quantified_vars, constraints
@@ -1119,18 +1111,15 @@ def derive_sp(pre: Expression, tr: Transition, A: Automaton) -> Expression:
     set2, p_expr = substitute_old(pre.to_solver_expr(), reg_map, old_reg_map)
     set3, g_expr = substitute_old(tr.input.condition.to_solver_expr(), reg_map, old_reg_map)
     quantified_vars = list(set1.union(set2, set3))
-    expr = solver.bool_val(True)
+    expr = SOLVER.bool_val(True)
     for e in [a_expr, p_expr, g_expr]:
-        expr = solver._and(expr, e)
+        expr = SOLVER._and(expr, e)
 
     if str(expr) not in ['True', 'False']:
-        sp = solver.eliminate(quantified_vars, expr)
+        sp = SOLVER.eliminate(quantified_vars, expr)
     else:
         sp = expr
     e = Expression(str(sp))
     e.solver_expr = sp
     log.debug(f'Postcondition after quantifier elimination: {e}') 
-    return e
-
-            
-    
+    return e  

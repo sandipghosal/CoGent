@@ -1,9 +1,6 @@
 from z3 import *
 from solvers.interface import Solver
-
-
-from customlogger import getlogger
-log = getlogger(__name__)
+from common_imports import log
 
 
 
@@ -75,21 +72,31 @@ class Z3Solver(Solver):
     def function(self, id, *args):
         return Function(id, *args)
     
-    def _or(self, a, b):
+    # def _or(self, a, b):
+    #     '''
+    #     Returns disjunction of a and b
+    #     '''
+    #     if not isinstance(a, z3.z3.BoolRef):
+    #         a = self.bool(a)
+    #     if not isinstance(b, z3.z3.BoolRef):
+    #         b = self.bool(b)
+    #     return simplify(Or(a, b))
+    
+    def _or(self, *args):
         '''
         Returns disjunction of a and b
         '''
-        if not isinstance(a, z3.z3.BoolRef):
-            a = self.bool(a)
-        if not isinstance(b, z3.z3.BoolRef):
-            b = self.bool(b)
-        return simplify(Or(a, b))
+        # if not isinstance(a, z3.z3.BoolRef):
+        #     a = self.bool(a)
+        # if not isinstance(b, z3.z3.BoolRef):
+        #     b = self.bool(b)
+        return simplify(Or(*args))
     
-    def _and(self, a, b):
+    def _and(self, *args):
         '''
         Returns conjunction of a and b
         '''
-        return simplify(And(a, b))
+        return simplify(And(*args))
     
     def _neg(self, arg):
         '''
@@ -155,17 +162,35 @@ class Z3Solver(Solver):
         return simplify(argv)
     
     def solve(self, *args):
-        s = z3.Solver()
+        # s = z3.Solver()
         for a in args:
-            s.add(a)
-        return s.check()
+            self._solver.add(a)
+        return self._solver.check()
+    
+    def is_implies(self, a, b) -> bool:
+        '''
+        Check if a => b is true
+        '''
+        expr = self._and(a, self._neg(b))
+        return self._solver.check(expr) == self._unsat()
 
-    def check_equivalence(self, a, b) -> bool:
-        fm = self._ne(a, b)
-        if self.solve(fm) == unsat:
-            return True
-        else:
-            return False
+    def check_equivalence(self, a, b, mode=0) -> bool:
+        '''
+        check equality of two expressions semantically or structurally.
+        when mode=0 check semantically, mode=1 check structurally
+        default mode is 0
+        '''
+        if mode == 0:
+            fm = self._ne(a, b)
+            if self.solve(fm) == unsat:
+                self._solver.reset()
+                return True
+            else:
+                self._solver.reset()
+                return False
+        if mode == 1:
+            return str(self._simplify(a)) == str(self._simplify(b))
+            # return z3.eq(self._simplify(a), self._simplify(b))
         
     def check_sat(self, vars, ant, cons=None):
         # Do negation of the implication

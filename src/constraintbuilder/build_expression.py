@@ -1,17 +1,14 @@
+from common_imports import(
+    dataclass, field, Any,
+    re, log, SOLVER,
+)
+
 from constraintbuilder.builder import Builder
 from constraintbuilder.logic_builder import LogicBuilder
-#from constraintbuilder.expr_builder import LExprBuilder
 from constraintbuilder.lexer import Lexer
 from constraintbuilder.parser import Parser
 from constraintbuilder.stringparser import StringBuilder
 
-import re
-
-from customlogger import getlogger
-log = getlogger(__name__)
-
-from solvers.factory import get_solver
-solver = get_solver()
 
 operators = [
     r'==',
@@ -117,7 +114,7 @@ def equals_semantic(e1, e2) -> bool:
     if isinstance(e1, Expression) != isinstance(e2, Expression):
         log.debug('Either e1 or e2 is not of Expression type')
         return False
-    if solver.check_equivalence(e1.solver_expr, e2.solver_expr) is True:
+    if SOLVER.check_equivalence(e1.solver_expr, e2.solver_expr) is True:
         log.debug('Expressions '+ e1.text + ' and ' + e2.text + ' are semantically same')
         return True
     else:
@@ -174,9 +171,6 @@ def build_logical_expr(expression):
 ###############################################
 # Expression (Solver Specific Logical Expression)
 ###############################################
-
-from dataclasses import dataclass, field
-from typing import Optional, Any
 
 @dataclass
 class Expression:
