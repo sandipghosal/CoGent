@@ -536,7 +536,7 @@ class Automaton:
                 elif sym_name in outputs:
                     base_output = outputs[sym_name]
                     # assuming method has only one output
-                    output = assigns[0].expr if assigns else None
+                    output = constants[assigns[0].expr].value if assigns else None
                     resolved_output = Output(
                         name=base_output.name, 
                         params=list(out_params), 
@@ -932,6 +932,26 @@ class Automaton:
         on self-loop transitions.
         '''
         state_obs: Dict[str, List[Method]] = {}
+
+        def refine_list():
+            # currently considering only isfull(), isempty() and size()
+            # however, isempty() implies !isfull()
+            # similarly isfull() implies !isempty()
+            # therefore, if condition and output of either one is True & True
+            # no need to consider other
+            for loc_name,  method_list in state_obs.items():
+                new_list = []
+                for method in method_list:
+                    if method.output_kind == OutputKind.FALSE:
+                        new_list.append(method)
+                    elif method.output_kind == OutputKind.TRUE:
+                        new_list.clear()
+                        new_list.append(method)
+                    else:
+                        continue
+                state_obs[loc_name] = new_list
+                    
+
         for loc in self.locations:
             valid_methods = []
             trs = self.trans_by_src_dst[(loc, loc)]
@@ -944,6 +964,8 @@ class Automaton:
                     valid_methods.append(tr.input)
 
             state_obs[loc] = valid_methods
+        
+        refine_list()
 
         self.location_truth_predicates = state_obs
 
@@ -980,7 +1002,7 @@ class Automaton:
                 # the rhs of assignments in out transition are the output
                 for asn in tr.assignments:
                     if asn.expr in self.constants:
-                        method.output = self.constants[asn.expr]
+                        method.output = self.constants[asn.expr].value
                     elif asn.expr in self.registers.keys():
                         method.output = self.registers[asn.expr]
                     else:
