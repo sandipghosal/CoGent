@@ -140,6 +140,10 @@ class Solver(ABC):
         pass
 
     @abstractmethod
+    def canonicalize(self, expr):
+        pass
+    
+    @abstractmethod
     def check_equivalence(self, a, b, mode) -> bool:
         pass
 

@@ -3,7 +3,11 @@ from common_imports import(
 )
 
 from ramodel import Automaton, OutputKind, Method
-from constraintbuilder import Expression
+from predicates import (
+    BooleanObserverPredicate, 
+    RelationalPredicate
+)
+from expressions import Expression
 from conditionbuilder import (
     Contract, Precondition, 
     Postcondition, PM
@@ -13,7 +17,11 @@ from .precondition_generator import generate_precondition
 
 
 def get_dest_observer(A: Automaton, tr, Q: Postcondition) -> Method:
-    obs = Q.predicate.observer
+    obs = None
+    if isinstance(Q.expr.predicate, BooleanObserverPredicate):
+        obs = Q.expr.predicate.observer
+    if isinstance(Q.expr.predicate, RelationalPredicate):
+        obs = Q.expr.predicate.lhs
     transitions = A.outgoing_for_input(tr.dest.name, obs.name)
     o: Method = None
     # get the input that matches with the return kind (True/False/Value)
@@ -33,7 +41,7 @@ def get_dest_observer(A: Automaton, tr, Q: Postcondition) -> Method:
     if o.output_kind is OutputKind.VALUE:
         o.condition = (
             Expression(f"{o.output}=={obs.output_params[0]}") 
-            if not Q.predicate.negated 
+            if not Q.expr.predicate.negated 
             else Expression(f"{o.output}!={obs.output_params[0]}") 
         )
     return o
@@ -78,11 +86,16 @@ def derive_wp(A, loc, method, Q) -> Expression:
 
     if not transitions:
         return None
+    
+    obs = None
+    if isinstance(Q.expr.predicate, BooleanObserverPredicate):
+        obs = Q.expr.predicate.observer
+    if isinstance(Q.expr.predicate, RelationalPredicate):
+        obs = Q.expr.predicate.lhs
 
     for tr in transitions:
         # get the guard of observer method in the destination of tr
         dest_obs = get_dest_observer(A, tr, Q)
-        obs = Q.predicate.observer
         # substitute guard with the parameter of observer
         g = substitute_params(obs, dest_obs)
         g = substitute_wrt_assignment(g, tr)

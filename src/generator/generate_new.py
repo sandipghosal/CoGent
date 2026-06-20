@@ -1,9 +1,14 @@
 
-from common_imports import log
+from common_imports import log, defaultdict
 
 from ramodel import Automaton
 from generator.postcondition_generator import generate_postconditions
 from generator.contract_generator import generate_contract_per_location
+
+
+def join_by_conjunction(A, PM):
+    grouped = defaultdict(list)
+    pass
 
 def log_contracts_per_location(A: Automaton):
     log.debug("Contracts derived per location:\n")
@@ -17,6 +22,9 @@ def log_contracts_per_location(A: Automaton):
         for c in loc.contracts:
             log.debug("     %s", c)
         log.debug("")
+
+        # for c in loc.contracts:
+        #     print(c)
 
 def generate(A: Automaton, target_method):
     '''

@@ -5,14 +5,22 @@ from common_imports import(
 )
 
 from .free_variable import FV
-from constraintbuilder import Expression
-from conditionbuilder import (
-    PM, Predicate, ObserverPredicate, EqualityPredicate, 
-    BooleanPredicate, Precondition, Postcondition, Conjunct
+
+from expressions import Expression
+
+from conditions import (
+    Precondition, Postcondition, 
+    Atom, And, Or, Not, Implies
 )
+from predicates import (
+    Predicate, BooleanObserverPredicate, 
+    RelationalPredicate, BooleanPredicate, PM
+)
+
 from ramodel import (
     Automaton, OutputKind, Method, Location
 )
+
 from solvers import mus as MUS
 
 methods_by_loc: Dict[str, List[Method]] = {}
@@ -73,26 +81,38 @@ def substitute_params(loc: Location, Q: Postcondition) -> List[Method]:
 
 
 
-def generate_equalities(target: Method, Q: Postcondition) -> List[Expression]:
+def generate_equalities(target: Method, Q: Postcondition) -> List[Predicate]:
     '''
-    Generate constraints such as p1==b0, p1!=b0, b1==(b0+1), b0==(b1-1), etc.
+    Generate Predicates such as p1==b0, p1!=b0, b1==(b0+1), b0==(b1-1), etc.
     '''
-    equalities: List[Expression] = []
+    equalities: List[Predicate] = []
     # CASE1: If the target and observer in postcondition both have input parameters 
-    observer = Q.predicate.observer
+    observer = None
+    if isinstance(Q.expr.predicate, BooleanObserverPredicate):
+        observer = Q.expr.predicate.observer
+    if isinstance(Q.expr.predicate, RelationalPredicate):
+        observer = Q.expr.predicate.lhs
+        
     if len(target.params) > 0 and len(observer.params) > 0:
-        target_params = [str(p) for p in target.params]
-        postcdn_params = [str(p) for p in observer.params]
+        target_params = [p for p in target.params]
+        postcdn_params = [p for p in observer.params]
         for e in list(product(target_params, postcdn_params)):
-            equalities.append(Expression(f"{e[0]}=={e[1]}"))
-            equalities.append(Expression(f"{e[0]}!={e[1]}"))
+            pred = RelationalPredicate(e[0], "==", e[1])
+            equalities.append(pred)
+            neg_pred = pred.negate()
+            equalities.append(neg_pred)
+            # equalities.append(Expression(f"{e[0]}=={e[1]}"))
+            # equalities.append(Expression(f"{e[0]}!={e[1]}"))
 
     # CASE2: If observer in postcondition has output parameter
     if len(observer.params) == 0 and len(observer.output_params) > 0:
         free_vars = FV.get_all()
         for a, b in permutations(free_vars, 2):
-            equalities.append(Expression(f"{a}==({b}+1)"))
-            equalities.append(Expression(f"{a}==({b}-1)"))
+            expr = Expression(f"({b}+1)")
+            pred = RelationalPredicate(a, "==", expr)
+            equalities.append(pred)
+            # equalities.append(Expression(f"{a}==({b}+1)"))
+            # equalities.append(Expression(f"{a}==({b}-1)"))
     return equalities
 
 
@@ -160,9 +180,9 @@ def prepare_predicates(loc, equalities, Q) -> List[Predicate]:
         # CASE1: no parameters at all
         if not m.params and not m.output_params:
             candidates.append(
-                ObserverPredicate(observer=copy.deepcopy(m)) 
+                BooleanObserverPredicate(observer=copy.deepcopy(m)) 
                 if m.output_kind == OutputKind.TRUE
-                else ObserverPredicate(observer=copy.deepcopy(m), negated=True) 
+                else BooleanObserverPredicate(observer=copy.deepcopy(m), negated=True) 
                 )
 
         # CASE2: input parameters present
@@ -173,9 +193,9 @@ def prepare_predicates(loc, equalities, Q) -> List[Predicate]:
             replace_condition(new_methods, subs)
             for m in new_methods:
                 candidates.append(
-                    ObserverPredicate(observer=m) 
+                    BooleanObserverPredicate(observer=m) 
                     if m.output_kind == OutputKind.TRUE
-                    else ObserverPredicate(observer=m, negated=True) 
+                    else BooleanObserverPredicate(observer=m, negated=True) 
                     )
         # CASE3: output parameters present
         if m.output_params:
@@ -183,17 +203,16 @@ def prepare_predicates(loc, equalities, Q) -> List[Predicate]:
             subs = prepare_substitute_param(m.output_params)
             new_methods = replace_output_params(m, subs)
             for new_m in new_methods:
-                expr = Expression(f"{new_m.output_params[0]} == {new_m.output}")
-                candidates.append(ObserverPredicate(observer=new_m, op='=='))
-    for eq in equalities:
-        candidates.append(EqualityPredicate(expr=eq))
+                # expr = Expression(f"{new_m.output_params[0]} == {new_m.output}")
+                candidates.append(RelationalPredicate(lhs=new_m, op='==', rhs=new_m.output_params[0]))
+    for pred in equalities:
+        candidates.append(pred)
     log.debug(
     "List of candidates for precondition: %s",
     ", ".join(f"{item}: {item.get_condition()}" for item in candidates)
     )
     return candidates
 
-from typing import List
 
 
 def remove_redundants(subsets: List[list]) -> List[list]:
@@ -282,11 +301,12 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
         Return the final list of substituted expressions. 
         '''
         solver_exprs = []
-        for c in candidates:
-            if subs:
-                solver_exprs.append(replace_constants(c.get_condition().solver_expr, subs))
-            else:
-                solver_exprs.append(c.get_condition(), subs)
+        for pred in candidates:
+            solver_exprs.append(pred.get_condition().solver_expr)
+            # if subs:
+            #     solver_exprs.append(replace_constants(pred.get_condition().solver_expr, subs))
+            # else:
+            #     solver_exprs.append(c.get_condition(), subs)
         # log.debug('Final list of candidates for precondition: %s',
         # ', '.join(str(e) for e in solver_exprs)
         # )
@@ -307,32 +327,49 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
         log.debug(f"~(Inv->WP): {ante_expr}")
         return ante_expr
 
+    def canonical(expr):
+        str_expr = None
+        if isinstance(expr, Expression):
+            str_expr = str(SOLVER.canonicalize(expr.to_solver_expr()))
+        else:
+            str_expr = str(SOLVER.canonicalize(expr))
+        return str_expr
 
     def match_expr_to_predicate(expr, candidates):
+        str_expr1 = canonical(expr).strip()
         for pred in candidates:
-            if SOLVER.check_equivalence(
-                pred.get_condition().solver_expr,
-                expr,
-                mode=1
-            ):
+            cond = pred.get_condition()
+            str_expr2 = canonical(cond).strip()
+            if str_expr1 == str_expr2:
                 return pred
+            
+            # if canonical(cond).strip() == str(expr).strip():
+            #     return pred
+            # cond = pred.get_condition().to_solver_expr()
+            # if SOLVER.check_equivalence(
+            #     cond,
+            #     expr,
+            #     mode=1
+            # ):
+            #     return pred
             
     def add_truth_predicates():
         '''
         Add location wise truth predicates.
         E.g., add the predicates isempty() and !isfull() for location l0
         '''
-        new_predicates = []
+        atoms = []
+
         for method in A.location_truth_predicates[loc.name]:
-            pred = None
             if method.output_kind == OutputKind.TRUE:
-                pred = ObserverPredicate(observer=method)
+                pred = BooleanObserverPredicate(observer=method)
+                atoms.append(Atom(pred))
             elif method.output_kind == OutputKind.FALSE:
-                pred = ObserverPredicate(observer=method, negated=True)
+                pred = BooleanObserverPredicate(observer=method, negated=True)
+                atoms.append(Atom(pred))
             else:
                 continue
-            new_predicates.append(pred)
-        return new_predicates
+        return And(atoms)
     
         # if len(predicates) == 1:
         #     if predicates[0].to_string() == 'True':
@@ -354,29 +391,28 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
         # if the set of constraints is blank then
         # we can add a contract like {False} push(p1) {Q}
         if not conjuncts_list or conjuncts_list == [[]]:
-            predicates: List[Predicate] =[]
-            # predicates.append(
-            #     BooleanPredicate(Expression('False'))
-            #     if wp.text == 'False'
-            #     else BooleanPredicate(Expression('True'))
-            # )
             if wp.text == 'True':
-                predicates.append(BooleanPredicate(Expression('True')))
-                predicates = add_truth_predicates()
-                return Precondition([Conjunct(predicates)])
+                atom =  Atom(BooleanPredicate(Expression('True')))
+                return Precondition(atom)
+                # predicates.append(BooleanPredicate(Expression('True')))
+                # predicates = add_truth_predicates()
+                # return Precondition([Conjunct(predicates)])
             else:
                 # No precondition created if weakest precondition is not True
                 return None
         else:
+            disjuncts = []
             for c_list in conjuncts_list:
-                predicates: List[Predicate] = []
+                conjunct = []
                 for expr in c_list:
                     pred = match_expr_to_predicate(expr, candidates)
-                    predicates.append(pred)
-                conjunts.append(Conjunct(predicates))
-            new_predicates = add_truth_predicates()
-            conjunts.append(Conjunct(new_predicates))
-            return Precondition(conjunts)
+                    # predicates.append(pred)
+                    conjunct.append(Atom(pred))
+                disjuncts.append(And(conjunct))
+            cond = Or(disjuncts)
+            loc_inv = add_truth_predicates()
+            final_cond = Or([Not(loc_inv), cond])
+            return Precondition(final_cond)
 
     # prepare list of (const, value) tuples for substitution
     const_subs = []
@@ -394,19 +430,6 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
     return create_preconditions(mus_lists)
     # return None
 
-    
-    
-    # conjuncts = []
-    # for candidate_set  in generated_candidates:
-    #     preds = []
-    #     for item in candidate_set:
-    #         if isinstance(item, Method):
-    #             preds.append(Predicate(observer=item))
-    #         else:
-    #             preds.append(Predicate(equality=item))
-    #     conjuncts.append(Conjunct(preds))
-
-    # return Precondition(conjuncts)
     
 
 

@@ -3,9 +3,21 @@ from common_imports import(
 )
 
 from .free_variable import FV
-from constraintbuilder import LogicalExpression
-from ramodel import OutputKind, DataType, Method
-from conditionbuilder import ObserverPredicate, Postcondition, PM
+
+from conditions import Postcondition
+
+from ramodel import (
+    OutputKind, DataType, Method
+)
+
+from predicates import (
+    BooleanObserverPredicate, 
+    RelationalPredicate
+)
+
+from conditions import (
+    Atom
+)
 
 
 
@@ -23,12 +35,12 @@ def ensure_free_vars(num, typ):
 
 
 
-def make_atomic_expr(pred_str: str) -> LogicalExpression:
-    """
-    Convert predicate string into atomic Expression using PredicateManager
-    """
-    atomic_str = PM.encode_expression(pred_str)
-    return LogicalExpression(atomic_str)
+# def make_atomic_expr(pred_str: str) -> LogicalExpression:
+#     """
+#     Convert predicate string into atomic Expression using PredicateManager
+#     """
+#     atomic_str = PM.encode_expression(pred_str)
+#     return LogicalExpression(atomic_str)
 
 
 
@@ -52,6 +64,7 @@ def generate_postconditions(A):
     # ----------------------------------------
     for obs in A.observers.values():
         # CASE 1: Unparameterized observers returning True/False
+        # Examples: isempty(), isfull()
         if len(obs.params) == 0 and obs.output_kind is not OutputKind.VALUE:
             observer = Method(
                 name=obs.name,
@@ -59,12 +72,15 @@ def generate_postconditions(A):
                 output_kind=OutputKind.TRUE,
                 output=True
             )
-            pred = ObserverPredicate(observer)
-            postconditions.append(Postcondition(pred,pred.to_expression()))
+            pred = BooleanObserverPredicate(observer)
+            atom = Atom(pred)
+            postconditions.append(Postcondition(atom))
             neg_pred = pred.negate()
-            postconditions.append(Postcondition(neg_pred, neg_pred.to_expression()))
+            neg_atom = Atom(neg_pred)
+            postconditions.append(Postcondition(neg_atom))
         
         # CASE 2: Parameterized observers returning True/False
+        # Example: contains(p1)
         elif len(obs.params) > 0 and obs.output_kind is not OutputKind.VALUE:
             params = []
             i = 0
@@ -79,12 +95,16 @@ def generate_postconditions(A):
                 output_kind=OutputKind.TRUE,
                 output=True
             )
-            pred = ObserverPredicate(observer)
-            postconditions.append(Postcondition(pred,pred.to_expression()))
+
+            pred = BooleanObserverPredicate(observer)
+            atom = Atom(pred)
+            postconditions.append(Postcondition(atom))
             neg_pred = pred.negate()
-            postconditions.append(Postcondition(neg_pred, neg_pred.to_expression()))
+            neg_atom = Atom(neg_pred)
+            postconditions.append(Postcondition(neg_atom))
 
         # CASE 3: Unparameterized observer returning Value
+        # Example: size()
         elif len(obs.params) == 0 and obs.output_kind is OutputKind.VALUE:
             # considering only one output parameter
             out_params = []
@@ -98,13 +118,17 @@ def generate_postconditions(A):
                 output_params=out_params,
                 output_kind=OutputKind.VALUE
             )
-            pred = ObserverPredicate(
-                observer=observer,
-                op = '=='
+            pred = RelationalPredicate(
+                lhs = observer,
+                op="==",
+                rhs=observer.output_params[0]
             )
-            postconditions.append(Postcondition(pred,pred.to_expression()))
+            atom = Atom(pred)
+            postconditions.append(Postcondition(atom))
+
             neg_pred = pred.negate()
-            postconditions.append(Postcondition(neg_pred, neg_pred.to_expression()))
+            neg_atom = Atom(neg_pred)
+            postconditions.append(Postcondition(neg_atom))
         
         # CASE 4: Parameterized observer returning Value
         # elif len(obs.params) > 0 and obs.output_kind is OutputKind.VALUE:
@@ -133,7 +157,7 @@ def generate_postconditions(A):
         #     postconditions.append(Postcondition(pred,pred.to_expression()))
         #     neg_pred = pred.negate()
         #     postconditions.append(Postcondition(neg_pred, neg_pred.to_expression()))
-        log.debug(f"For observer {obs} corresponding postconditions are: {pred} and {neg_pred}")
+        log.debug(f"For observer {obs} corresponding postconditions are: {atom} and {neg_atom}")
     log.debug("\n")
     return postconditions
 

@@ -173,6 +173,45 @@ class Z3Solver(Solver):
         '''
         expr = self._and(a, self._neg(b))
         return self._solver.check(expr) == self._unsat()
+    
+    def canonicalize(self, expr):
+        """
+        Recursively canonicalize solver expression:
+        - sort arguments of Or / And
+        - keep everything else unchanged
+        """
+        if is_not(expr):
+            inner = self.canonicalize(expr.children()[0])
+            return self._neg(inner)
+        
+        if is_or(expr) or is_and(expr):
+            children = [self.canonicalize(c) for c in expr.children()]
+
+            # sort based on string representation (stable key)
+            children_sorted = sorted(children, key=lambda x: str(x))
+
+            if is_or(expr):
+                return self._or(*children_sorted)
+            else:
+                return self._and(*children_sorted)
+            
+        # if expr.decl().name() == '=':
+        #     left, right = expr.children()
+        #     left = self.canonicalize(left)
+        #     right = self.canonicalize(right)
+
+        #     if str(left) > str(right):
+        #         return left.__class__()(right, left)
+        #     return left.__class__()(left, right)
+            
+        if expr.num_args() > 0:
+            new_children = [self.canonicalize(c) for c in expr.children()]
+            return expr.decl()(*new_children)
+
+        return expr
+
+
+
 
     def check_equivalence(self, a, b, mode=0) -> bool:
         '''

@@ -4,7 +4,7 @@ from common_imports import (
     List, Any, Dict, Optional, Tuple, Union
 )
 
-from constraintbuilder import Expression
+from expressions import Expression
 # from conditionbuilder import Contract
 
 
