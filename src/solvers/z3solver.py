@@ -329,20 +329,36 @@ class Z3Solver(Solver):
         PREC_OR = 1
         PREC_AND = 2
         PREC_NOT = 3
-        PREC_ATOM = 4
 
         # OR
         if is_or(expr):
             parts = [self.pretty_print(c, PREC_OR) for c in expr.children()]
-            s = " || ".join(f"({p})" for p in parts)
+            # s = " || ".join(f"({p})" for p in parts)
+            # s = " || ".join(parts)
+            formatted_parts = []
+            for c, p in zip(expr.children(), parts):
+                if is_and(c):
+                    formatted_parts.append(f"({p})")
+                else:
+                    formatted_parts.append(p)
+            s = " || ".join(formatted_parts)
             if parent_prec > PREC_OR:
                 return f"({s})"
             return s
 
         # AND
         if is_and(expr):
-            parts = [self.pretty_print(c, PREC_AND) for c in expr.children()]
-            s =  " && ".join(f"({p})" for p in parts)
+            parts = []
+            for c in expr.children():
+                p = self.pretty_print(c, PREC_AND)
+
+                if is_or(c):
+                    parts.append(f"({p})")
+                else:
+                    parts.append(p)
+
+            s = " && ".join(parts)
+
             if parent_prec > PREC_AND:
                 return f"({s})"
             return s
@@ -351,10 +367,14 @@ class Z3Solver(Solver):
         if is_not(expr):
             inner_expr = expr.children()[0]
             inner = self.pretty_print(inner_expr, PREC_NOT)
+
+            if inner_expr.decl().name() in ["=", "distinct"]:
+                return f"!({inner})"
+
             if is_and(inner_expr) or is_or(inner_expr):
                 return f"!({inner})"
-            else:
-                return f"!{inner}"
+
+            return f"!{inner}"
 
         # equality
         if expr.decl().name() == "=":
