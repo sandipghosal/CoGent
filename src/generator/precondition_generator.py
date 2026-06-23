@@ -22,7 +22,6 @@ from ramodel import (
 )
 
 from solvers import mus as MUS
-from solvers import is_equal
 
 methods_by_loc: Dict[str, List[Method]] = {}
 

@@ -8,10 +8,11 @@ from predicates import (
     RelationalPredicate
 )
 from expressions import Expression
-from conditionbuilder import (
-    Contract, Precondition, 
-    Postcondition, PM
-)
+
+from conditions import(
+    Precondition, Postcondition, Contract
+) 
+
 
 from .precondition_generator import generate_precondition
 

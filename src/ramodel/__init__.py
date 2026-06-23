@@ -1,10 +1,5 @@
-# Old import
-from ramodel.config import Config
-from ramodel.automaton import *
-
-
 # New import
-from .automaton_new import(
+from .automaton import(
     DataType,
     Variable,
     Param,

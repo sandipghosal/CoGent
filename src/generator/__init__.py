@@ -1,5 +1,5 @@
 from .generate import generate
-from .generate_new import generate
+from .generate import generate
 
 from .free_variable import FV
 

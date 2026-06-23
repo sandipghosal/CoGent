@@ -5,9 +5,9 @@ import time
 
 import os
 # import ramodel.config
-from ramodel.automaton_new import Automaton
+from ramodel.automaton import Automaton
 from errors import *
-from generator.generate_new import generate
+from generator.generate import generate
 from solvers.factory import get_solver
 
 
