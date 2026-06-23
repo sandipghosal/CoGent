@@ -6,7 +6,7 @@ from common_imports import(
 
 from .free_variable import FV
 
-from expressions import Expression
+from expressions import Expression, LogicalExpression
 
 from conditions import (
     Precondition, Postcondition, 
@@ -22,6 +22,7 @@ from ramodel import (
 )
 
 from solvers import mus as MUS
+from solvers import is_equal
 
 methods_by_loc: Dict[str, List[Method]] = {}
 
@@ -126,12 +127,17 @@ def prepare_predicates(loc, equalities, Q) -> List[Predicate]:
     base_methods = methods_by_loc[loc.name]
     candidates: List[Predicate] = list()
 
-    def prepare_substitute_param(old_param) -> List[Tuple]:
+    def subs_for_outparam(old_param) -> List[Tuple]:
         # generate all mappings: params -> free vars
         subs = []
         for combo in product(free_vars, repeat=len(old_param)):
             # subs = list(zip(old_param, combo))
             subs.extend(zip(old_param, combo))
+        return subs
+    
+    def subs_for_inparam(old_params) -> List[Tuple]:
+        subs = []
+        subs.extend(zip(old_params, free_vars))
         return subs
 
     def replace_input_params(method, subs) -> List[Method]:
@@ -164,17 +170,51 @@ def prepare_predicates(loc, equalities, Q) -> List[Predicate]:
             new_methods.append(m)
         return new_methods
 
-    def replace_condition(methods, subs) -> None:
+    def replace_condition(methods, subs) -> List[Method]:
+        new_methods: List[Method] = []
         for m in methods:
-            if str(m.condition) not in ['True', 'False']:
-                text_expr = str(m.condition)
-                for old, new in subs:
-                    for p in m.params:
-                        if p.name == new.name:
-                            text_expr = text_expr.replace(old.name, new.name)
-                subs_expr = [(a.to_solver_expr(), b.to_solver_expr()) for (a, b) in subs]
-                solver_expr = SOLVER.substitute(m.condition.solver_expr, subs_expr)
-                m.condition = Expression(text_expr, solver_expr)
+            new_m = copy.deepcopy(m)
+            cond_text = str(new_m.condition)
+            if cond_text in ['True', 'False']:
+                new_methods.append(new_m)
+                continue
+            solver_expr = new_m.condition.solver_expr
+            for old, new in subs:
+                if new.name == new_m.params[0].name:
+                    cond_text = cond_text.replace(old.name, new.name)
+                    subs_solver = [(old.to_solver_expr(), new.to_solver_expr())]
+                    solver_expr = SOLVER.substitute(solver_expr, subs_solver)
+                    solver_expr = SOLVER.canonicalize(solver_expr)
+                else:
+                    continue
+            new_m.condition.text = cond_text
+            new_m.condition.solver_expr = solver_expr
+            new_methods.append(new_m)
+
+        return new_methods
+
+
+        # for m in methods:
+        #     new_m = copy.deepcopy(m)
+        #     cond_text = str(new_m.condition)
+        #     if cond_text in ['True', 'False']:
+        #         new_methods.append(new_m)
+        #         continue
+        #     solver_expr = new_m.condition.solver_expr
+        #     for old, new in subs:
+
+        #         # asume the observer has only one input parameter
+        #         if new.name == new_m.params[0].name:
+        #             cond_text = cond_text.replace(old.name, new.name)
+        #             subs_solver = [(old.to_solver_expr(), new.to_solver_expr())]
+        #             solver_expr = SOLVER.substitute(solver_expr, subs_solver)
+        #         else:
+        #             continue
+        #     new_m.condition.text = cond_text
+        #     new_m.condition.solver_expr = solver_expr
+        #     new_methods.append(new_m)
+        # return new_methods
+
 
     for m in base_methods:
         # CASE1: no parameters at all
@@ -188,9 +228,9 @@ def prepare_predicates(loc, equalities, Q) -> List[Predicate]:
         # CASE2: input parameters present
         if m.params and not m.output_params:
             # new_m = copy.deepcopy(m)
-            subs = prepare_substitute_param(m.params)
+            subs = subs_for_inparam(m.params)
             new_methods = replace_input_params(m, subs)
-            replace_condition(new_methods, subs)
+            new_methods = replace_condition(new_methods, subs)
             for m in new_methods:
                 candidates.append(
                     BooleanObserverPredicate(observer=m) 
@@ -200,7 +240,7 @@ def prepare_predicates(loc, equalities, Q) -> List[Predicate]:
         # CASE3: output parameters present
         if m.output_params:
             # new_m = copy.deepcopy(m)
-            subs = prepare_substitute_param(m.output_params)
+            subs = subs_for_outparam(m.output_params)
             new_methods = replace_output_params(m, subs)
             for new_m in new_methods:
                 # expr = Expression(f"{new_m.output_params[0]} == {new_m.output}")
@@ -302,7 +342,9 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
         '''
         solver_exprs = []
         for pred in candidates:
-            solver_exprs.append(pred.get_condition().solver_expr)
+            expr = pred.get_condition().solver_expr
+            # expr = SOLVER.canonicalize(expr)
+            solver_exprs.append(expr)
             # if subs:
             #     solver_exprs.append(replace_constants(pred.get_condition().solver_expr, subs))
             # else:
@@ -336,22 +378,17 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
         return str_expr
 
     def match_expr_to_predicate(expr, candidates):
-        str_expr1 = canonical(expr).strip()
+        # str_expr1 = canonical(expr).strip()
+        # for pred in candidates:
+        #     cond = pred.get_condition()
+        #     str_expr2 = canonical(cond).strip()
+        #     if str_expr1 == str_expr2:
+        #         return pred
+        str_expr1 =  str(expr)
         for pred in candidates:
-            cond = pred.get_condition()
-            str_expr2 = canonical(cond).strip()
+            str_expr2 = str(pred.get_condition().to_solver_expr())
             if str_expr1 == str_expr2:
                 return pred
-            
-            # if canonical(cond).strip() == str(expr).strip():
-            #     return pred
-            # cond = pred.get_condition().to_solver_expr()
-            # if SOLVER.check_equivalence(
-            #     cond,
-            #     expr,
-            #     mode=1
-            # ):
-            #     return pred
             
     def add_truth_predicates():
         '''

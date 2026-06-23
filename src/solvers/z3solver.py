@@ -51,6 +51,21 @@ def implicant(atoms, s, snot):
     return Or([mk_not(c) for c in core])
 
 
+def dnf_implicant(atoms, s, sfml):
+    """
+    Dual of `implicant`. Here `sfml` holds fml (supplies a satisfying
+    model), and `s` holds Not(fml) (supplies the unsat core). The
+    resulting core is a minimal conjunction of literals (a prime
+    implicant term) that is sufficient to guarantee fml is true.
+    """
+    m = sfml.model()
+    lits = [atom2literal(m, a) for a in atoms]
+    is_sat = s.check(lits)
+    assert is_sat == unsat
+    core = s.unsat_core()
+    if len(core) == 1:
+        return core[0]
+    return And([c for c in core])
 
 
 class Z3Solver(Solver):
@@ -102,10 +117,10 @@ class Z3Solver(Solver):
         '''
         Returns negation of the parameter
         '''
-        return simplify(Not(arg))
+        return Not(arg)
     
     def _ne(self, a, b):
-        return simplify(Not(a == b))
+        return Not(a == b)
     
     def _eq(self, a, b):
         return a == b
@@ -151,7 +166,7 @@ class Z3Solver(Solver):
         return Z3_get_ast_id(x, y)
 
     def _wp(self, argv, args):
-        return simplify(substitute(argv, args))
+        return substitute(argv, args)
     
     def substitute(self, argv, args):
         return self._wp(argv, args)
@@ -194,15 +209,6 @@ class Z3Solver(Solver):
                 return self._or(*children_sorted)
             else:
                 return self._and(*children_sorted)
-            
-        # if expr.decl().name() == '=':
-        #     left, right = expr.children()
-        #     left = self.canonicalize(left)
-        #     right = self.canonicalize(right)
-
-        #     if str(left) > str(right):
-        #         return left.__class__()(right, left)
-        #     return left.__class__()(left, right)
             
         if expr.num_args() > 0:
             new_children = [self.canonicalize(c) for c in expr.children()]
@@ -269,16 +275,101 @@ class Z3Solver(Solver):
             yield clause
             snot.add(clause)
 
+    def to_dnf_terms(self, fml):
+        '''
+        Generator that yields DNF terms (And-of-literals) of fml,
+        one at a time. Mirrors to_cnf, but with the roles of
+        fml / Not(fml) swapped so each yielded piece is a
+        conjunction (prime implicant) rather than a clause.
+        '''
+        atms = atoms(fml)
+        s = z3.Solver()      # holds Not(fml) -> supplies unsat core
+        sfml = z3.Solver()   # holds fml      -> supplies models to cover
+        s.add(Not(fml))
+        sfml.add(fml)
+        while sat == sfml.check():
+            term = dnf_implicant(atms, s, sfml)
+            yield term
+            sfml.add(Not(term))
 
     def to_dnf(self, fml):
-        clauses = self.to_cnf(fml)
-        d_clauses = list()
-        for c in clauses:
-            disjunction = Or([literal if literal.decl().name() != 'Not' else Not(literal.arg(0)) for literal in c])
-            d_clauses.append(disjunction)
-        dnf = self.bool_val(False)
-        for d in d_clauses:
-            dnf = self._or(dnf, d)
-        print(self._str(dnf))
-    
+        '''
+        Converts fml into an equivalent Z3 expression in DNF
+        (disjunction of conjunctions of literals).
+        '''
+        terms = list(self.to_dnf_terms(fml))
+        if not terms:
+            # fml is unsatisfiable
+            return self.bool_val(False)
+        dnf = terms[0]
+        for t in terms[1:]:
+            dnf = Or(dnf, t)
+        return simplify(dnf)
 
+    # def to_dnf(self, fml):
+    #     clauses = self.to_cnf(fml)
+    #     d_clauses = list()
+    #     for c in clauses:
+    #         disjunction = Or([literal if literal.decl().name() != 'Not' else Not(literal.arg(0)) for literal in c])
+    #         d_clauses.append(disjunction)
+    #     dnf = self.bool_val(False)
+    #     for d in d_clauses:
+    #         dnf = self._or(dnf, d)
+    #     print(self._str(dnf))
+
+    
+    
+    def pretty_print(self, expr, parent_prec=0):
+        """
+        Convert solver expression into readable infix logical form
+        """
+
+
+        # precedence levels
+        PREC_OR = 1
+        PREC_AND = 2
+        PREC_NOT = 3
+        PREC_ATOM = 4
+
+        # OR
+        if is_or(expr):
+            parts = [self.pretty_print(c, PREC_OR) for c in expr.children()]
+            s = " || ".join(f"({p})" for p in parts)
+            if parent_prec > PREC_OR:
+                return f"({s})"
+            return s
+
+        # AND
+        if is_and(expr):
+            parts = [self.pretty_print(c, PREC_AND) for c in expr.children()]
+            s =  " && ".join(f"({p})" for p in parts)
+            if parent_prec > PREC_AND:
+                return f"({s})"
+            return s
+    
+        # NOT   
+        if is_not(expr):
+            inner_expr = expr.children()[0]
+            inner = self.pretty_print(inner_expr, PREC_NOT)
+            if is_and(inner_expr) or is_or(inner_expr):
+                return f"!({inner})"
+            else:
+                return f"!{inner}"
+
+        # equality
+        if expr.decl().name() == "=":
+            lhs, rhs = expr.children()
+            return f"{self.pretty_print(lhs)} == {self.pretty_print(rhs)}"
+
+        # inequality
+        if expr.decl().name() == "distinct":
+            lhs, rhs = expr.children()
+            return f"{self.pretty_print(lhs)} != {self.pretty_print(rhs)}"
+
+        # constants / variables / function calls
+        if expr.num_args() == 0:
+            return str(expr)
+
+        # fallback (general)
+        args = [self.pretty_print(c) for c in expr.children()]
+        return f"{expr.decl().name()}({', '.join(args)})"

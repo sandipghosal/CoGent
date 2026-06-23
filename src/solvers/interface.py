@@ -167,3 +167,7 @@ class Solver(ABC):
     @abstractmethod
     def to_dnf(self, fml):
         pass
+
+    @abstractmethod
+    def pretty_print(self, expr, val):
+        pass
