@@ -368,21 +368,7 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
         log.debug(f"~(Inv->WP): {ante_expr}")
         return ante_expr
 
-    def canonical(expr):
-        str_expr = None
-        if isinstance(expr, Expression):
-            str_expr = str(SOLVER.canonicalize(expr.to_solver_expr()))
-        else:
-            str_expr = str(SOLVER.canonicalize(expr))
-        return str_expr
-
     def match_expr_to_predicate(expr, candidates):
-        # str_expr1 = canonical(expr).strip()
-        # for pred in candidates:
-        #     cond = pred.get_condition()
-        #     str_expr2 = canonical(cond).strip()
-        #     if str_expr1 == str_expr2:
-        #         return pred
         str_expr1 =  str(expr)
         for pred in candidates:
             str_expr2 = str(pred.get_condition().to_solver_expr())
@@ -423,16 +409,22 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
             
     def create_preconditions(conjuncts_list) -> Precondition:
         conjunts: List[Precondition] = []
+        loc_inv = add_truth_predicates()
 
         # if the set of constraints is blank then
         # we can add a contract like {False} push(p1) {Q}
         if not conjuncts_list or conjuncts_list == [[]]:
             if wp.text == 'True':
                 atom =  Atom(BooleanPredicate(Expression('True')))
-                return Precondition(atom)
+                final_cond = Implies(loc_inv, atom)
+                return Precondition(final_cond)
                 # predicates.append(BooleanPredicate(Expression('True')))
                 # predicates = add_truth_predicates()
                 # return Precondition([Conjunct(predicates)])
+            elif wp.text == 'False':
+                atom =  Atom(BooleanPredicate(Expression('False')))
+                final_cond = Implies(loc_inv, atom)
+                return Precondition(final_cond)
             else:
                 # No precondition created if weakest precondition is not True
                 return None
@@ -446,8 +438,9 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
                     conjunct.append(Atom(pred))
                 disjuncts.append(And(conjunct))
             cond = Or(disjuncts)
-            loc_inv = add_truth_predicates()
-            final_cond = Or([Not(loc_inv), cond])
+            # loc_inv = add_truth_predicates()
+            # final_cond = Or([Not(loc_inv), cond])
+            final_cond = Implies(loc_inv, cond)
             return Precondition(final_cond)
 
     # prepare list of (const, value) tuples for substitution
@@ -465,11 +458,5 @@ def generate_precondition(A: Automaton, loc: Location, target: Method, wp: Expre
 
     return create_preconditions(mus_lists)
     # return None
-
-    
-
-
-    
-    
 
     

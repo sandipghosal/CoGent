@@ -138,7 +138,8 @@ class Z3Solver(Solver):
         return a >= b
     
     def implies(self, ant, cons):
-        return simplify(Implies(ant, cons))
+        return simplify(self._or(self._neg(ant), cons))
+        # return simplify(Implies(ant, cons))
     
     def _add(self, a, b):
         return a + b

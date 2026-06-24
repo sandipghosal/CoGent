@@ -16,6 +16,37 @@ class PredicateSymbol:
     name: str       # contains(p1)
     var: Any        # BoolRef (obs_0)
 
+# =====================================================
+# Shared building blocks (module-level, reused in both steps)
+# =====================================================
+
+
+IDENTIFIER = r"[A-Za-z_][A-Za-z0-9_]*"
+CALL       = rf"{IDENTIFIER}\([^()]*\)"          # name(args)  – no outer parens
+OPERAND    = rf"(?:{CALL}|{IDENTIFIER})"
+
+
+# Arithmetic term: stops at logical operators && || ! and unmatched )
+# Only digits allowed after arithmetic operator (e.g. b1+1, b0-2)
+# NOT another identifier, to avoid consuming && operands
+ARITH_TERM  = rf"(?:{OPERAND}\s*[+\-*/]\s*\d+)"   # b1+1, b0-2, size()*2
+ARITH_RHS   = rf"(?:{ARITH_TERM}|{OPERAND})"       # b1+1  OR just  b1
+
+EQ_PATTERN  = (
+    rf"(?P<lhs>{OPERAND})"                          # LHS: call or identifier
+    rf"\s*(?P<op>==|!=)\s*"                         # operator
+    rf"\(?"                                         # optional ( around RHS
+    rf"(?P<rhs>{ARITH_RHS})"                        # RHS: arithmetic or plain
+    rf"\)?"                                         # optional ) around RHS
+)
+
+
+OBS_PATTERN = (
+    rf"(?<!\w)"                                  # not preceded by word char
+    rf"(?P<call>{CALL})"                         # bare call – NO optional parens
+)
+# ─────────────────────────────────────────────────────────────────────────── #
+
 
 # =====================================================
 # Predicate Manager
@@ -70,14 +101,39 @@ class PredicateManager:
         return self.pred_to_var[key]
     
 
+    def _normalize(self, raw: str) -> str:
+        """
+        Strip surrounding whitespace and redundant outer parentheses
+        so that  (I_isfull())  and  I_isfull()  map to the same key.
+        """
+        s = raw.strip()
+        # repeatedly strip a single matching outer paren pair
+        while s.startswith("(") and s.endswith(")"):
+            # make sure the opening ( matches the closing )
+            depth = 0
+            for i, ch in enumerate(s):
+                if ch == "(":
+                    depth += 1
+                elif ch == ")":
+                    depth -= 1
+                if depth == 0:
+                    if i == len(s) - 1:
+                        s = s[1:-1].strip()   # safe to strip
+                    break                     # outermost ) closed early – stop
+        return s
+
+
+
     def encode_expression(self, expr_text: str):
         ''' 
-        Replace ALL occurrences of predicates with atomic variables
+        Replace ALL occurrences of predicates with atomic variables.
 
-        Example:
-        "(p1 == b0) && contains(b0)"
-            →
-        "(a0 && a1)
+        Examples
+        --------
+        "(p1 == b0) && contains(b0)"          →  "(a0 && a1)"
+        "!(!(I_isfull()) && I_isempty()) || ((p1 == b0))"
+                                               →  "(!(!a1 && a2) || a0)"
+        "(b0 == b1 + 1)"                       →  "(a3)"
         '''
 
         text = expr_text
@@ -86,29 +142,47 @@ class PredicateManager:
         # STEP 1: Replace FULL equality predicates
         # e.g. size() == b0, p1 != b0
         # ----------------------------------------
-        eq_pattern = r"[A-Za-z_][A-Za-z0-9_]*(?:\([^)]*\))?\s*(?:==|!=)\s*[A-Za-z_][A-Za-z0-9_]*"
+        # eq_pattern = r"[A-Za-z_][A-Za-z0-9_]*(?:\([^)]*\))?\s*(?:==|!=)\s*[A-Za-z_][A-Za-z0-9_]*"
+        
+        eq_pattern = r"""
+            [A-Za-z_][A-Za-z0-9_]*(?:\([^()]*\))?   # LHS
+            \s*
+            (?:==|!=)
+            \s*
+            (
+                \(
+                [A-Za-z0-9_]+
+                (?:\s*[+\-*/]\s*[A-Za-z0-9_]+)+
+                \)
+                |
+                [A-Za-z0-9_]+
+            )
+        """
+        matches = [m.group() for m in re.finditer(eq_pattern, text, re.VERBOSE)]
 
-        # full matches (needed because group returns partial)
-        full_matches = re.findall(eq_pattern, text)
-
-        for m in sorted(full_matches, key=len, reverse=True):
-            var = self.get_var(m)
+        for m in sorted(matches, key=len, reverse=True):
+            var = self.get_var(f"({m})")
             text = re.sub(re.escape(m), str(var), text)
-            # return text
 
         # ----------------------------------------
         # STEP 2: Replace standalone observer calls
         # e.g. size(), contains(b0)
         # ----------------------------------------
-        obs_pattern = r"\(?[A-Za-z_][A-Za-z0-9_]*\([^()]*\)\)?"
 
-        obs_matches = re.findall(obs_pattern, text)
+        # obs_pattern = r"\(?[A-Za-z_][A-Za-z0-9_]*\([^()]*\)\)?"
 
+        # obs_matches = re.findall(obs_pattern, text)
+
+        # for m in sorted(obs_matches, key=len, reverse=True):
+        #     var = self.get_var(m)
+        #     # text = re.sub(rf"{re.escape(m)}", str(var), text)
+        #     text = re.sub(re.escape(m), str(var), text)
+
+        obs_matches = [m.group("call") for m in re.finditer(OBS_PATTERN, text)]
         for m in sorted(obs_matches, key=len, reverse=True):
-            var = self.get_var(m)
-            # text = re.sub(rf"{re.escape(m)}", str(var), text)
+            var = self.get_var(self._normalize(m))
             text = re.sub(re.escape(m), str(var), text)
-            # return text
+            
         return text
     
     def decode_expression(self, expr_str: str):

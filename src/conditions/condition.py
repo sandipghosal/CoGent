@@ -133,9 +133,12 @@ class Implies(BoolExpr):
             self.antecedent.to_solver_expr(),
             self.consequent.to_solver_expr()
         )
+    
+    def precedence(self):
+        return 1
 
     def __str__(self):
-        return f"({self.antecedent}) -> ({self.consequent})"
+        return f"!({self.antecedent}) || ({self.consequent})"
     
     def __repr__(self):
         return self.__str__()

@@ -1,5 +1,5 @@
-from common_imports import defaultdict, log, SOLVER
-
+from common_imports import defaultdict, log, SOLVER, re
+from sympy.logic.boolalg import to_dnf
 from expressions import LogicalExpression
 from predicates import PM
 
@@ -27,25 +27,46 @@ def build_conjunction(preconditions):
         encoded = PM.encode_expression(s)
         encoded_parts.append(f"({encoded})")
     
-    if not encoded_parts:
-        return "True"
-    
-    return " && ".join(encoded_parts)
+    # if not encoded_parts:
+    #     return "True"
+
+    expr_str = " && ".join(encoded_parts)
+    log.debug("Encoded expression:")
+    log.debug(expr_str)
+    return expr_str
 
 
 
 # =====================================================
 # Simplify + DNF
 # =====================================================
-def to_dnf(expr):
-    '''
-    Try solver DNF, fallback to manual distribution
-    '''
-    try:
-        return SOLVER.to_dnf(expr)
-    except Exception:
-        return SOLVER._simplify(expr)
+# def to_dnf(expr):
+#     '''
+#     Try solver DNF, fallback to manual distribution
+#     '''
+#     try:
+#         return SOLVER.to_dnf(expr)
+#     except Exception:
+#         return SOLVER._simplify(expr)
     
+def convert_operators(expr: str) -> str:
+    """
+    Convert boolean expression operators:
+      &  ->  &&
+      |  ->  ||
+      ~  ->  !
+    Handles cases where && and || may already exist (won't double-expand).
+    """
+    # Replace | with || (but not if already ||)
+    expr = re.sub(r'(?<!\|)\|(?!\|)', '||', expr)
+
+    # Replace & with && (but not if already &&)
+    expr = re.sub(r'(?<!&)&(?!&)', '&&', expr)
+
+    # Replace ~ with !
+    expr = re.sub(r'~', '!', expr)
+
+    return expr
 
 def simplify_to_dnf(expr_str):
     '''
@@ -53,12 +74,21 @@ def simplify_to_dnf(expr_str):
     '''
     logical_expr = LogicalExpression(expr_str)
     solver_expr = logical_expr.to_solver_expr()
-
+    log.debug("Converted before simplification:")
+    log.debug(solver_expr)
     simplified = SOLVER._simplify(solver_expr)
 
-    dnf_expr = to_dnf(simplified)
-    pretty = SOLVER.pretty_print(dnf_expr)
-    decoded = PM.decode_expression(str(pretty))
+    dnf_expr = str(to_dnf(str(simplified), simplify=True, force=True))
+    log.debug("Simplified DNF:")
+    log.debug(dnf_expr)
+
+    converted_expr = convert_operators(dnf_expr)
+    # pretty = SOLVER.pretty_print(dnf_expr)
+    decoded = PM.decode_expression(str(converted_expr))
+    log.debug("Decoded expression:")
+    log.debug(decoded)
+    log.debug("\n")
+
     return decoded
 
 

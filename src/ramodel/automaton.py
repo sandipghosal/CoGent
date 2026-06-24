@@ -942,13 +942,22 @@ class Automaton:
             for loc_name,  method_list in state_obs.items():
                 new_list = []
                 for method in method_list:
-                    if method.output_kind == OutputKind.FALSE:
+                # uncomment the following if only one of isfull/isempty
+                # is supposed to be included for first and last state
+                    # if method.output_kind == OutputKind.FALSE:
+                    #     new_list.append(method)
+                    # elif method.output_kind == OutputKind.TRUE:
+                    #     new_list.clear()
+                    #     new_list.append(method)
+                    # else:
+                    #     continue
+
+                # Edited on June 23, 2026
+                # consider all isfull() and isempty()
+                    if method.condition.text == 'True' and \
+                    method.output_kind in [OutputKind.TRUE, OutputKind.FALSE]:
                         new_list.append(method)
-                    elif method.output_kind == OutputKind.TRUE:
-                        new_list.clear()
-                        new_list.append(method)
-                    else:
-                        continue
+
                 state_obs[loc_name] = new_list
                     
 
